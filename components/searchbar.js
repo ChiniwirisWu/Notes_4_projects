@@ -6,7 +6,7 @@ import g_styles from "../extra/styles.js";
 const Searchbar = () =>{
   return (
     <View style={styles.container}>
-      <TextInput style={styles.textInput} />
+      <TextInput style={g_styles.textInput} />
       <Text style={[g_styles.p, styles.text]}>0 Elements found</Text>
     </View>
   );
@@ -19,19 +19,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 20
-  },
-
-  textInput: {
-    height: 50,
-    width: "100%",
-    paddingVertical: 5,
-    paddingHorizontal: 5,
-    outlineColor: "#fff",
-    borderColor: "#fff",
-    borderWidth: 5,
-    marginBottom: 10,
-    color: "#fff",
-    fontFamily: Fonts.vt323,
   },
 
   text: {

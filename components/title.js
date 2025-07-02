@@ -1,12 +1,22 @@
-import { View, StyleSheet, TextInput, Pressable, Text } from "react-native";
+import { View, StyleSheet, TextInput, Pressable, Text, Modal } from "react-native";
+import { useState } from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Fonts from "../extra/fonts.js";
+import TitleBox from "./titleBox.js";
+
 
 const Title = () =>{
+  const [showModal, setShowModal] = useState(true);
 
   return (
     <View style={styles.container}>
-      <Pressable>
+      <Modal
+        visible={showModal}
+        backdropColor={"#000"}
+      >
+        <TitleBox title="Brain storming" />
+      </Modal>
+      <Pressable onPress={()=> setShowModal(!showModal)}>
         <Text style={styles.text}>Brain storming</Text>
       </Pressable>
     </View>
