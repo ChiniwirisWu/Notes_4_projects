@@ -18,6 +18,7 @@ const Vote = ({votes})=>{
       <FlatList
         horizontal={true}
         data={colors}
+        contentContainerStyle={styles.votesContainer}
         renderItem={({item})=> <AntDesign name="heart" size={24} color={item} />}
       />
     </View>
@@ -25,6 +26,10 @@ const Vote = ({votes})=>{
 }
 
 const styles = StyleSheet.create({
+  votesContainer: {
+    alignItems: "center",
+    gap: 5
+  }
 });
 
 export default Vote;

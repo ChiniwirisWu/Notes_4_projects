@@ -1,39 +1,36 @@
-import { Pressable, Text, Animated, View, StyleSheet } from "react-native";
+import { Pressable, Text, View, StyleSheet } from "react-native";
+import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate } from "react-native-reanimated";
 import g_styles from "../extra/styles.js";
 
-const SaveButton = ()=> {
-  const bgcRef = new Animated.Value(0);
+const SaveButton = (props)=> {
+  const initialWidth = 300;
+  const width = useSharedValue(initialWidth);
 
-  const handlePress = ()=>{
-    console.log(buttonStyles)
-    Animated.timing(bgcRef, {
-      toValue: 1,
-      duration: 60,
-      useNativeDriver: true
-    }).start();
+  const handlePressIn = ()=> {
+    width.value = withSpring(width.value + 10);
   }
 
-  const handleRelease = ()=>{
-    console.log("release")
-    Animated.timing(bgcRef, {
-      toValue: 0,
-      duration: 60,
-      useNativeDriver: true
-    }).start();
+  const handlePressOut = ()=> {
+    width.value = withSpring(initialWidth);
   }
 
-  const buttonStyles = bgcRef.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["#000", "#fff"]
-  })
+  const text_as = useAnimatedStyle(()=>({
+    color: (width.value == initialWidth) ? "#fff" : "#000" 
+  }));
+
+  const view_as = useAnimatedStyle(()=>({
+    width: width.value,
+    backgroundColor: (width.value == initialWidth) ? "#000" : "#fff" 
+  }));
 
   return(
       <Pressable 
-        onPressIn={handlePress}
-        onPressOut={handleRelease}
+        onPress={props.onSaveQuit}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
       >
-        <Animated.View style={[g_styles.saveBtnContainer, buttonStyles.container]}>
-          <Text style={[g_styles.p, buttonStyles.text]}>Save/exit</Text>
+        <Animated.View style={[g_styles.saveBtnContainer, view_as ]}>
+          <Animated.Text style={[g_styles.p, text_as]}>Save/exit</Animated.Text>
         </Animated.View>
       </Pressable>
   );

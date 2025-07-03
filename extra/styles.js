@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 import Fonts from "./fonts.js";
 
 export default g_styles = StyleSheet.create({
-  container: {
+  container: { // screen container
     flex: 1,
     backgroundColor: '#000',
     paddingVertical: 20,
@@ -10,7 +10,7 @@ export default g_styles = StyleSheet.create({
     color: "#fff",
   },
 
-  p : {
+  p : { 
     fontSize: 25,
     color: "#fff",
     fontFamily: Fonts.vt323,
@@ -42,7 +42,8 @@ export default g_styles = StyleSheet.create({
 
   saveBtnContainer: {
     height: 50,
-    width: "100%",
+    width: 300,
+    margin: "auto",
     paddingHorizontal: 5,
     borderWitdh: 5,
     paddingBottom: 5,

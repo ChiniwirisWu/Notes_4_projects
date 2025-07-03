@@ -14,8 +14,9 @@ const Title = () =>{
         visible={showModal}
         backdropColor={"#000"}
       >
-        <TitleBox title="Brain storming" />
+        <TitleBox title="Brain storming" onSaveQuit={()=> setShowModal(false)} />
       </Modal>
+
       <Pressable onPress={()=> setShowModal(!showModal)}>
         <Text style={styles.text}>Brain storming</Text>
       </Pressable>
