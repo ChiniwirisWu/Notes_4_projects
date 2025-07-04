@@ -6,7 +6,7 @@ import TitleBox from "./titleBox.js";
 
 
 const Title = () =>{
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <View style={styles.container}>

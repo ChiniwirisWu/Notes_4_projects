@@ -2,6 +2,7 @@ import { useFonts } from 'expo-font';
 import AppLoading from "expo-app-loading";
 
 import Home from './screens/home';
+import Workplace from './screens/workplace';
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -13,7 +14,7 @@ export default function App() {
   }
 
   return (
-    <Home />
+    <Workplace />
   );
 }
 

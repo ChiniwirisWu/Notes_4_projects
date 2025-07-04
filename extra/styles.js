@@ -26,14 +26,28 @@ export default g_styles = StyleSheet.create({
   textInput: {
     height: 50,
     width: "100%",
-    paddingVertical: 5,
+    fontSize: 18,
     paddingHorizontal: 5,
     outlineColor: "#fff",
     borderColor: "#fff",
     borderWidth: 5,
-    marginBottom: 10,
-    color: "#fff",
+    color: "yellow",
     fontFamily: Fonts.vt323,
+    marginBottom: 20
+  },
+
+  textarea: {
+    height: 150,
+    textAlignVertical: "top",
+    width: "100%",
+    fontSize: 18,
+    paddingHorizontal: 5,
+    outlineColor: "#fff",
+    borderColor: "#fff",
+    borderWidth: 5,
+    color: "yellow",
+    fontFamily: Fonts.vt323,
+    marginBottom: 20
   },
 
   titleMargin: {

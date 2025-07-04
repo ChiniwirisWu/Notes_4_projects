@@ -5,6 +5,8 @@ import g_styles from "../extra/styles.js";
 const styles = StyleSheet.create({
   container : {
     height: 75,
+    justifyContent: "center",
+    alignItems: "center"
   },
 
   pressable: {
@@ -13,7 +15,7 @@ const styles = StyleSheet.create({
     height: 55,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: "40%",
+    borderRadius: "50%",
     borderWidth: 2,
     borderColor: "#aba857"
   }
@@ -22,9 +24,9 @@ const styles = StyleSheet.create({
 export default Add = ()=>{
   return (
     <View style={styles.container}>
-      <Pressable style={[g_styles.pressable, styles.pressable]}>
+      <Pressable style={[styles.pressable]}>
         <AntDesign
-          name="addfile"
+          name="plus"
           size={35}
           color="#fff"
         />
