@@ -1,13 +1,13 @@
 import { View } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 
-import Setting from "../components/setting.js";
-import Title from "../components/title.js";
-import SingleLineTextInput from "../components/sigleLineTextInput.js";
-import TextAreaInput from "../components/textareaInput.js";
-import SaveButton from "../components/saveButton.js";
+import Setting from "../components/setting.tsx";
+import Title from "../components/title";
+import SingleLineTextInput from "../components/sigleLineTextInput.tsx";
+import TextAreaInput from "../components/textareaInput.tsx";
+import SaveButton from "../components/saveButton.tsx";
 
-import g_style from "../extra/styles.js";
+import g_style from "../extra/styles";
 
 const Workplace = () => {
 
@@ -18,7 +18,7 @@ const Workplace = () => {
       <SingleLineTextInput fieldName="Title" />
       <TextAreaInput fieldName="Description" />
       <StatusBar style="auto" />
-      <SaveButton />
+      <SaveButton onSaveQuit={()=> {}} />
     </View>
   );
 };

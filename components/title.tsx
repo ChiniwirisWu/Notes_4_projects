@@ -1,8 +1,8 @@
 import { View, StyleSheet, TextInput, Pressable, Text, Modal } from "react-native";
 import { useState } from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import Fonts from "../extra/fonts.js";
-import TitleBox from "./titleBox.js";
+import Fonts from "../extra/fonts.tsx";
+import TitleBox from "./titleBox.tsx";
 
 
 const Title = () =>{

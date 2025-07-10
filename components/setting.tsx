@@ -2,8 +2,8 @@ import { useState } from "react";
 import { View, StyleSheet, Pressable, Modal } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
-import g_styles from "../extra/styles.js";
-import OptionBox from "./settingBox.js";
+import g_styles from "../extra/styles.tsx";
+import SettingBox from "./settingBox.tsx";
 
 const Setting = () =>{
   const [showModal, setShowModal] = useState(true);
@@ -14,7 +14,7 @@ const Setting = () =>{
         visible={showModal}
         backdropColor={"#000"}
       >
-        <OptionBox onSaveQuit={()=> setShowModal(false)} />
+        <SettingBox onSaveQuit={()=> setShowModal(false)} />
       </Modal>
 
       <Pressable style={g_styles.pressable} onPress={()=> setShowModal(true)}>

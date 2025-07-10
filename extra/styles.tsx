@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
-import Fonts from "./fonts.js";
+import Fonts from "./fonts.tsx";
 
-export default g_styles = StyleSheet.create({
+const g_styles = StyleSheet.create({
   container: { // screen container
     flex: 1,
     backgroundColor: '#000',
@@ -59,10 +59,9 @@ export default g_styles = StyleSheet.create({
     width: 300,
     margin: "auto",
     paddingHorizontal: 5,
-    borderWitdh: 5,
+    borderWidth: 5,
     paddingBottom: 5,
     borderColor: "#fff",
-    borderWidth: 5,
     marginBottom: 10,
     color: "#000",
     fontFamily: Fonts.vt323,
@@ -71,3 +70,5 @@ export default g_styles = StyleSheet.create({
   },
 
 });
+
+export default g_styles;

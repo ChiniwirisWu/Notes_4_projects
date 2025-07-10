@@ -1,6 +1,6 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { View, StyleSheet, Pressable } from "react-native";
-import g_styles from "../extra/styles.js";
+import g_styles from "../extra/styles";
 
 const styles = StyleSheet.create({
   container : {
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Add = ()=>{
+const Add = ()=>{
   return (
     <View style={styles.container}>
       <Pressable style={[styles.pressable]}>
@@ -33,4 +33,6 @@ export default Add = ()=>{
       </Pressable> 
     </View>
   )
-}
+};
+
+export default Add;

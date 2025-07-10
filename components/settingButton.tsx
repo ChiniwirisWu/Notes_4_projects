@@ -1,8 +1,15 @@
 import { Pressable, Text, View, StyleSheet } from "react-native";
 import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate } from "react-native-reanimated";
-import g_styles from "../extra/styles.js";
+import g_styles from "../extra/styles.tsx";
 
-const SettingButton = (props)=> {
+type SettingBoxProps = {
+  titleEnable:string,
+  titleDisable:string,
+  settingEnable:boolean,
+  onSettingSwitch:()=>void
+};
+
+const SettingButton = ({props}:{props:SettingBoxProps})=> {
   const initialWidth = 300;
   const width = useSharedValue(initialWidth);
 
