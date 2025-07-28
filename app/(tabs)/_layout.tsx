@@ -21,7 +21,7 @@ const TabsLayout = () =>{
       />
 
       <Tabs.Screen
-      name="workplace"
+      name="create"
       options={{
         title: "Create",
         headerShown: false,
