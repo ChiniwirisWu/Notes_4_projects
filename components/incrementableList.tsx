@@ -35,8 +35,10 @@ const enum States {
 };
 
 const enum MessageStates {
-  shown,
   hidden,
+  shown,
+  filled,
+  empty,
 };
 
 type Key = `${string}-${number}`;
@@ -65,6 +67,14 @@ function getStateColor(state:States){
   }
 }
 
+function getMessageColor(state:MessageStates) : (String | null){
+  switch(state){
+    case MessageStates.hidden: return "#fced0f";
+    case MessageStates.empty: return "#9534eb";
+    default: return null;
+  }
+}
+
 const ListItem = ({itemInfo, index} : {itemInfo:Item, index:number}) => {
 
   const [state, setState] = useState(itemInfo.state);
@@ -85,36 +95,77 @@ const ListItem = ({itemInfo, index} : {itemInfo:Item, index:number}) => {
 };
 
 function generateKey(id:number, hashLength:number) : Key{
+  console.log(id);
   const hash:string = Math.random().toString(36).substring(2, 2 + hashLength); 
   return `${hash}-${id}`;
 }
 
+function getMessage(state : MessageStates) : (String | null){
+  switch(state){
+    case MessageStates.empty: return "This list is empty";
+    case MessageStates.hidden: return "List is hidden";
+    default: return null;
+  } 
+}
 
 const IncrementableList = ({title}: {title:string})=>{
-  const [items, setItems] = useState([]);
-  const [showMessage, setShowMessage] = useState(true);
+  const [items, setItems] = useState<Array<Item>>([]);
+  const [showMessage, setShowMessage] = useState<boolean>(true); // if true shows message and hides list.
+  const [messageState, setMessageState] = useState<MessageStates>(MessageStates.empty);
+  const [messageColor, setMessageColor] = useState(getMessageColor(messageState));
 
-  const getMessage = (state : MessageStates)=> {
+  const onAdd = (id:number)=>{
+    const hashLength = 10;
+    const newItem = {key: generateKey(id, hashLength), title: "", state: States.empty};
+    setItems([...items, newItem]);
+    setShowMessage(false);
+  };
+
+  const onShowHide = ()=> {
+
+    setMessageState((messageState == MessageStates.hidden) ? MessageStates.shown : MessageStates.hidden);
+
+    setMessageState((messageState == MessageStates.hidden) ? (
+      (items.length < 1) ? MessageStates.empty : MessageStates.shown
+    ) : (
+      MessageStates.hidden
+    ));
+
+
+    switch(messageState){
+      case MessageStates.hidden: 
+        setShowMessage(true);
+        setMessageColor(getMessageColor(messageState));
+        break;
+
+      case MessageStates.empty:
+        setShowMessage(true);
+        setMessageColor(getMessageColor(messageState));
+        break;
+
+      case MessageStates.shown:
+        setShowMessage(false);
+        break;
+    }
+
+    console.log(messageState);
+    console.log(getMessageColor(messageState));
+    console.log(showMessage);
   }
 
-  const onAdd = ()=>{
-    const hashLength = 10;
-    const newItem = {key: generateKey(items.length, hashLength), title: "", state: States.empty};
-    setItems({...items, ...newItem});
-  };
 
   return (
     <View>
       <View style={styles.header}>
         <Text style={g_styles.p}>{title}</Text>
         <View style={styles.buttonsContainer}>
-          <SquareButton iconName="eye" onPress={()=> console.log("eye")} />
-          <SquareButton iconName="plus" onPress={()=> onAdd()} />
+          <SquareButton iconName="eye" onPress={()=> onShowHide()} />
+          <SquareButton iconName="plus" onPress={()=> onAdd(1)} />
         </View>
       </View>
 
       { showMessage ? (
-        <Text style={[g_styles.p, styles.message]}>This list is empty</Text>
+        <Text style={[g_styles.p, styles.message, {color: messageColor}]}>{getMessage(messageState)}</Text>
       ):(
         <View>
           <FlatList 
