@@ -69,8 +69,8 @@ function getStateColor(state:States){
 
 function getMessageColor(state:MessageStates) : (String | null){
   switch(state){
-    case MessageStates.hidden: return "#fced0f";
-    case MessageStates.empty: return "#9534eb";
+    case MessageStates.hidden: return "#9534eb";
+    case MessageStates.empty: return "#fced0f";
     default: return null;
   }
 }
@@ -123,36 +123,42 @@ const IncrementableList = ({title}: {title:string})=>{
 
   const onShowHide = ()=> {
 
-    setMessageState((messageState == MessageStates.hidden) ? MessageStates.shown : MessageStates.hidden);
+    // set current state
+    let nextState = MessageStates.empty;
 
-    setMessageState((messageState == MessageStates.hidden) ? (
-      (items.length < 1) ? MessageStates.empty : MessageStates.shown
-    ) : (
-      MessageStates.hidden
-    ));
+    if(messageState == MessageStates.hidden){
+      // output: MessageStates.empty | MessageStates.shown.
+      if(items.length < 1){
+        // empty scenario.
+        nextState = MessageStates.empty;
+      } else {
+        // show the elements.
+        nextState = MessageStates.shown;
+      }
+    } else {
+      // output: MessageStates.hidden.
+      nextState = MessageStates.hidden;
+    }
 
+    // update message state
+    setMessageState(nextState);
 
-    switch(messageState){
+    switch(nextState){
       case MessageStates.hidden: 
         setShowMessage(true);
-        setMessageColor(getMessageColor(messageState));
+        setMessageColor(getMessageColor(nextState));
         break;
 
       case MessageStates.empty:
         setShowMessage(true);
-        setMessageColor(getMessageColor(messageState));
+        setMessageColor(getMessageColor(nextState));
         break;
 
       case MessageStates.shown:
         setShowMessage(false);
         break;
     }
-
-    console.log(messageState);
-    console.log(getMessageColor(messageState));
-    console.log(showMessage);
   }
-
 
   return (
     <View>
