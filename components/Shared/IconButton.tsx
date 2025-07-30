@@ -3,7 +3,7 @@ import { FontAwesome } from "@expo/vector-icons";
 
 type Icon_t = "eye" | "plus";
 
-const SquareButton = ({iconName, onPress} : {iconName?: Icon_t, onPress:()=> void})=>{
+const IconButton = ({iconName, onPress} : {iconName?: Icon_t, onPress:()=> void})=>{
   
   return (
     <Pressable onPress={()=> onPress()}>
@@ -14,4 +14,4 @@ const SquareButton = ({iconName, onPress} : {iconName?: Icon_t, onPress:()=> voi
   ); 
 }
 
-export default SquareButton;
+export default IconButton;

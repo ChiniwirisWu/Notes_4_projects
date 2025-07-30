@@ -1,6 +1,6 @@
 import { Pressable, Text, View, StyleSheet } from "react-native";
 import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate } from "react-native-reanimated";
-import g_styles from "../constants/styles.ts";
+import g_styles from "@/constants/styles";
 
 type SettingBoxProps = {
   titleEnable:string,

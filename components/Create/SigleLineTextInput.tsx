@@ -1,5 +1,5 @@
 import { View, Text, TextInput } from "react-native";
-import g_styles from "../constants/styles.ts";
+import g_styles from "@/constants/styles";
 
 const SingleLineTextInput = ({fieldName}:{fieldName:string}) =>{
   return (

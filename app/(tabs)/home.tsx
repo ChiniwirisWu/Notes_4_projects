@@ -1,21 +1,21 @@
 import { View  } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 
-import Setting from "@/components/setting.tsx";
-import Title from "@/components/title.tsx";
-import Searchbar from "@/components/searchbar.tsx";
-import List from "@/components/list.tsx";
+import Setting from "@/components/Shared/Setting";
+import Title from "@/components/Shared/Title";
+import Searchbar from "@/components/Home/Searchbar";
+import ProjectsList from "@/components/Home/Projectslist";
 
-import g_style from "../../constants/styles.ts";
+import g_style from "@/constants/styles";
 
 const Home = ()=>{
 
   return (
     <View style={g_style.container}>
       <Setting />
-      <Title />
+      <Title editable={true} />
       <Searchbar />
-      <List />
+      <ProjectsList />
       <StatusBar style="auto" />
     </View>
   );

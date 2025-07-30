@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 });
 
 
-const ListItem = ({itemInfo} : {itemInfo:Item}) => {
+const IncrementableListItem = ({itemInfo} : {itemInfo:Item}) => {
 
   const [state, setState] = useState<ItemStates>(itemInfo.state);
   const [title, setTitle] = useState<String>((state == ItemStates.empty) ? "Insert text" : itemInfo.title);
@@ -40,4 +40,4 @@ const ListItem = ({itemInfo} : {itemInfo:Item}) => {
   );
 };
 
-export default ListItem;
+export default IncrementableListItem;

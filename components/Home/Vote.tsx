@@ -9,6 +9,13 @@ enum Levels {
   legendary,
 };
 
+const styles = StyleSheet.create({
+  votesContainer: {
+    alignItems: "center",
+    gap: 5
+  }
+});
+
 const Vote = ({level}:{level:Levels})=>{
 
   const levels:string[][] = [
@@ -33,11 +40,5 @@ const Vote = ({level}:{level:Levels})=>{
   )
 }
 
-const styles = StyleSheet.create({
-  votesContainer: {
-    alignItems: "center",
-    gap: 5
-  }
-});
 
 export default Vote;

@@ -1,8 +1,8 @@
 import { View, StyleSheet, Text, TextInput } from "react-native";
 import { useState } from "react";
-import g_styles from "../constants/styles.ts";
-import SaveButton from "./saveButton.tsx";
-import SettingButton from "./settingButton.tsx";
+import g_styles from "@/constants/styles";
+import SaveButton from "@/components/Shared/SaveButton";
+import SettingButton from "@/components/Shared/SettingButton";
 
 const styles = StyleSheet.create({
   center: {

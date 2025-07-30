@@ -18,8 +18,8 @@ import { MessageStates,
 } 
 from "@/constants/listItem"; import g_styles from "@/constants/styles";
 import { generateKey } from "@/constants/functions";
-import SquareButton from "./squareButton";
-import ListItem from "./listItem";
+import IconButton from "@/components/Shared/IconButton";
+import IncrementableListItem from "./IncrementableListItem";
 
 
 const styles = StyleSheet.create({
@@ -106,8 +106,8 @@ const IncrementableList = ({title, alias}: {title:string, alias:string})=>{
       <View style={styles.header}>
         <Text style={g_styles.p}>{title}</Text>
         <View style={styles.buttonsContainer}>
-          <SquareButton iconName="eye" onPress={()=> onShowHide()} />
-          <SquareButton iconName="plus" onPress={()=> onAdd(items.length, alias)} />
+          <IconButton iconName="eye" onPress={()=> onShowHide()} />
+          <IconButton iconName="plus" onPress={()=> onAdd(items.length, alias)} />
         </View>
       </View>
 
@@ -116,7 +116,7 @@ const IncrementableList = ({title, alias}: {title:string, alias:string})=>{
       ):(
         <FlatList 
           data={items}
-          renderItem={({item, index})=> <ListItem itemInfo={item} />}
+          renderItem={({item, index})=> <IncrementableListItem itemInfo={item} />}
           keyExtractor={item => (item.key == undefined)? "undefined-0" : item.key}
           scrollEnabled={false}
           nestedScrollEnabled={true}

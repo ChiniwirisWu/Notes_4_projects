@@ -1,7 +1,7 @@
 import React from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import g_styles from "@/constants/styles";
-import Vote from './vote';
+import Vote from "@/components/Home/Vote";
 
 enum Levels {
   common,
@@ -28,7 +28,7 @@ const IdeaList = ({idea} : {idea:Idea})=>{
   )
 }
 
-const List = () => {
+const ProjectsList = () => {
   
   const ideasList:Idea[] = [
     {name: 'Idea 3', vote: Levels.legendary},
@@ -66,4 +66,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default List;
+export default ProjectsList;

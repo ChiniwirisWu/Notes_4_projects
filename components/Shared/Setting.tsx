@@ -3,7 +3,7 @@ import { View, StyleSheet, Pressable, Modal } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 import g_styles from "@/constants/styles";
-import SettingBox from "./settingBox";
+import SettingBox from "@/components/Shared/SettingBox";
 
 const Setting = () =>{
   const [showModal, setShowModal] = useState(false);

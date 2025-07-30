@@ -1,11 +1,11 @@
 import { View, StyleSheet, TextInput, Pressable, Text, Modal } from "react-native";
 import { useState } from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import Fonts from "../constants/fonts.ts";
-import TitleBox from "./titleBox.tsx";
+import Fonts from "@/constants/fonts";
+import TitleBox from "@/components/Shared/titleBox";
 
 
-const Title = () =>{
+const Title = ({editable}: {editable:boolean}) =>{
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -17,7 +17,7 @@ const Title = () =>{
         <TitleBox title="Brain storming" onSaveQuit={()=> setShowModal(false)} />
       </Modal>
 
-      <Pressable onPress={()=> setShowModal(!showModal)}>
+      <Pressable onPress={()=> (editable) ? setShowModal(true) : console.log("Non editable.")}>
         <Text style={styles.text}>Brain storming</Text>
       </Pressable>
     </View>

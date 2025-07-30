@@ -1,7 +1,5 @@
 import { View, StyleSheet, TextInput, Pressable, Text } from "react-native";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import Fonts from "../constants/fonts";
-import g_styles from "../constants/styles.ts";
+import g_styles from "@/constants/styles";
 
 const Searchbar = () =>{
   return (
