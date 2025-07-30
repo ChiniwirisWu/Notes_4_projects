@@ -4,6 +4,7 @@ import Fonts from "./fonts";
 const g_styles = StyleSheet.create({
   container: { // screen container
     flex: 1,
+    height: "100%",
     backgroundColor: '#000',
     paddingVertical: 20,
     paddingHorizontal: 20,

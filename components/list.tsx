@@ -1,7 +1,7 @@
 import React from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
-import g_styles from "../constants/styles.ts";
-import Vote from './vote.tsx';
+import g_styles from "@/constants/styles";
+import Vote from './vote';
 
 enum Levels {
   common,

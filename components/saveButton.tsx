@@ -1,6 +1,6 @@
 import { Pressable, Text, View, StyleSheet } from "react-native";
 import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate } from "react-native-reanimated";
-import g_styles from "../constants/styles.ts";
+import g_styles from "@/constants/styles";
 
 const SaveButton = ({onSaveQuit} : {onSaveQuit:()=>void})=> {
   const initialWidth = 300;
@@ -25,6 +25,7 @@ const SaveButton = ({onSaveQuit} : {onSaveQuit:()=>void})=> {
 
   return(
       <Pressable 
+        style={{marginBottom: 30}}
         onPress={onSaveQuit}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
