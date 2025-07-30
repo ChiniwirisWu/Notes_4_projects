@@ -109,11 +109,13 @@ function getMessage(state : MessageStates) : (String | null){
 }
 
 const IncrementableList = ({title}: {title:string})=>{
+  // ordinary states...
   const [items, setItems] = useState<Array<Item>>([]);
   const [showMessage, setShowMessage] = useState<boolean>(true); // if true shows message and hides list.
   const [messageState, setMessageState] = useState<MessageStates>(MessageStates.empty);
   const [messageColor, setMessageColor] = useState(getMessageColor(messageState));
 
+  // header button's on-type methods.
   const onAdd = (id:number)=>{
     const hashLength = 10;
     const newItem = {key: generateKey(id, hashLength), title: "", state: States.empty};
@@ -123,7 +125,7 @@ const IncrementableList = ({title}: {title:string})=>{
 
   const onShowHide = ()=> {
 
-    // set current state
+    // 1) Set next State (empty, hidden, or shown). 
     let nextState = MessageStates.empty;
 
     if(messageState == MessageStates.hidden){
@@ -140,10 +142,11 @@ const IncrementableList = ({title}: {title:string})=>{
       nextState = MessageStates.hidden;
     }
 
-    // update message state
     setMessageState(nextState);
 
+    // 2) Render messages color or list via "nextState".
     switch(nextState){
+      // A) Color picking
       case MessageStates.hidden: 
         setShowMessage(true);
         setMessageColor(getMessageColor(nextState));
