@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 50,
-    marginBottom: 30
+    marginBottom: 100
   },
   scoreBox: {
     borderWidth: 5,

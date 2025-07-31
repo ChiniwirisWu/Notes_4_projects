@@ -1,7 +1,7 @@
 import { View, StyleSheet, Text, TextInput } from "react-native";
 import { useState } from "react";
 import g_styles from "@/constants/styles";
-import SaveButton from "@/components/Shared/SaveButton";
+import LongButton from "@/components/Shared/LongButton";
 import SettingButton from "@/components/Shared/SettingButton";
 
 const styles = StyleSheet.create({
@@ -48,7 +48,7 @@ const SettingBox = ({onSaveQuit} : {onSaveQuit: ()=> void})=> {
             settingEnable:sfxEnable,
             onSettingSwitch:()=> setSfxEnable(!sfxEnable)
         }}/>
-        <SaveButton onSaveQuit={onSaveQuit} />
+        <LongButton text="Save/Quit" onPress={onSaveQuit} />
       </View>
     </View>
   );

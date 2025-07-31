@@ -5,7 +5,7 @@ import Setting from "@/components/Shared/Setting";
 import Title from "@/components/Shared/Title";
 import SingleLineTextInput from "@/components/Create/SigleLineTextInput";
 import TextAreaInput from "@/components/Create/TextareaInput";
-import SaveButton from "@/components/Shared/SaveButton";
+import LongButton from "@/components/Shared/LongButton";
 import IncrementableList from "@/components/Create/IncrementableList";
 import Votation from "@/components/Create/Votation";
 
@@ -18,11 +18,12 @@ const Create = () => {
       <Setting />
       <Title editable={false} />
       <SingleLineTextInput fieldName="Title" />
-      <TextAreaInput fieldName="Description" />
+      <TextAreaInput fieldName="Description" marginBottom={40} />
       <IncrementableList title="Functional Requirements" alias="functionalR"/>
       <IncrementableList title="Functional Requirements" alias="functionalR"/>
       <Votation />
-      <SaveButton onSaveQuit={()=> {}} />
+      <LongButton text="Save/Quit" onPress={()=> {}} marginBottom={10} />
+      <LongButton text="Delete/Clear" onPress={()=> {}} marginBottom={40} />
       <StatusBar style="auto" />
     </ScrollView>
   );

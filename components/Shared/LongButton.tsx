@@ -2,7 +2,7 @@ import { Pressable, Text, View, StyleSheet } from "react-native";
 import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate } from "react-native-reanimated";
 import g_styles from "@/constants/styles";
 
-const SaveButton = ({onSaveQuit} : {onSaveQuit:()=>void})=> {
+const LongButton = ({text, onPress, marginBottom} : {text:string, onPress:()=>void, marginBottom?:number})=> {
   const initialWidth = 300;
   const width = useSharedValue(initialWidth);
 
@@ -25,16 +25,16 @@ const SaveButton = ({onSaveQuit} : {onSaveQuit:()=>void})=> {
 
   return(
       <Pressable 
-        style={{marginBottom: 30}}
-        onPress={onSaveQuit}
+        style={{marginBottom: (marginBottom) ? marginBottom : 0}}
+        onPress={onPress}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
       >
         <Animated.View style={[g_styles.saveBtnContainer, view_as ]}>
-          <Animated.Text style={[g_styles.p, text_as]}>Save/exit</Animated.Text>
+          <Animated.Text style={[g_styles.p, text_as]}>{text}</Animated.Text>
         </Animated.View>
       </Pressable>
   );
 };
 
-export default SaveButton;
+export default LongButton;
