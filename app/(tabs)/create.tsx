@@ -7,6 +7,7 @@ import SingleLineTextInput from "@/components/Create/SigleLineTextInput";
 import TextAreaInput from "@/components/Create/TextareaInput";
 import SaveButton from "@/components/Shared/SaveButton";
 import IncrementableList from "@/components/Create/IncrementableList";
+import Votation from "@/components/Create/Votation";
 
 import g_style from "@/constants/styles";
 
@@ -20,6 +21,7 @@ const Create = () => {
       <TextAreaInput fieldName="Description" />
       <IncrementableList title="Functional Requirements" alias="functionalR"/>
       <IncrementableList title="Functional Requirements" alias="functionalR"/>
+      <Votation />
       <SaveButton onSaveQuit={()=> {}} />
       <StatusBar style="auto" />
     </ScrollView>

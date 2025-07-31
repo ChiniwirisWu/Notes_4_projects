@@ -17,7 +17,7 @@ const Setting = () =>{
         <SettingBox onSaveQuit={()=> setShowModal(false)} />
       </Modal>
 
-      <Pressable style={g_styles.pressable} onPress={()=> setShowModal(true)}>
+      <Pressable style={[g_styles.pressable, {marginTop: 30}]} onPress={()=> setShowModal(true)}>
 
         <MaterialCommunityIcons
           name="dots-vertical"
