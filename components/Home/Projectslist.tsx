@@ -1,5 +1,6 @@
 import React from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View, Pressable} from 'react-native';
+import { router } from "expo-router";
 import g_styles from "@/constants/styles";
 import Vote from "@/components/Home/Vote";
 
@@ -17,14 +18,16 @@ type Idea = {
 };
 
 
-const IdeaList = ({idea} : {idea:Idea})=>{
+const IdeaListItem = ({idea} : {idea:Idea})=>{
   const {name, vote} = idea;
 
   return (
-    <View style={styles.item}>
-      <Text style={g_styles.p}>{name}</Text>
-      <Vote level={vote} />
-    </View>
+    <Pressable onPress={()=> router.navigate("/(tabs)/pages/2")}>
+      <View style={styles.item}>
+        <Text style={g_styles.p}>{name}</Text>
+        <Vote level={vote} />
+      </View>
+    </Pressable>
   )
 }
 
@@ -42,7 +45,7 @@ const ProjectsList = () => {
     <View style={styles.container}>
       <FlatList
         data={ideasList}
-        renderItem={({item}) => <IdeaList idea={item} />}
+        renderItem={({item}) => <IdeaListItem idea={item} />}
       />
     </View>
   );

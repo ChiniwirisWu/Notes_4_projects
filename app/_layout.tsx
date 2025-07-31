@@ -1,15 +1,23 @@
 import { useFonts } from "expo-font";
+import { useEffect } from "react";
 import { Stack } from "expo-router";
-import AppLoading from "expo-app-loading";
+import * as SplashScreen from "expo-splash-screen";
 
+SplashScreen.preventAutoHideAsync();
 
 const RootLayout = ()=>{
   let [fontsLoaded] = useFonts({
     VT323: require("../assets/fonts/VT323-Regular.ttf"),
   });
 
-  if (!fontsLoaded) {
-    return <AppLoading />;
+  useEffect(()=>{
+    if(fontsLoaded){
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if(!fontsLoaded){
+    return null;
   }
 
   return (

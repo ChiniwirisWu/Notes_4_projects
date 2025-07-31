@@ -1,4 +1,4 @@
-import { View  } from "react-native";
+import { View, Button  } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 
 import Setting from "@/components/Shared/Setting";

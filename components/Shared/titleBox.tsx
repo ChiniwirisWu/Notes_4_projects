@@ -24,7 +24,7 @@ const TitleBox = ({title, onSaveQuit} : {title:string, onSaveQuit: ()=> void})=>
       <View style={styles.container}>
         <Text style={[g_styles.p, g_styles.titleMargin]}>Update title "{title}" to...</Text>
         <TextInput placeholderTextColor={"#ddd"} style={[g_styles.textInput, {width: 300, margin: "auto"}]} placeholder="New title"/>
-        <SaveButton onSaveQuit={onSaveQuit} />
+        <LongButton text="Save/Quit" onPress={onSaveQuit} />
       </View>
     </View>
   );

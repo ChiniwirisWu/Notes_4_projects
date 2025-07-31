@@ -8,7 +8,7 @@ const TabsLayout = () =>{
   return (
     <Tabs screenOptions={{ tabBarActiveTintColor: "blue "}}>
       <Tabs.Screen
-      name="home"
+      name="pages"
       options={{
         title: "Home",
         headerShown: false,
