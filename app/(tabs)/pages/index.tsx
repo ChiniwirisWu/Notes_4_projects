@@ -3,8 +3,8 @@ import { StatusBar } from 'expo-status-bar';
 
 import Setting from "@/components/Shared/Setting";
 import Title from "@/components/Shared/Title";
-import Searchbar from "@/components/Home/Searchbar";
-import ProjectsList from "@/components/Home/Projectslist";
+import Searchbar from "@/components/Pages/Searchbar";
+import ProjectsList from "@/components/Pages/Projectslist";
 
 import g_style from "@/constants/styles";
 

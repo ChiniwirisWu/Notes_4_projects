@@ -2,7 +2,7 @@ import React from 'react';
 import {FlatList, StyleSheet, Text, View, Pressable} from 'react-native';
 import { router } from "expo-router";
 import g_styles from "@/constants/styles";
-import Vote from "@/components/Home/Vote";
+import Vote from "@/components/Pages/Vote";
 
 enum Levels {
   common,
