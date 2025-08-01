@@ -29,10 +29,6 @@ const PageSelector = ({title, pageIndex, onSelect, pageSelected}:{title:string, 
       <Text style={[
         g_styles.p, 
         styles.selectorP, 
-        {
-          borderRightWidth: 5, 
-          borderColor: "#fff"
-        }, 
         (pageIndex == pageSelected) ? styles.selected : styles.unselected
       ]}>
         {title}

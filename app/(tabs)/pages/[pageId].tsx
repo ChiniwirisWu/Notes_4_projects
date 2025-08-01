@@ -5,6 +5,8 @@ import LongButton from "@/components/Shared/LongButton";
 import PageSelectorContainer from "@/components/Pages/PageSelectorContainer";
 import PageSelector from "@/components/Pages/PageSelector";
 import { generateKey } from "@/constants/functions";
+import DetailsPage from "@/components/Pages/DetailsPage";
+import RequirementsPage from "@/components/Pages/RequirementsPage";
 
 const styles = StyleSheet.create({
   container: {
@@ -38,6 +40,11 @@ const Detail = ()=>{
   return (
     <View style={[g_styles.container, styles.container]}>
       <PageSelectorContainer pageSelectors={pageSelectors} pageSelected={pageSelected} />
+      {(pageSelected == 0) ? (
+        <DetailsPage />
+      ) : (
+        <RequirementsPage />
+      )}
     </View>
   );
 };

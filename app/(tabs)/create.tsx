@@ -23,7 +23,7 @@ const Create = () => {
       <IncrementableList title="Functional Requirements" alias="functionalR"/>
       <Votation />
       <LongButton text="Save/Quit" onPress={()=> {}} marginBottom={10} />
-      <LongButton text="Delete/Clear" onPress={()=> {}} marginBottom={40} />
+      <LongButton text="Clear" onPress={()=> {}} marginBottom={40} />
       <StatusBar style="auto" />
     </ScrollView>
   );

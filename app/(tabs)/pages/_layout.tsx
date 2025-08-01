@@ -11,7 +11,13 @@ const PagesLayout = ()=> {
       screenOptions={{headerTintColor: "#000"}}
     >
       <Stack.Screen name="index" options={{headerShown:false}}/>
-      <Stack.Screen name="[pageId]" options={{headerTitle: ""}} />
+      <Stack.Screen name="[pageId]" options={{
+        headerTitle: "", 
+        headerStyle: {
+          backgroundColor: "#000"
+        },
+        headerTintColor: "#fff"
+      }} />
     </Stack>
   );
 }
