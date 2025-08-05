@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, ScrollView } from "react-native";
 import IncrementableList from "../Create/IncrementableList";
 import LongButton from "../Shared/LongButton";
 import CircularProgress from "react-native-circular-progress-indicator"
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
 const RequirementsPage = ()=>{
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <IncrementableList title="Functional Requirements" alias="functionalR"/>
       <IncrementableList title="Functional Requirements" alias="functionalR"/>
       <View style={styles.progressBarContainer}>
@@ -39,7 +39,7 @@ const RequirementsPage = ()=>{
         />
       </View>
       <LongButton text="Delete" onPress={()=> {}} marginBottom={40} />
-    </View>
+    </ScrollView>
   ); 
 }
 

@@ -20,6 +20,7 @@ from "@/constants/listItem"; import g_styles from "@/constants/styles";
 import { generateKey } from "@/constants/functions";
 import IconButton from "@/components/Shared/IconButton";
 import IncrementableListItem from "./IncrementableListItem";
+import ConfirmationBox from "../Shared/ConfirmationBox";
 
 
 const styles = StyleSheet.create({
@@ -100,6 +101,12 @@ const IncrementableList = ({title, alias}: {title:string, alias:string})=>{
     }
   }
 
+  const handleOpenDeleteBox = ()=>{
+    // open delete box inside IncrementableListItem.
+    //setShowModal(true);
+    console.log("onOpenDeleteBox()");
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -115,7 +122,7 @@ const IncrementableList = ({title, alias}: {title:string, alias:string})=>{
       ):(
         <FlatList 
           data={items}
-          renderItem={({item, index})=> <IncrementableListItem itemInfo={item} />}
+          renderItem={({item, index})=> <IncrementableListItem onLongPress={()=> handleOpenDeleteBox()} itemInfo={item} />}
           keyExtractor={item => (item.key == undefined)? "undefined-0" : item.key}
           scrollEnabled={false}
           nestedScrollEnabled={true}

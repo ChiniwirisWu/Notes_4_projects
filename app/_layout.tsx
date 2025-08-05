@@ -2,6 +2,7 @@ import { useFonts } from "expo-font";
 import { useEffect } from "react";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -21,10 +22,12 @@ const RootLayout = ()=>{
   }
 
   return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown:false }} />
-    </Stack>
-  )
+    <GestureHandlerRootView>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown:false }} />
+      </Stack>
+    </GestureHandlerRootView>
+  );
 
 }
 
