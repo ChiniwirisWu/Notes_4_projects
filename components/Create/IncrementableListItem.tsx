@@ -32,7 +32,7 @@ const IncrementableListItem = ({itemInfo, onLongPress} : {itemInfo:Item, onLongP
     setTitle((text.length < 1) ? "Insert text" : text);
   }
 
-  const handleOpenConfirmationBox = ()=>{
+  const handleOpenDeleteBox = ()=>{
     try {
       setShowModal(true);
     } catch(e){
@@ -40,17 +40,35 @@ const IncrementableListItem = ({itemInfo, onLongPress} : {itemInfo:Item, onLongP
     }
   }
 
-  const tapGesture = Gesture.Tap()
-    .numberOfTaps(3)
+  const handleOpenMarkBox = ()=>{
+    try {
+      if(state == ItemStates.filled){
+        console.log("Element " + itemInfo.key + " marked");
+      } else {
+        console.log("Cannot mark an empty element.");
+      }
+    } catch(e){
+      console.error("Error: " + e);
+    }
+  }
+
+  const longPressGesture = Gesture.LongPress()
+    .minDuration(500)
     .onEnd(()=>{
-      // open yes/no modal
-      console.log(itemInfo);
-      runOnJS(handleOpenConfirmationBox)();
+      runOnJS(handleOpenDeleteBox)();
+    })
+
+  const tapGesture = Gesture.Tap()
+    .numberOfTaps(2)
+    .onEnd(()=>{
+      runOnJS(handleOpenMarkBox)();
     });
+
+  const gestures = Gesture.Simultaneous(longPressGesture, tapGesture);
 
   return (
     <View style={styles.ListItem}>
-      <GestureDetector gesture={tapGesture}>
+      <GestureDetector gesture={gestures}>
         <FontAwesome6 name="square-plus" size={24} color={getStateColor(state)} />
       </GestureDetector>
       <TextInput 
