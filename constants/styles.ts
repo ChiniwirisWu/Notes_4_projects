@@ -17,6 +17,13 @@ const g_styles = StyleSheet.create({
     fontFamily: Fonts.vt323,
   },
 
+  markedP: {
+    textDecorationLine: "line-through",
+    textDecorationColor: "#fff",
+    color: "#333",
+    //fontStyle: "italic",
+  },
+
   pressable : {
     width: 35,
     height: 35,

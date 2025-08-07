@@ -23,12 +23,12 @@ const styles = StyleSheet.create({
 type IncrementableListItemParams = {
   itemInfo:Item, // key is used to modify or delete in the db with sql queries.
   onLongPress:()=> void,
-  handleChangeText: (itemInfo:Item, itemIndex:number)=> void,
+  handleItemInfoChange: (itemInfo:Item, itemIndex:number)=> void,
   itemIndex:number // this is used to modify or delete in the array in the moment of creation.
 };
 
 
-const IncrementableListItem = ({itemInfo, onLongPress, handleChangeText, itemIndex} : IncrementableListItemParams) => {
+const IncrementableListItem = ({itemInfo, onLongPress, handleItemInfoChange, itemIndex} : IncrementableListItemParams) => {
 
   // initialize with itemInfo from DB.
   const [state, setState] = useState<ItemStates>(itemInfo.state);
@@ -43,7 +43,7 @@ const IncrementableListItem = ({itemInfo, onLongPress, handleChangeText, itemInd
     setState(nextState);
     setTitle(nextTitle);
     // update the db also.
-    handleChangeText({key: itemInfo.key, title:nextTitle, state:nextState}, itemIndex);
+    handleItemInfoChange({key: itemInfo.key, title:nextTitle, state:nextState}, itemIndex);
   }
 
   const handleOpenDeleteBox = ()=>{
@@ -54,12 +54,25 @@ const IncrementableListItem = ({itemInfo, onLongPress, handleChangeText, itemInd
     }
   }
 
-  const handleOpenMarkBox = ()=>{
+  const handleMarkBox = ()=>{
     try {
-      if(state == ItemStates.filled){
-        console.log("Element " + itemInfo.key + " marked");
-      } else {
-        console.log("Cannot mark an empty element.");
+
+      switch(state){
+        case ItemStates.marked: 
+          if(title.length > 0) {
+            setState(ItemStates.filled);
+            handleItemInfoChange({key: itemInfo.key, title:title, state:ItemStates.filled}, itemIndex);
+          } else {
+            setState(ItemStates.empty);
+            handleItemInfoChange({key: itemInfo.key, title:title, state:ItemStates.empty}, itemIndex);
+          }
+          break;
+
+        case ItemStates.filled:
+          setState(ItemStates.marked);
+          handleItemInfoChange({key: itemInfo.key, title:title, state:ItemStates.marked}, itemIndex);
+          break;
+          
       }
     } catch(e){
       console.error("Error: " + e);
@@ -75,7 +88,7 @@ const IncrementableListItem = ({itemInfo, onLongPress, handleChangeText, itemInd
   const tapGesture = Gesture.Tap()
     .numberOfTaps(2)
     .onEnd(()=>{
-      runOnJS(handleOpenMarkBox)();
+      runOnJS(handleMarkBox)();
     });
 
   const gestures = Gesture.Simultaneous(longPressGesture, tapGesture);
@@ -87,7 +100,7 @@ const IncrementableListItem = ({itemInfo, onLongPress, handleChangeText, itemInd
       </GestureDetector>
       <TextInput 
         onChangeText={(e)=> onTitleChange(e)} 
-        style={[g_styles.p, styles.textInput]} 
+        style={[g_styles.p, styles.textInput, (state == ItemStates.marked ? g_styles.markedP : null )]} 
         value={(state == ItemStates.empty) ? undefined : title.toString()} 
         placeholderTextColor="#fff" 
         placeholder={title.toString()} 

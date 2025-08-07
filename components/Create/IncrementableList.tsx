@@ -140,7 +140,7 @@ const IncrementableList = ({title, alias, items, setItems}: IncrementableListPar
             <IncrementableListItem 
               onLongPress={()=> handleOpenDeleteBox()} 
               itemInfo={item} 
-              handleChangeText={updateListItem}
+              handleItemInfoChange={updateListItem}
               itemIndex={index}
             />
           )}

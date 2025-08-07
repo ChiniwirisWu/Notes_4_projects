@@ -23,9 +23,9 @@ export type Item = {
 // method's 
 export function getStateColor(state:ItemStates){
   switch (state){
-    case ItemStates.filled: return "#fced0f";
-    case ItemStates.empty: return "#706260";
-    case ItemStates.marked: return "#0be646";
+    case ItemStates.filled: return "#0be646";
+    case ItemStates.empty: return "#fced0f";
+    case ItemStates.marked: return "#706260";
     default: return "#0be646";
   }
 }
