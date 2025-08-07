@@ -1,28 +1,27 @@
 import { View, Text, TextInput } from "react-native";
 import g_styles from "@/constants/styles";
 
-type TextAreaInputParams = {
+type SingleLineTextInputParams = {
   fieldName:string, 
-  marginBottom?:number,
   value?:(string|undefined), 
   setValue?:(text:(string|undefined))=>void
 }
 
-const TextAreaInput = ({fieldName, marginBottom, value, setValue}:TextAreaInputParams) =>{
+const SingleLineTextInput = ({fieldName, value, setValue}: SingleLineTextInputParams) =>{
+
   return (
-    <View style={{marginBottom: marginBottom ? marginBottom : 0}}>
+    <View>
       <Text style={g_styles.p}>{fieldName}</Text>
       <TextInput 
-        multiline={true} 
-        value={value}
-        onChangeText={(text)=> setValue(text)}
+        value={value} 
+        onChangeText={(text)=> setValue(text)} 
         placeholderTextColor="#fff" 
         placeholder="..." 
-        style={g_styles.textarea}>
+        style={g_styles.textInput}>
       </TextInput>
     </View>
   )
 };
 
-export default TextAreaInput;
+export default SingleLineTextInput;
 

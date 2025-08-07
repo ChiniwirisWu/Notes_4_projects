@@ -20,16 +20,30 @@ const styles = StyleSheet.create({
   },
 });
 
+type IncrementableListItemParams = {
+  itemInfo:Item, // key is used to modify or delete in the db with sql queries.
+  onLongPress:()=> void,
+  handleChangeText: (itemInfo:Item, itemIndex:number)=> void,
+  itemIndex:number // this is used to modify or delete in the array in the moment of creation.
+};
 
-const IncrementableListItem = ({itemInfo, onLongPress} : {itemInfo:Item, onLongPress:()=> void}) => {
 
+const IncrementableListItem = ({itemInfo, onLongPress, handleChangeText, itemIndex} : IncrementableListItemParams) => {
+
+  // initialize with itemInfo from DB.
   const [state, setState] = useState<ItemStates>(itemInfo.state);
   const [title, setTitle] = useState<String>((state == ItemStates.empty) ? "Insert text" : itemInfo.title);
+
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const onTitleChange = (text:String)=>{
-    setState((text.length < 1) ? ItemStates.empty : ItemStates.filled);
-    setTitle((text.length < 1) ? "Insert text" : text);
+    // It manages it's information by itself and also changes the database info. 
+    const nextState = (text.length < 1) ? ItemStates.empty : ItemStates.filled;
+    const nextTitle = (text.length < 1) ? "Insert text" : text;
+    setState(nextState);
+    setTitle(nextTitle);
+    // update the db also.
+    handleChangeText({key: itemInfo.key, title:nextTitle, state:nextState}, itemIndex);
   }
 
   const handleOpenDeleteBox = ()=>{

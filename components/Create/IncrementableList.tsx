@@ -44,22 +44,36 @@ const styles = StyleSheet.create({
   }
 });
 
+type IncrementableListParams = {
+  title:string, 
+  alias:string
+  items:(Item[]),
+  setItems: (items:Item[])=> void
+};
 
-const IncrementableList = ({title, alias}: {title:string, alias:string})=>{
+
+const IncrementableList = ({title, alias, items, setItems}: IncrementableListParams)=>{
   // ordinary states...
-  const [items, setItems] = useState<Array<Item>>([]);
   const [showMessage, setShowMessage] = useState<boolean>(true); // if true shows message and hides list.
   const [messageState, setMessageState] = useState<MessageStates>(MessageStates.empty);
   const [messageColor, setMessageColor] = useState<String>(getMessageColor(messageState));
 
   // header button's on-type methods.
-  const onAdd = (id:number, alias:string)=>{
+  const handleAddEmptyListItem = (id:number, alias:string)=>{
     const hashLength = 10;
     const newItem = {key: generateKey(id, hashLength, alias), title: "", state: ItemStates.empty};
     setItems([...items, newItem]);
     setShowMessage(false);
     console.log(items);
   };
+
+  const updateListItem = (itemInfo:Item, itemIndex:number)=>{
+    if(itemIndex <= items.length){
+      const itemsCopy = items.slice();
+      itemsCopy[itemIndex] = itemInfo;
+      setItems(itemsCopy); 
+    }
+  }
 
   const onShowHide = ()=> {
 
@@ -112,8 +126,8 @@ const IncrementableList = ({title, alias}: {title:string, alias:string})=>{
       <View style={styles.header}>
         <Text style={g_styles.p}>{title}</Text>
         <View style={styles.buttonsContainer}>
-          <IconButton iconName="eye" onPress={()=> onShowHide()} />
-          <IconButton iconName="plus" onPress={()=> onAdd(items.length, alias)} />
+          <IconButton iconName="eye" handleOnPress={()=> onShowHide()} />
+          <IconButton iconName="plus" handleOnPress={()=> handleAddEmptyListItem(items.length, alias)} />
         </View>
       </View>
 
@@ -122,7 +136,14 @@ const IncrementableList = ({title, alias}: {title:string, alias:string})=>{
       ):(
         <FlatList 
           data={items}
-          renderItem={({item, index})=> <IncrementableListItem onLongPress={()=> handleOpenDeleteBox()} itemInfo={item} />}
+          renderItem={({item, index})=> (
+            <IncrementableListItem 
+              onLongPress={()=> handleOpenDeleteBox()} 
+              itemInfo={item} 
+              handleChangeText={updateListItem}
+              itemIndex={index}
+            />
+          )}
           keyExtractor={item => (item.key == undefined)? "undefined-0" : item.key}
           scrollEnabled={false}
           nestedScrollEnabled={true}

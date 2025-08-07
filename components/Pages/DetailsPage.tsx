@@ -1,5 +1,5 @@
 import { View, StyleSheet } from "react-native";
-import SingleLineTextInput from "../Create/SigleLineTextInput";
+import SingleLineTextInput from "../Create/SingleLineTextInput";
 import TextAreaInput from "../Create/TextareaInput";
 import Votation from "../Create/Votation";
 import LongButton from "../Shared/LongButton";

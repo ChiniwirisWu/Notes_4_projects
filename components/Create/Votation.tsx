@@ -37,11 +37,10 @@ const ScoreBox = ({score, baseWidth} : {score:number, baseWidth: number})=>{
   )
 }
 
-const Votation = ()=>{
+const Votation = ({score, setScore}:{score:number, setScore:(score:number)=>void})=>{
+
   const buttonsBoxWidth = 40;
   const scoreBoxWidth = 50;
-
-  const [score, setScore] = useState(1);
 
   const onAdd = ()=>{
     setScore(((score + 1) > 5) ? 5 : score + 1);

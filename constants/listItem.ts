@@ -15,7 +15,7 @@ export const enum MessageStates {
 export type Key = `${string}-${string}-${number}`;
 
 export type Item = {
-  key: (Key | undefined),
+  key: Key,
   title:String,
   state:ItemStates,
 };

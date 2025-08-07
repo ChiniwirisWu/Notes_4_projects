@@ -3,10 +3,10 @@ import { FontAwesome } from "@expo/vector-icons";
 
 type Icon_t = "eye" | "plus";
 
-const IconButton = ({iconName, onPress} : {iconName?: Icon_t, onPress:()=> void})=>{
+const IconButton = ({iconName, handleOnPress} : {iconName?: Icon_t, handleOnPress:()=> void})=>{
   
   return (
-    <Pressable onPress={()=> onPress()}>
+    <Pressable onPress={()=> handleOnPress()}>
       <Animated.View>
         <Animated.Text><FontAwesome name={iconName} size={24} color="#fff" /></Animated.Text>
       </Animated.View>
