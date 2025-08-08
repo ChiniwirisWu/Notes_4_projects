@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Animated, { 
   FlatList, 
   View, 
@@ -54,9 +54,20 @@ type IncrementableListParams = {
 
 const IncrementableList = ({title, alias, items, setItems}: IncrementableListParams)=>{
   // ordinary states...
-  const [showMessage, setShowMessage] = useState<boolean>(true); // if true shows message and hides list.
+  const [showMessage, setShowMessage] = useState<boolean>(items.length < 1); // if true shows message and hides list.
   const [messageState, setMessageState] = useState<MessageStates>(MessageStates.empty);
   const [messageColor, setMessageColor] = useState<String>(getMessageColor(messageState));
+
+  useEffect(()=>{
+  // this ensures that it shows the empty message whenever the user clears the fields.
+
+    if(items.length < 1){
+      setShowMessage(true);  
+      setMessageState(MessageStates.empty);
+      setMessageColor(getMessageColor(MessageStates.empty));
+    }
+
+  }, [items]);
 
   // header button's on-type methods.
   const handleAddEmptyListItem = (id:number, alias:string)=>{
@@ -116,8 +127,6 @@ const IncrementableList = ({title, alias, items, setItems}: IncrementableListPar
   }
 
   const handleOpenDeleteBox = ()=>{
-    // open delete box inside IncrementableListItem.
-    //setShowModal(true);
     console.log("onOpenDeleteBox()");
   }
 

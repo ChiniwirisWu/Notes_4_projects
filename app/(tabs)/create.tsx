@@ -1,6 +1,6 @@
 import { View, ScrollView } from "react-native";
 import { StatusBar } from 'expo-status-bar';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Setting from "@/components/Shared/Setting";
 import Title from "@/components/Shared/Title";
@@ -26,6 +26,14 @@ const Create = () => {
   const [nonFunctionalRequirements, setNonFunctionalRequirements] = useState<Array<Item>>();
   const [score, setScore] = useState<number>(1);
 
+  const emtpyAllFields = ()=>{
+    console.log("emptyAllFields() executed");
+    setTitle("");
+    setDescription("");
+    setFunctionalRequirements([]);
+    setNonFunctionalRequirements([]);
+    setScore(1);
+  }
 
   return (
     <ScrollView style={g_style.container}>
@@ -47,7 +55,7 @@ const Create = () => {
       />
       <Votation score={score} setScore={setScore} />
       <LongButton text="Save/Quit" onPress={()=> {}} marginBottom={10} />
-      <LongButton text="Clear" onPress={()=> {}} marginBottom={40} />
+      <LongButton text="Clear" onPress={emtpyAllFields} marginBottom={40} />
       <StatusBar style="auto" />
     </ScrollView>
   );
