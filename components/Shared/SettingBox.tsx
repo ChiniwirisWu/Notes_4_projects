@@ -27,7 +27,7 @@ type SettingBoxProps = {
   onSettingSwitch:()=>void
 };
 
-const SettingBox = ({onSaveQuit} : {onSaveQuit: ()=> void})=> {
+const SettingBox = ({handleSaveQuit} : {handleSaveQuit: ()=> void})=> {
   // I need to extract the values from somewhere.
   const [musicEnable, setMusicEnable] = useState(true);
   const [sfxEnable, setSfxEnable] = useState(false);
@@ -48,7 +48,7 @@ const SettingBox = ({onSaveQuit} : {onSaveQuit: ()=> void})=> {
             settingEnable:sfxEnable,
             onSettingSwitch:()=> setSfxEnable(!sfxEnable)
         }}/>
-        <LongButton text="Save/Quit" onPress={onSaveQuit} />
+        <LongButton text="Save/Quit" handleOnPress={handleSaveQuit} />
       </View>
     </View>
   );

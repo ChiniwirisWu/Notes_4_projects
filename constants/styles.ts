@@ -4,11 +4,19 @@ import Fonts from "./fonts";
 const g_styles = StyleSheet.create({
   container: { // screen container
     flex: 1,
-    height: "100%",
     backgroundColor: '#000',
     paddingVertical: 20,
     paddingHorizontal: 20,
     color: "#fff",
+  },
+
+  modalContainer: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    top: 0,
+    left: 0,
+    backgroundColor: "#000"
   },
 
   p : { 

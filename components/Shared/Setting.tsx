@@ -13,8 +13,9 @@ const Setting = () =>{
       <Modal
         visible={showModal}
         backdropColor={"#000"}
+        onRequestClose={()=> setShowModal(false)}
       >
-        <SettingBox onSaveQuit={()=> setShowModal(false)} />
+        <SettingBox handleSaveQuit={()=> setShowModal(false)} />
       </Modal>
 
       <Pressable style={[g_styles.pressable, {marginTop: 30}]} onPress={()=> setShowModal(true)}>

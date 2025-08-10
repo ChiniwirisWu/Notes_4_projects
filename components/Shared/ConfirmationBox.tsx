@@ -17,8 +17,8 @@ const ConfirmationBox = ({message, onConfirm, onCancel}:{message:string, onConfi
   return (
     <View style={[g_styles.container, styles.container]}>
       <Text style={[g_styles.p, styles.title]}>{message}</Text>
-      <LongButton text="Yes" onPress={onConfirm} marginBottom={20} />
-      <LongButton text="No" onPress={onCancel} marginBottom={20} />
+      <LongButton text="Yes" handleOnPress={onConfirm} marginBottom={20} />
+      <LongButton text="No" handleOnPress={onCancel} marginBottom={20} />
     </View>
   );
 };

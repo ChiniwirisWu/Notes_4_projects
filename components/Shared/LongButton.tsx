@@ -2,7 +2,7 @@ import { Pressable, Text, View, StyleSheet } from "react-native";
 import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate } from "react-native-reanimated";
 import g_styles from "@/constants/styles";
 
-const LongButton = ({text, onPress, marginBottom} : {text:string, onPress:()=>void, marginBottom?:number})=> {
+const LongButton = ({text, handleOnPress, marginBottom} : {text:string, handleOnPress:()=>void, marginBottom?:number})=> {
   const initialWidth = 300;
   const width = useSharedValue(initialWidth);
 
@@ -26,7 +26,7 @@ const LongButton = ({text, onPress, marginBottom} : {text:string, onPress:()=>vo
   return(
       <Pressable 
         style={{marginBottom: (marginBottom) ? marginBottom : 0}}
-        onPress={onPress}
+        onPress={handleOnPress}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
       >
