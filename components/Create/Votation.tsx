@@ -37,7 +37,12 @@ const ScoreBox = ({score, baseWidth} : {score:number, baseWidth: number})=>{
   )
 }
 
-const Votation = ({score, setScore}:{score:number, setScore:(score:number)=>void})=>{
+type VotationParams = {
+  score : number,
+  setScore : (x: number) => void
+}
+
+const Votation = ({score, setScore}: VotationParams)=>{
 
   const buttonsBoxWidth = 40;
   const scoreBoxWidth = 50;

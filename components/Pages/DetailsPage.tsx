@@ -11,13 +11,18 @@ const styles = StyleSheet.create({
   }
 });
 
-const DetailsPage = ()=>{
+type DetailsPageParams = {
+  score : number,
+  setScore : (x: number) => void
+}
+
+const DetailsPage = ({score, setScore}: DetailsPageParams)=>{
 
   return (
     <View style={styles.container}>
       <SingleLineTextInput fieldName="Title" />
       <TextAreaInput fieldName="Description" marginBottom={40} />
-      <Votation />
+      <Votation score={score} setScore={setScore} />
     </View>
   ); 
 }

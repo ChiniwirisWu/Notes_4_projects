@@ -10,19 +10,24 @@ enum Levels {
 };
 
 const styles = StyleSheet.create({
-  votesContainer: {
+
+  flatListContainer: {
+    backgroundColor: "#d91202",
+    gap: 5,
+    minWidth: 160,
     alignItems: "center",
-    gap: 5
-  }
+    justifyContent: "flex-end",
+    paddingHorizontal: 10,
+  },
 });
 
 const Vote = ({level}:{level:Levels})=>{
 
   const levels:string[][] = [
-    ["#000","#000","#000","#000","#000", "#fff"],
-    ["#000","#000","#000", "#00c750", "#00c750"],
-    ["#000","#000", "#00c0c7", "#00c0c7", "#00c0c7"],
-    ["#000","#7b06bf","#7b06bf","#7b06bf","#7b06bf"],
+    ["#c21002","#c21002","#c21002","#c21002", "#fff"],
+    ["#c21002","#c21002", "#c21002", "#00c750", "#00c750"],
+    ["#c21002","#c21002", "#00c0c7", "#00c0c7", "#00c0c7"],
+    ["#7b06bf","#7b06bf","#7b06bf","#7b06bf"],
     ["#c99504","#c99504","#c99504","#c99504","#c99504"]
   ]
   
@@ -33,7 +38,7 @@ const Vote = ({level}:{level:Levels})=>{
       <FlatList
         horizontal={true}
         data={vote}
-        contentContainerStyle={styles.votesContainer}
+        contentContainerStyle={styles.flatListContainer}
         renderItem={({item})=> <AntDesign name="heart" size={24} color={item} />}
       />
     </View>
