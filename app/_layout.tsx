@@ -16,7 +16,6 @@ const RootLayout = ()=>{
   useEffect(()=>{
     const setUp = async ()=>{
       try{
-        
         console.log("Setting up Database");
         const db = await SQLite.openDatabaseAsync("notes4projects");
         await db.execAsync(`
@@ -24,7 +23,7 @@ const RootLayout = ()=>{
           id INTEGER PRIMARY KEY,
           title VARCHAR(200) NOT NULL UNIQUE,
           description VARCHAR(1000) NOT NULL,
-          votation INTEGER NOT NULL,
+          score INTEGER NOT NULL,
           functionalRequirements VARCHAR(10000),
           nonFunctionalRequirements VARCHAR(10000)
         );

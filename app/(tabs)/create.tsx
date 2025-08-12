@@ -68,14 +68,14 @@ const Create = () => {
       const nonFunctionalRequirementsJSON = JSON.stringify(nonFunctionalRequirements);
 
       const statement = await db.prepareAsync(`
-      INSERT INTO note (title, description, votation, functionalRequirements, nonFunctionalRequirements) 
-      VALUES ($title, $description, $votation, $functionalRequirements, $nonFunctionalRequirements);
+      INSERT INTO note (title, description, score, functionalRequirements, nonFunctionalRequirements) 
+      VALUES ($title, $description, $score, $functionalRequirements, $nonFunctionalRequirements);
       `);
       console.log("handleSaveNewNote() saving new object...");
       const result = await statement.executeAsync({
         $title: (title == "" || title == undefined) ? defaultNoteValue.title : title, 
         $description: (description == "" || description == undefined) ? defaultNoteValue.description : description, 
-        $votation: score, 
+        $score: score, 
         $functionalRequirements: functionalRequirementsJSON,
         $nonFunctionalRequiremenents : nonFunctionalRequirementsJSON
       });

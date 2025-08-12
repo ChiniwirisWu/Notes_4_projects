@@ -7,7 +7,7 @@ import PageSelector from "@/components/Pages/PageSelector";
 import { generateKey } from "@/constants/functions";
 import DetailsPage from "@/components/Pages/DetailsPage";
 import RequirementsPage from "@/components/Pages/RequirementsPage";
-import { ItemInfoWithJSON } from "@/constants/globalTypes";
+import { ItemInfoWithJSON, ItemInfo } from "@/constants/globalTypes";
 import { useLocalSearchParams } from "expo-router";
 import { parse } from "@babel/core";
 
@@ -17,26 +17,27 @@ const styles = StyleSheet.create({
   },
 });
 
+
+
 const Detail = ()=>{
 
-  const pages = ["Details", "Requirements"]; 
   const [pageSelected, setSelectedPage] = useState<number>(0); 
+  const pages = ["Details", "Requirements"]; 
   const pagesHashLength = 10;
   const pagesAlias = "pageSelector";
 
-  const [pageInfo, setPageInfo] = useState<ItemInfoWithJSON>();
-  const { details } = useLocalSearchParams();
-  console.log("Detail Component: retrieving page details...");
-  console.log(details);
+  const { details } = useLocalSearchParams<{details : string}>();
+  const [pageInfo, setPageInfo] = useState<ItemInfo>((typeof details === "string") ? JSON.parse(details) : undefined);
+  const [score, setScore] = useState<number>(pageInfo.score);
 
-
-  console.log(`Detail Component - Info retrieved: ${pageInfo}`);
-  const [score, setScore] = useState<number>(3);
-
-  function onSelect (pageIndex:number){
+  const onSelect = (pageIndex:number)=> {
     setSelectedPage(pageIndex);
   };
-  
+
+  const updatePageInfo = (newPageInfo:ItemInfo)=>{
+    setPageInfo(newPageInfo);
+  };
+
   // pageSelectors for the PageSelectorContainer
   const pageSelectors:React.ReactElement<typeof PageSelector>[] = pages.map((el, ind)=> (
     <PageSelector
@@ -48,12 +49,11 @@ const Detail = ()=>{
     />
   ));
   
-
   return (
     <View style={[g_styles.container, styles.container]}>
       <PageSelectorContainer pageSelectors={pageSelectors} pageSelected={pageSelected} />
       {(pageSelected == 0) ? (
-        <DetailsPage score={score} setScore={setScore} />
+        <DetailsPage pageInfo={pageInfo} handleOnSave={updatePageInfo} />
       ) : (
         <RequirementsPage />
       )}

@@ -7,7 +7,7 @@ export type ItemInfo = {
   description: string,
   functionalRequirements: Item[], // JSON
   nonFunctionalRequirements: Item[], // JSON
-  votation: (1 | 2 | 3| 4| 5);
+  score: number 
 };
 
 export type ItemInfoWithJSON = {
@@ -16,5 +16,5 @@ export type ItemInfoWithJSON = {
   description: string,
   functionalRequirements: string, // JSON
   nonFunctionalRequirements: string, // JSON
-  votation: (1 | 2 | 3| 4| 5);
+  score:  number;
 };
