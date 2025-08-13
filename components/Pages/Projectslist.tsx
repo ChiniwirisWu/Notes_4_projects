@@ -33,13 +33,13 @@ function getLevelFromNumber (x:number) : Levels{
 
 
 const IdeaListItem = ({idea} : {idea:ItemInfoWithJSON})=>{
-  const {title, votation} = idea;
+  const {title, score} = idea;
 
   return (
     <Pressable onPress={()=> router.navigate({pathname: "/(tabs)/pages/details", params: {details: JSON.stringify(idea)}})}>
       <View style={styles.item}>
         <Text style={[g_styles.p, {flex: 1}]}>{title}</Text>
-        <Vote level={getLevelFromNumber(votation)} />
+        <Vote level={getLevelFromNumber(score)} />
       </View>
     </Pressable>
   )

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext } from "react";
 import g_styles from "@/constants/styles";
 import LongButton from "@/components/Shared/LongButton";
 import PageSelectorContainer from "@/components/Pages/PageSelectorContainer";
@@ -11,6 +11,7 @@ import { ItemInfoWithJSON, ItemInfo } from "@/constants/globalTypes";
 import { useLocalSearchParams } from "expo-router";
 import { parse } from "@babel/core";
 
+
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
@@ -18,25 +19,27 @@ const styles = StyleSheet.create({
 });
 
 
-
 const Detail = ()=>{
 
+  // page management --
   const [pageSelected, setSelectedPage] = useState<number>(0); 
   const pages = ["Details", "Requirements"]; 
-  const pagesHashLength = 10;
+  const pagesHashLength = 10; 
   const pagesAlias = "pageSelector";
-
-  const { details } = useLocalSearchParams<{details : string}>();
-  const [pageInfo, setPageInfo] = useState<ItemInfo>((typeof details === "string") ? JSON.parse(details) : undefined);
-  const [score, setScore] = useState<number>(pageInfo.score);
 
   const onSelect = (pageIndex:number)=> {
     setSelectedPage(pageIndex);
   };
 
+  // ItemsInfo management --
   const updatePageInfo = (newPageInfo:ItemInfo)=>{
     setPageInfo(newPageInfo);
   };
+
+  const { details } = useLocalSearchParams<{details : string}>();
+  const [pageInfo, setPageInfo] = useState<ItemInfo>((typeof details === "string") ? JSON.parse(details) : undefined);
+  const [score, setScore] = useState<number>(pageInfo.score);
+
 
   // pageSelectors for the PageSelectorContainer
   const pageSelectors:React.ReactElement<typeof PageSelector>[] = pages.map((el, ind)=> (

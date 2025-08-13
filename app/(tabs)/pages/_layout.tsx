@@ -8,10 +8,10 @@ const PagesLayout = ()=> {
   return (
     <Stack
       initialRouteName="index"
-      screenOptions={{headerTintColor: "#000"}}
+      screenOptions={{headerTintColor: "#000", headerShown: false}}
     >
       <Stack.Screen name="index" options={{headerShown:false}}/>
-      <Stack.Screen name="[pageId]" options={{
+      <Stack.Screen name="details" options={{
         headerTitle: "", 
         headerStyle: {
           backgroundColor: "#000"
