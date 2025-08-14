@@ -16,7 +16,7 @@ export type Key = `${string}-${string}-${number}`;
 
 export type Item = {
   key: Key,
-  title:String,
+  title:string,
   state:ItemStates,
 };
 
@@ -30,7 +30,7 @@ export function getStateColor(state:ItemStates){
   }
 }
 
-export function getMessageColor(state:MessageStates) : String {
+export function getMessageColor(state:MessageStates) : string {
   switch(state){
     case MessageStates.hidden: return "#9534eb";
     case MessageStates.empty: return "#fced0f";

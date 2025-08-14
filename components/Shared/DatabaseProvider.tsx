@@ -49,8 +49,6 @@ export default function DatabaseProvider({children}:{children:any}){
       
       INSERT INTO settings (id, title, musicOn, sfxOn) VALUES (1, 'Crazy title', 1, 1);
 
-      DROP TABLE IF EXISTS note;
-
       CREATE TABLE IF NOT EXISTS note(
         key VARCHAR(200) PRIMARY KEY,
         title VARCHAR(200) NOT NULL UNIQUE,

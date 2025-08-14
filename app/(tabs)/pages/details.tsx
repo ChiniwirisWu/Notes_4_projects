@@ -35,7 +35,6 @@ const Detail = ()=>{
 
   const { details } = useLocalSearchParams<{details : string}>();
   const [pageInfo, setPageInfo] = useState<ItemInfo>((typeof details === "string") ? JSON.parse(details) : undefined);
-  const [score, setScore] = useState<number>(pageInfo.score);
 
   // pageSelectors for the PageSelectorContainer
   const pageSelectors:React.ReactElement<typeof PageSelector>[] = pages.map((el, ind)=> (
@@ -54,7 +53,7 @@ const Detail = ()=>{
       {(pageSelected == 0) ? (
         <DetailsPage pageInfo={pageInfo} />
       ) : (
-        <RequirementsPage />
+        <RequirementsPage pageInfo={pageInfo} />
       )}
     </View>
   );

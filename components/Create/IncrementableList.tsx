@@ -56,7 +56,7 @@ const IncrementableList = ({title, alias, items, setItems}: IncrementableListPar
   // ordinary states...
   const [showMessage, setShowMessage] = useState<boolean>(items.length < 1); // if true shows message and hides list.
   const [messageState, setMessageState] = useState<MessageStates>(MessageStates.empty);
-  const [messageColor, setMessageColor] = useState<String>(getMessageColor(messageState));
+  const [messageColor, setMessageColor] = useState<string>(getMessageColor(messageState));
 
   useEffect(()=>{
   // this ensures that it shows the empty message whenever the user clears the fields.
@@ -153,7 +153,7 @@ const IncrementableList = ({title, alias, items, setItems}: IncrementableListPar
               itemIndex={index}
             />
           )}
-          keyExtractor={item => (item.key == undefined)? "undefined-0" : item.key}
+          keyExtractor={(item, index) => (item.key == undefined)? `alias-${index}` : item.key}
           scrollEnabled={false}
           nestedScrollEnabled={true}
           bounces={false}

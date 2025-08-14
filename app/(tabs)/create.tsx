@@ -79,6 +79,16 @@ const Create = () => {
 
       const functionalRequirementsJSON = JSON.stringify(functionalRequirements);
       const nonFunctionalRequirementsJSON = JSON.stringify(nonFunctionalRequirements);
+      const hashLength = 10;
+      const alias = "note4projects";
+      console.log({
+        $key: generateKey(generateRandomInteger(), hashLength, alias),
+        $title: (title == "" || title == undefined) ? defaultNoteValue.title : title, 
+        $description: (description == "" || description == undefined) ? defaultNoteValue.description : description, 
+        $score: score, 
+        $functionalRequirements: functionalRequirementsJSON,
+        $nonFunctionalRequirements : nonFunctionalRequirementsJSON
+      })
 
       const statement = await db.prepareAsync(`
       INSERT INTO note (key, title, description, score, functionalRequirements, nonFunctionalRequirements) 
@@ -87,8 +97,6 @@ const Create = () => {
       console.log("handleSaveNewNote() saving new object...");
       console.log({title, description, score, functionalRequirementsJSON, nonFunctionalRequirementsJSON});
 
-      const hashLength = 10;
-      const alias = "note4projects";
 
       const result = await statement.executeAsync({
         $key: generateKey(generateRandomInteger(), hashLength, alias),

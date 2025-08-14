@@ -1,6 +1,6 @@
 import { Item, ItemStates, getStateColor } from "@/constants/listItem";
 import { View, TextInput, StyleSheet, Modal } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesome6 } from "@expo/vector-icons";
 import g_styles from "@/constants/styles";
 
@@ -32,11 +32,14 @@ const IncrementableListItem = ({itemInfo, onLongPress, handleItemInfoChange, ite
 
   // initialize with itemInfo from DB.
   const [state, setState] = useState<ItemStates>(itemInfo.state);
-  const [title, setTitle] = useState<String>((state == ItemStates.empty) ? "Insert text" : itemInfo.title);
-
+  const [title, setTitle] = useState<string>((state == ItemStates.empty) ? "Insert text" : itemInfo.title);
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const onTitleChange = (text:String)=>{
+  useEffect(()=>{
+    console.log(itemInfo)
+  }, []);
+
+  const onTitleChange = (text:string)=>{
     // It manages it's information by itself and also changes the database info. 
     const nextState = (text.length < 1) ? ItemStates.empty : ItemStates.filled;
     const nextTitle = (text.length < 1) ? "Insert text" : text;
@@ -101,9 +104,9 @@ const IncrementableListItem = ({itemInfo, onLongPress, handleItemInfoChange, ite
       <TextInput 
         onChangeText={(e)=> onTitleChange(e)} 
         style={[g_styles.p, styles.textInput, (state == ItemStates.marked ? g_styles.markedP : null )]} 
-        value={(state == ItemStates.empty) ? undefined : title.toString()} 
+        value={(state == ItemStates.empty) ? undefined : title} 
         placeholderTextColor="#fff" 
-        placeholder={title.toString()} 
+        placeholder={title} 
       />
       <Modal
         visible={showModal}

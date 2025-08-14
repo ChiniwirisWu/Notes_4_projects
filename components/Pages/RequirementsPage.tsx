@@ -4,6 +4,9 @@ import LongButton from "../Shared/LongButton";
 import CircularProgress from "react-native-circular-progress-indicator"
 import Fonts from "@/constants/fonts";
 import g_styles from "@/constants/styles";
+import { ItemInfo, ItemInfoWithJSON } from "@/constants/globalTypes";
+import { useEffect, useState } from "react";
+import { Item } from "@/constants/listItem";
 
 const styles = StyleSheet.create({
   container: {
@@ -17,12 +20,25 @@ const styles = StyleSheet.create({
   }
 });
 
-const RequirementsPage = ()=>{
+const RequirementsPage = ({pageInfo}:{pageInfo:ItemInfoWithJSON})=>{
+
+  const [functionalRequirements, setFunctionalRequirements] = useState<Array<Item>>(JSON.parse(pageInfo.functionalRequirements));
+  const [nonFunctionalRequirements, setNonFunctionalRequirements] = useState<Array<Item>>(JSON.parse(pageInfo.nonFunctionalRequirements));
 
   return (
     <ScrollView style={styles.container}>
-      <IncrementableList title="Functional Requirements" alias="functionalR"/>
-      <IncrementableList title="Functional Requirements" alias="functionalR"/>
+      <IncrementableList 
+        title="Functional Requirements" 
+        alias="functionalR" 
+        items={functionalRequirements} 
+        setItems={setFunctionalRequirements}
+      />
+      <IncrementableList 
+        title="Functional Requirements" 
+        alias="nonfunctionalR"
+        items={nonFunctionalRequirements}
+        setItems={setNonFunctionalRequirements}
+      />
       <View style={styles.progressBarContainer}>
         <Text style={[g_styles.p, {marginBottom: 40, width: "100%"}]}>Requirement's achieved</Text>
         <CircularProgress
@@ -38,7 +54,7 @@ const RequirementsPage = ()=>{
           duration={1000}
         />
       </View>
-      <LongButton text="Delete" onPress={()=> {}} marginBottom={40} />
+      <LongButton text="Delete" handleOnPress={()=> {}} marginBottom={40} />
     </ScrollView>
   ); 
 }
