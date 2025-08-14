@@ -6,8 +6,11 @@ import LongButton from "../Shared/LongButton";
 import MessageBox from "../Shared/MessageBox";
 import { ItemInfo } from "@/constants/globalTypes";
 import { useSQLiteContext } from "expo-sqlite";
+import { useFocusEffect } from "expo-router";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
+import { useDatabase } from "../Shared/DatabaseProvider";
+import { checkDatabaseState } from "@/constants/functions";
 
 const styles = StyleSheet.create({
   container: {
@@ -18,17 +21,22 @@ const styles = StyleSheet.create({
 
 type ScrollViewRef = React.RefObject<ScrollView>;
 
-const DetailsPage = ({pageInfo, handleOnSave}: {pageInfo:ItemInfo, handleOnSave:(newPageInfo:ItemInfo)=> void})=>{
+const DetailsPage = ({pageInfo}: {pageInfo:ItemInfo})=>{
 
-  const [title, setTitle] = useState<string>(pageInfo != undefined ? pageInfo.title : "");
+  const [title, setTitle] = useState<string>(pageInfo.title);
+  const [description, setDescription] = useState<string>(pageInfo.description);
   const [score, setScore] = useState<number>(pageInfo != undefined ? pageInfo.score : 1);
-  const [description, setDescription] = useState<string>(pageInfo != undefined ? pageInfo.description : "");
-  const [showMessage, setShowMessage] = useState<boolean>(true);
+  const [showMessage, setShowMessage] = useState<boolean>(false);
   const scrollRef = useRef<ScrollViewRef>(null);
 
-  const db = useSQLiteContext();
-  console.log("DetailsPage - Database status...");
-  console.log(db);
+  const db = useDatabase();
+  const [isDBReady, setIsDBReady] = useState<boolean>(false);
+  
+  useFocusEffect(
+    useCallback(()=> {
+      checkDatabaseState({db, setIsDBReady});
+    }, [isDBReady])
+  );
 
   const handleCloseMessage = ()=>{
     setShowMessage(false);
@@ -36,21 +44,15 @@ const DetailsPage = ({pageInfo, handleOnSave}: {pageInfo:ItemInfo, handleOnSave:
   };
 
   const handleSaveChanges = async ()=>{
+    if(!db) return;
     try {
       console.log("Updating the note...");
-      const statement = await db.prepareAsync("UPDATE note SET title=$title, description=$description, score=$score WHERE id=$key");
+      const statement = await db.prepareAsync("UPDATE note SET title=$title, description=$description, score=$score WHERE key=$key");
       const response = await statement.executeAsync({$title:title, $description:description, $score:score, $key:pageInfo.key});
+      console.log({$title:title, $description:description, $score:score, $key: pageInfo.key})
+      console.log(pageInfo);
       console.log("Note updated ✅");
-      handleOnSave({
-        key: pageInfo.key,
-        title: title,
-        description: description,
-        score: score,
-        functionalRequirements: pageInfo.functionalRequirements,
-        nonFunctionalRequirements: pageInfo.nonFunctionalRequirements
-      });
-      console.log("Notes updated in the home screen  ✅");
-      
+
     } catch (e){
       console.error(e);
     }

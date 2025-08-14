@@ -11,6 +11,8 @@ import { ItemInfoWithJSON, ItemInfo } from "@/constants/globalTypes";
 import { useLocalSearchParams } from "expo-router";
 import { parse } from "@babel/core";
 
+import { useDatabase } from "@/components/Shared/DatabaseProvider";
+
 
 const styles = StyleSheet.create({
   container: {
@@ -31,15 +33,9 @@ const Detail = ()=>{
     setSelectedPage(pageIndex);
   };
 
-  // ItemsInfo management --
-  const updatePageInfo = (newPageInfo:ItemInfo)=>{
-    setPageInfo(newPageInfo);
-  };
-
   const { details } = useLocalSearchParams<{details : string}>();
   const [pageInfo, setPageInfo] = useState<ItemInfo>((typeof details === "string") ? JSON.parse(details) : undefined);
   const [score, setScore] = useState<number>(pageInfo.score);
-
 
   // pageSelectors for the PageSelectorContainer
   const pageSelectors:React.ReactElement<typeof PageSelector>[] = pages.map((el, ind)=> (
@@ -56,7 +52,7 @@ const Detail = ()=>{
     <View style={[g_styles.container, styles.container]}>
       <PageSelectorContainer pageSelectors={pageSelectors} pageSelected={pageSelected} />
       {(pageSelected == 0) ? (
-        <DetailsPage pageInfo={pageInfo} handleOnSave={updatePageInfo} />
+        <DetailsPage pageInfo={pageInfo} />
       ) : (
         <RequirementsPage />
       )}

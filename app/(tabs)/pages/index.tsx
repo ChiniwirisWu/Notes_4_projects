@@ -13,41 +13,38 @@ import Searchbar from "@/components/Pages/Searchbar";
 import ProjectsList from "@/components/Pages/Projectslist";
 
 import g_style from "@/constants/styles";
+import { checkDatabaseState } from "@/constants/functions";
+import LoadingScreen from "@/components/Shared/LoadingScreen";
 
 const Home = ()=>{
 
   const db = useDatabase();
   const [items, setItems] = useState<Array<ItemInfoWithJSON>>([]);
+  const [isDBReady, setIsDBReady] = useState<boolean>(false); // this method is to load the method once, not twice.
+
+  const fetchAllItems = async ()=>{
+    if(db){
+      console.log("fetching all the items...");
+      const result = await db.getAllAsync<ItemInfoWithJSON>("SELECT * FROM note");
+      setItems(result);
+    }
+  };
 
   useFocusEffect(useCallback(()=>{
-
-    const getAllItemsFromDB = async ()=> {
-      try {
-        if(db == null) {
-          console.error("Home Component - Database is not ready to use.");
-          return;
-        };
-
-        console.log("DATABASE SHOULD BE USABLE HERE.");
-
-        //console.log(`Home Component - Fetching all the items....`);
-        //const result = await db.getAllAsync<ItemInfoWithJSON>("SELECT * FROM note"); 
-        //console.log(`Home Component - ${result.length} fetched.`);
-        //setItems(result);
-      } catch (e){
-        console.error(`Home Component - Error updating the database: ${e}`);
-      }
-    }; 
-
-    if(db){
-      getAllItemsFromDB();
+    console.log("index.tsx useFocusEffect");
+    if(checkDatabaseState({db, setIsDBReady})){
+      fetchAllItems();
     }
+  }, [db])
+  );
 
-  }, []));
+  if(!isDBReady){
 
+    return <LoadingScreen />;
 
+  } else {
 
-  return (
+    return (
     <View style={g_style.container}>
       <Setting />
       <Title editable={true} />
@@ -56,6 +53,7 @@ const Home = ()=>{
       <StatusBar style="auto" />
     </View>
   );
+  }
 };
 
 export default Home;

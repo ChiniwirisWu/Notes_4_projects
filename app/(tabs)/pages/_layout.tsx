@@ -8,7 +8,7 @@ const PagesLayout = ()=> {
   return (
     <Stack
       initialRouteName="index"
-      screenOptions={{headerTintColor: "#000", headerShown: false}}
+      screenOptions={{headerTintColor: "#000" }}
     >
       <Stack.Screen name="index" options={{headerShown:false}}/>
       <Stack.Screen name="details" options={{

@@ -14,7 +14,9 @@ import {
   ActivityIndicator,
   Text,
   View
-} from "react-native"
+} from "react-native";
+import g_styles from "@/constants/styles";
+import LoadingScreen from "./LoadingScreen";
 
 const DatabaseContext = createContext<SQLiteDatabase | null>(null);
 
@@ -47,8 +49,10 @@ export default function DatabaseProvider({children}:{children:any}){
       
       INSERT INTO settings (id, title, musicOn, sfxOn) VALUES (1, 'Crazy title', 1, 1);
 
+      DROP TABLE IF EXISTS note;
+
       CREATE TABLE IF NOT EXISTS note(
-        id INTEGER PRIMARY KEY,
+        key VARCHAR(200) PRIMARY KEY,
         title VARCHAR(200) NOT NULL UNIQUE,
         description VARCHAR(1000) NOT NULL,
         score INTEGER NOT NULL,
@@ -62,11 +66,16 @@ export default function DatabaseProvider({children}:{children:any}){
       console.error(e);
     }
   }
+
+  if(db){
+    return (
+      <DatabaseContext.Provider value={db}>
+        {children}
+      </DatabaseContext.Provider>
+    );
+  } else {
+    <LoadingScreen />
+  }
   
-  return (
-    <DatabaseContext.Provider value={db}>
-      {children}
-    </DatabaseContext.Provider>
-  );
 
 }

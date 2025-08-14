@@ -12,7 +12,7 @@ import Votation from "@/components/Create/Votation";
 import { Item } from "@/constants/listItem";
 
 import { useSQLiteContext } from "expo-sqlite";
-import { generateKey } from "@/constants/functions";
+import { generateKey, generateRandomInteger } from "@/constants/functions";
 
 import g_style from "@/constants/styles";
 import { defaultNoteValue } from "@/constants/defaultNoteObjectValues";
@@ -21,20 +21,21 @@ import g_styles from "@/constants/styles";
 import { showErrorCSS } from "react-native-svg/lib/typescript/deprecated";
 import { useFocusEffect } from "expo-router";
 
+import { useDatabase } from "@/components/Shared/DatabaseProvider";
+import { LightSpeedOutLeft } from "react-native-reanimated";
+import LoadingScreen from "@/components/Shared/LoadingScreen";
+import { checkDatabaseState } from "@/constants/functions";
+
 const Create = () => {
-  const db = useSQLiteContext();
+  const db = useDatabase();
   const [isDBReady, setIsDBReady] = useState<boolean>(false);
   
-  useFocusEffect(useCallback(()=>{
-    console.log("Create component - Checking DB state...")
-    if(db){
-      console.log("Database ready to use!");
-      setIsDBReady(true);
-    } else {
-      console.log("Database not to use!");
-      setIsDBReady(false);
-    }
-  }, [isDBReady]));
+  useFocusEffect(
+    useCallback(()=> {
+      console.log("create.tsx useFocusEffect");
+      checkDatabaseState({db, setIsDBReady});
+    }, [isDBReady])
+  );
 
   // These are the fields of a Note object that will be saved in the DB.
   const [title, setTitle] = useState<string>();
@@ -80,12 +81,17 @@ const Create = () => {
       const nonFunctionalRequirementsJSON = JSON.stringify(nonFunctionalRequirements);
 
       const statement = await db.prepareAsync(`
-      INSERT INTO note (title, description, score, functionalRequirements, nonFunctionalRequirements) 
-      VALUES ($title, $description, $score, $functionalRequirements, $nonFunctionalRequirements);
+      INSERT INTO note (key, title, description, score, functionalRequirements, nonFunctionalRequirements) 
+      VALUES ($key, $title, $description, $score, $functionalRequirements, $nonFunctionalRequirements);
       `);
       console.log("handleSaveNewNote() saving new object...");
       console.log({title, description, score, functionalRequirementsJSON, nonFunctionalRequirementsJSON});
+
+      const hashLength = 10;
+      const alias = "note4projects";
+
       const result = await statement.executeAsync({
+        $key: generateKey(generateRandomInteger(), hashLength, alias),
         $title: (title == "" || title == undefined) ? defaultNoteValue.title : title, 
         $description: (description == "" || description == undefined) ? defaultNoteValue.description : description, 
         $score: score, 
@@ -100,6 +106,10 @@ const Create = () => {
       console.error(e);
     }
   };
+
+  if(!db){
+    <LoadingScreen />
+  }
 
   return (
     <View style={g_style.container}>

@@ -9,10 +9,7 @@ export default function MessageBox ({handleOnPress}:{handleOnPress : ()=>void}){
   return (
     <View>
       <Text style={[g_styles.p, {textAlign: "center", marginBottom: 40}]}>Note created succesfully!🥳</Text>
-      <LongButton text="Close message" handleOnPress={()=> {
-        handleOnPress();
-        console.log("go back");
-      }} />
+      <LongButton text="Close message" handleOnPress={handleOnPress} />
     </View>
   );
 }
