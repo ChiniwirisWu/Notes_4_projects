@@ -38,7 +38,7 @@ export function getMessageColor(state:MessageStates) : string {
   }
 }
 
-export function getMessage(state : MessageStates) : (String | null){
+export function getMessage(state : MessageStates) : (string | null){
   switch(state){
     case MessageStates.empty: return "This list is empty";
     case MessageStates.hidden: return "List is hidden";

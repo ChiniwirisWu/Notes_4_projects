@@ -13,7 +13,7 @@ import Searchbar from "@/components/Pages/Searchbar";
 import ProjectsList from "@/components/Pages/Projectslist";
 
 import g_style from "@/constants/styles";
-import { checkDatabaseState } from "@/constants/functions";
+import { tryConnectDB } from "@/constants/functions";
 import LoadingScreen from "@/components/Shared/LoadingScreen";
 
 const Home = ()=>{
@@ -32,7 +32,7 @@ const Home = ()=>{
 
   useFocusEffect(useCallback(()=>{
     console.log("index.tsx useFocusEffect");
-    if(checkDatabaseState({db, setIsDBReady})){
+    if(tryConnectDB({db, setIsDBReady})){
       fetchAllItems();
     }
   }, [db])

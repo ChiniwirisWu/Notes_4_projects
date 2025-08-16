@@ -54,6 +54,7 @@ const RequirementsPage = ({pageInfo}:{pageInfo:ItemInfoWithJSON})=>{
           duration={1000}
         />
       </View>
+      <LongButton text="Save" handleOnPress={()=> {}} marginBottom={40} />
       <LongButton text="Delete" handleOnPress={()=> {}} marginBottom={40} />
     </ScrollView>
   ); 

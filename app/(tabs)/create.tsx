@@ -1,6 +1,17 @@
-import { View, ScrollView, Modal, Text } from "react-native";
+import { View, ScrollView, } from "react-native";
 import { StatusBar } from 'expo-status-bar';
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useFocusEffect } from "expo-router";
+import { Item } from "@/constants/listItem";
+import { defaultNoteValue } from "@/constants/defaultNoteObjectValues";
+import g_style from "@/constants/styles";
+import { generateKey, generateRandomInteger } from "@/constants/functions";
+import { useDatabase } from "@/components/Shared/DatabaseProvider";
+import { tryConnectDB } from "@/constants/functions";
+import { 
+  useState, 
+  useRef, 
+  useCallback 
+} from "react";
 
 import Setting from "@/components/Shared/Setting";
 import Title from "@/components/Shared/Title";
@@ -9,46 +20,29 @@ import TextAreaInput from "@/components/Create/TextareaInput";
 import LongButton from "@/components/Shared/LongButton";
 import IncrementableList from "@/components/Create/IncrementableList";
 import Votation from "@/components/Create/Votation";
-import { Item } from "@/constants/listItem";
-
-import { useSQLiteContext } from "expo-sqlite";
-import { generateKey, generateRandomInteger } from "@/constants/functions";
-
-import g_style from "@/constants/styles";
-import { defaultNoteValue } from "@/constants/defaultNoteObjectValues";
 import MessageBox from "@/components/Shared/MessageBox";
-import g_styles from "@/constants/styles";
-import { showErrorCSS } from "react-native-svg/lib/typescript/deprecated";
-import { useFocusEffect } from "expo-router";
-
-import { useDatabase } from "@/components/Shared/DatabaseProvider";
-import { LightSpeedOutLeft } from "react-native-reanimated";
 import LoadingScreen from "@/components/Shared/LoadingScreen";
-import { checkDatabaseState } from "@/constants/functions";
+
 
 const Create = () => {
   const db = useDatabase();
   const [isDBReady, setIsDBReady] = useState<boolean>(false);
-  
-  useFocusEffect(
-    useCallback(()=> {
-      console.log("create.tsx useFocusEffect");
-      checkDatabaseState({db, setIsDBReady});
-    }, [isDBReady])
-  );
 
-  // These are the fields of a Note object that will be saved in the DB.
   const [title, setTitle] = useState<string>();
   const [description, setDescription] = useState<string>();
   const [functionalRequirements, setFunctionalRequirements] = useState<Array<Item>>();
   const [nonFunctionalRequirements, setNonFunctionalRequirements] = useState<Array<Item>>();
   const [score, setScore] = useState<number>(1);
   const [showMessage, setShowMessage] = useState<boolean>(false);
-
-  const scrollRef = useRef(null);
+  const scrollRef = useRef<ScrollView | null>(null);
+  
+  useFocusEffect(
+    useCallback(()=> {
+      tryConnectDB({db, setIsDBReady});
+    }, [isDBReady])
+  );
 
   const handleEmtpyAllFields = ()=>{
-    console.log("emptyAllFields() executed");
     setTitle("");
     setDescription("");
     setFunctionalRequirements([]);
@@ -58,13 +52,14 @@ const Create = () => {
 
   const handleCloseMessage = ()=>{
     setShowMessage(false);
-    scrollRef.current.scrollTo({x: 0, y:0});
+    if(scrollRef.current != null){
+      scrollRef.current.scrollTo({x: 0, y:0});
+    }
   }
 
   const handleShowMessage = ()=>{
     setShowMessage(true);
     if(scrollRef.current != null){
-      //scrollRef.current.scrollTo({x: 0, y: 0});
       scrollRef.current.scrollToEnd();
     }
   }
@@ -81,22 +76,11 @@ const Create = () => {
       const nonFunctionalRequirementsJSON = JSON.stringify(nonFunctionalRequirements);
       const hashLength = 10;
       const alias = "note4projects";
-      console.log({
-        $key: generateKey(generateRandomInteger(), hashLength, alias),
-        $title: (title == "" || title == undefined) ? defaultNoteValue.title : title, 
-        $description: (description == "" || description == undefined) ? defaultNoteValue.description : description, 
-        $score: score, 
-        $functionalRequirements: functionalRequirementsJSON,
-        $nonFunctionalRequirements : nonFunctionalRequirementsJSON
-      })
 
       const statement = await db.prepareAsync(`
       INSERT INTO note (key, title, description, score, functionalRequirements, nonFunctionalRequirements) 
       VALUES ($key, $title, $description, $score, $functionalRequirements, $nonFunctionalRequirements);
       `);
-      console.log("handleSaveNewNote() saving new object...");
-      console.log({title, description, score, functionalRequirementsJSON, nonFunctionalRequirementsJSON});
-
 
       const result = await statement.executeAsync({
         $key: generateKey(generateRandomInteger(), hashLength, alias),
@@ -106,8 +90,8 @@ const Create = () => {
         $functionalRequirements: functionalRequirementsJSON,
         $nonFunctionalRequirements : nonFunctionalRequirementsJSON
       });
-      console.log("handleSaveNewNote() object saved!");
-      await result.resetAsync();
+
+      // Show messages only if the note is saved.
       handleEmtpyAllFields();
       handleShowMessage();
     } catch (e){
@@ -115,15 +99,16 @@ const Create = () => {
     }
   };
 
+  // If the database is not set yet, this cuts the way of making an error with SQL queries.
   if(!db){
     <LoadingScreen />
   }
 
+  // It loads only if the database is setted.
   return (
     <View style={g_style.container}>
       <ScrollView ref={scrollRef}>
         <Setting />
-
         <Title editable={false} />
         <SingleLineTextInput fieldName="Title" value={title} setValue={setTitle} />
         <TextAreaInput fieldName="Description" value={description} setValue={setDescription} marginBottom={40} />

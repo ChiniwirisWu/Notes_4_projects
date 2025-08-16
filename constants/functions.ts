@@ -13,12 +13,12 @@ export function generateRandomInteger(){
   return Math.floor(Math.random() * (MAX_VALUE - MIN_VALUE)) + MIN_VALUE;
 }
 
-type CheckDatabaseStateParams = {
+type TryConnectDBParams = {
   db:(SQLiteDatabase | null), 
   setIsDBReady:(isReady:boolean)=>void
 };
 
-export function checkDatabaseState({db, setIsDBReady}: CheckDatabaseStateParams) : boolean{
+export function tryConnectDB({db, setIsDBReady}: TryConnectDBParams) : boolean{
   if(!db){
     console.log("Database is still loading...");
     setIsDBReady(false);

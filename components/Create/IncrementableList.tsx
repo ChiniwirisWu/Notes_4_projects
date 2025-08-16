@@ -1,26 +1,18 @@
-import { useState, useEffect } from "react";
-import Animated, { 
-  FlatList, 
-  View, 
-  Text, 
-  Pressable, 
-  StyleSheet, 
-  TextInput,
-} from "react-native";
-import { FontAwesome, FontAwesome6 } from "@expo/vector-icons";
-import { MessageStates,
+import { useState, useEffect, createContext } from "react";
+import Animated, { FlatList, View, Text, StyleSheet, } from "react-native";
+import g_styles from "@/constants/styles";
+import { generateKey } from "@/constants/functions";
+import { 
+  MessageStates,
   ItemStates, 
-  Key, 
   Item,
   getMessage,
   getMessageColor,
-  getStateColor
 } 
-from "@/constants/listItem"; import g_styles from "@/constants/styles";
-import { generateKey } from "@/constants/functions";
+from "@/constants/listItem"; 
+
 import IconButton from "@/components/Shared/IconButton";
 import IncrementableListItem from "./IncrementableListItem";
-import ConfirmationBox from "../Shared/ConfirmationBox";
 
 
 const styles = StyleSheet.create({
@@ -52,83 +44,77 @@ type IncrementableListParams = {
 };
 
 
+export interface IncrementableListContextType {
+  handleOnDeleteListItem : (itemIndex:number)=> void,
+  handleItemInfoChange: (itemInfo:Item, itemIndex:number)=> void,
+};
+
+export const IncrementableListContext = createContext<IncrementableListContextType>({
+  handleOnDeleteListItem : (itemIndex:number)=> {},
+  handleItemInfoChange: (itemInfo:Item, itemIndex:number)=> {}
+});
+
 const IncrementableList = ({title, alias, items, setItems}: IncrementableListParams)=>{
-  // ordinary states...
-  const [showMessage, setShowMessage] = useState<boolean>(items.length < 1); // if true shows message and hides list.
-  const [messageState, setMessageState] = useState<MessageStates>(MessageStates.empty);
+  const [showMessage, setShowMessage] = useState<boolean>(items.length < 1); 
+  const [messageState, setMessageState] = useState<MessageStates>((items.length < 1) ? MessageStates.empty : MessageStates.shown);
   const [messageColor, setMessageColor] = useState<string>(getMessageColor(messageState));
+  const [message, setMessage] = useState<string|null>(getMessage(messageState));
+
+  const showSelectedMessage = (messageState:MessageStates)=>{
+    setShowMessage((messageState == MessageStates.shown) ? false : true);  
+    setMessage(getMessage(messageState));
+    setMessageState(messageState);
+    setMessageColor(getMessageColor(messageState));
+  };
 
   useEffect(()=>{
   // this ensures that it shows the empty message whenever the user clears the fields.
-
     if(items.length < 1){
-      setShowMessage(true);  
-      setMessageState(MessageStates.empty);
-      setMessageColor(getMessageColor(MessageStates.empty));
+      showSelectedMessage(MessageStates.empty);
     }
-
   }, [items]);
 
-  // header button's on-type methods.
+  // hader method 1  
   const handleAddEmptyListItem = (id:number, alias:string)=>{
     const hashLength = 10;
     const newItem = {key: generateKey(id, hashLength, alias), title: "", state: ItemStates.empty};
     setItems([...items, newItem]);
-    setShowMessage(false);
-    console.log(items);
+    showSelectedMessage(MessageStates.shown); // the list should be shown whenever the user adds a new item.
   };
 
-  const updateListItem = (itemInfo:Item, itemIndex:number)=>{
-    if(itemIndex <= items.length){
-      const itemsCopy = items.slice();
-      itemsCopy[itemIndex] = itemInfo;
-      setItems(itemsCopy); 
-    }
-  }
-
   const onShowHide = ()=> {
-
-    // 1) Set next State (empty, hidden, or shown). 
-    let nextState = MessageStates.empty;
 
     if(messageState == MessageStates.hidden){
       // output: MessageStates.empty | MessageStates.shown.
       if(items.length < 1){
         // empty scenario.
-        nextState = MessageStates.empty;
+        showSelectedMessage(MessageStates.empty);
       } else {
         // show the elements.
-        nextState = MessageStates.shown;
+        showSelectedMessage(MessageStates.shown);
       }
     } else {
       // output: MessageStates.hidden.
-      nextState = MessageStates.hidden;
-    }
-
-    setMessageState(nextState);
-
-    // 2) Render messages color or list via "nextState".
-    switch(nextState){
-      // A) Color picking
-      case MessageStates.hidden: 
-        setShowMessage(true);
-        setMessageColor(getMessageColor(nextState));
-        break;
-
-      case MessageStates.empty:
-        setShowMessage(true);
-        setMessageColor(getMessageColor(nextState));
-        break;
-
-      case MessageStates.shown:
-        setShowMessage(false);
-        break;
+      showSelectedMessage(MessageStates.hidden);
     }
   }
 
-  const handleOpenDeleteBox = ()=>{
-    console.log("onOpenDeleteBox()");
-  }
+  const handleOnDeleteListItem = (itemIndex:number)=>{
+    if(itemIndex <= (items.length - 1) && itemIndex >= 0){
+      let itemsCopy = items.slice();
+      itemsCopy.splice(itemIndex, 1);
+      setItems(itemsCopy); 
+    };
+  };
+
+  const handleItemInfoChange = (itemInfo:Item, itemIndex:number)=>{
+    if(itemIndex <= (items.length - 1)){
+      const itemsCopy = items.slice();
+      itemsCopy[itemIndex] = itemInfo;
+      setItems(itemsCopy); 
+    };
+  };
+
 
   return (
     <View style={styles.container}>
@@ -141,25 +127,24 @@ const IncrementableList = ({title, alias, items, setItems}: IncrementableListPar
       </View>
 
       { showMessage ? (
-        <Text style={[g_styles.p, styles.message, {color: messageColor.toString()}]}>{getMessage(messageState)}</Text>
+        <Text style={[g_styles.p, styles.message, {color: messageColor}]}>{message}</Text>
       ):(
-        <FlatList 
-          data={items}
-          renderItem={({item, index})=> (
-            <IncrementableListItem 
-              onLongPress={()=> handleOpenDeleteBox()} 
-              itemInfo={item} 
-              handleItemInfoChange={updateListItem}
-              itemIndex={index}
-            />
-          )}
-          keyExtractor={(item, index) => (item.key == undefined)? `alias-${index}` : item.key}
-          scrollEnabled={false}
-          nestedScrollEnabled={true}
-          bounces={false}
-        />
+        <IncrementableListContext.Provider value={{handleOnDeleteListItem, handleItemInfoChange}}>
+          <FlatList 
+            data={items}
+            renderItem={({item, index})=> (
+              <IncrementableListItem 
+                itemInfo={item} 
+                itemIndex={index}
+              />
+            )}
+            keyExtractor={(item, index) => (item.key == undefined)? `alias-${index}` : item.key}
+            scrollEnabled={false}
+            nestedScrollEnabled={true}
+            bounces={false}
+          />
+        </IncrementableListContext.Provider>
       )}
-
     </View>
   );
 }
