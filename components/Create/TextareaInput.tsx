@@ -4,8 +4,8 @@ import g_styles from "@/constants/styles";
 type TextAreaInputParams = {
   fieldName:string, 
   marginBottom?:number,
-  value?:(string|undefined), 
-  setValue?:(text:(string|undefined))=>void
+  value:string, 
+  setValue:(text:string)=>void
 }
 
 const TextAreaInput = ({fieldName, marginBottom, value, setValue}:TextAreaInputParams) =>{

@@ -4,13 +4,13 @@ import TextAreaInput from "../Create/TextareaInput";
 import Votation from "../Create/Votation";
 import LongButton from "../Shared/LongButton";
 import MessageBox from "../Shared/MessageBox";
-import { ItemInfo } from "@/constants/globalTypes";
+import { ItemInfoWithJSON } from "@/constants/globalTypes";
 import { useSQLiteContext } from "expo-sqlite";
 import { useFocusEffect } from "expo-router";
 
 import { useState, useRef, useCallback } from "react";
 import { useDatabase } from "../Shared/DatabaseProvider";
-import { checkDatabaseState } from "@/constants/functions";
+import { tryConnectDB } from "@/constants/functions";
 
 const styles = StyleSheet.create({
   container: {
@@ -19,28 +19,28 @@ const styles = StyleSheet.create({
   }
 });
 
-type ScrollViewRef = React.RefObject<ScrollView>;
-
-const DetailsPage = ({pageInfo}: {pageInfo:ItemInfo})=>{
+const DetailsPage = ({pageInfo}: {pageInfo:ItemInfoWithJSON})=>{
 
   const [title, setTitle] = useState<string>(pageInfo.title);
   const [description, setDescription] = useState<string>(pageInfo.description);
   const [score, setScore] = useState<number>(pageInfo != undefined ? pageInfo.score : 1);
   const [showMessage, setShowMessage] = useState<boolean>(false);
-  const scrollRef = useRef<ScrollViewRef>(null);
+  const scrollRef = useRef<ScrollView | null>(null);
 
   const db = useDatabase();
   const [isDBReady, setIsDBReady] = useState<boolean>(false);
   
   useFocusEffect(
     useCallback(()=> {
-      checkDatabaseState({db, setIsDBReady});
+      tryConnectDB({db, setIsDBReady});
     }, [isDBReady])
   );
 
   const handleCloseMessage = ()=>{
     setShowMessage(false);
-    scrollRef.current.scrollTo({x: 0, y: 0});
+    if(scrollRef.current != null){
+      scrollRef.current.scrollTo({x: 0, y: 0});
+    }
   };
 
   const handleSaveChanges = async ()=>{
@@ -63,7 +63,9 @@ const DetailsPage = ({pageInfo}: {pageInfo:ItemInfo})=>{
 
   const handleShowMessage = ()=>{
     setShowMessage(true);
-    scrollRef.current.scrollToEnd();
+    if(scrollRef.current != null){
+      scrollRef.current.scrollToEnd();
+    }
   };
 
   return (

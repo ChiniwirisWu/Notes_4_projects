@@ -18,13 +18,25 @@ const styles = StyleSheet.create({
 
 });
 
-const TitleBox = ({title, onSaveQuit} : {title:string, onSaveQuit: ()=> void})=> {
+type TitleBoxTypes = {
+  title:string, 
+  handleOnTitleChange: (text:string)=> void,
+  handleTitleChange: ()=> void
+};
+
+const TitleBox = ({title, handleOnTitleChange, handleTitleChange} : TitleBoxTypes)=> {
+
   return (
     <View style={styles.center}>
       <View style={styles.container}>
         <Text style={[g_styles.p, g_styles.titleMargin]}>Update title "{title}" to...</Text>
-        <TextInput placeholderTextColor={"#ddd"} style={[g_styles.textInput, {width: 300, margin: "auto"}]} placeholder="New title"/>
-        <LongButton text="Save/Quit" onPress={onSaveQuit} />
+        <TextInput 
+          onChangeText={(text)=> handleOnTitleChange(text)} 
+          placeholderTextColor={"#ddd"} 
+          value={title}
+          style={[g_styles.textInput, {width: 300, margin: "auto"}]} 
+          placeholder="New title"/>
+        <LongButton text="Save/Quit" handleOnPress={handleTitleChange} />
       </View>
     </View>
   );

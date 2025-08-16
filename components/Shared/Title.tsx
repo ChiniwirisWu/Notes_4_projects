@@ -6,7 +6,15 @@ import TitleBox from "@/components/Shared/titleBox";
 
 
 const Title = ({editable}: {editable:boolean}) =>{
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>("Brain Storming");
+
+  // this changes the title in the db and localy in it's state.
+  const handleTitleChange = ()=>{
+    setTitle(title);
+    setShowModal(false);
+    //TODO: change the title in the database as well.
+  };
 
   return (
     <View style={styles.container}>
@@ -14,11 +22,11 @@ const Title = ({editable}: {editable:boolean}) =>{
         visible={showModal}
         backdropColor={"#000"}
       >
-        <TitleBox title="Brain storming" onSaveQuit={()=> setShowModal(false)} />
+        <TitleBox title={title} handleOnTitleChange={setTitle} handleTitleChange={handleTitleChange} />
       </Modal>
 
       <Pressable onPress={()=> (editable) ? setShowModal(true) : console.log("Non editable.")}>
-        <Text style={styles.text}>Brain storming</Text>
+        <Text style={styles.text}>{title}</Text>
       </Pressable>
     </View>
   );

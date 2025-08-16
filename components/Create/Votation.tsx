@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
 
 const ScoreBox = ({score, baseWidth} : {score:number, baseWidth: number})=>{
 
-
   const colors = [
     {background: "#000", color: "#fff"},
     {background: "#00c750", color: "#fff"},

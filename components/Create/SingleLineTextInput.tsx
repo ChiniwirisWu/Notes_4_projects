@@ -3,8 +3,8 @@ import g_styles from "@/constants/styles";
 
 type SingleLineTextInputParams = {
   fieldName:string, 
-  value?:(string|undefined), 
-  setValue?:(text:(string|undefined))=>void
+  value:(string), 
+  setValue:(text:string)=>void
 }
 
 const SingleLineTextInput = ({fieldName, value, setValue}: SingleLineTextInputParams) =>{
