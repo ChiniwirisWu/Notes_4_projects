@@ -38,16 +38,17 @@ export default function DatabaseProvider({children}:{children:any}){
     try{
       const database = await openDatabaseAsync("notes4projects");
       await database.execAsync(`
-      DROP TABLE IF EXISTS settings;
 
       CREATE TABLE IF NOT EXISTS settings(
         id INTEGER PRIMARY KEY,
-        title VARCHAR (200) NOT NULL,
+        title VARCHAR(200) NOT NULL,
         musicOn INTEGER NOT NULL,
         sfxOn INTEGER NOT NULL
       );
-      
-      INSERT INTO settings (id, title, musicOn, sfxOn) VALUES (1, 'Crazy title', 1, 1);
+
+      INSERT INTO settings (id, title, musicOn, sfxOn)
+      SELECT 1, 'My Awesome App', 1, 1
+      WHERE (SELECT COUNT(*) FROM settings) = 0;
 
       CREATE TABLE IF NOT EXISTS note(
         key VARCHAR(200) PRIMARY KEY,
