@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext } from "react";
 import { useFocusEffect } from "expo-router";
 import { useDatabase } from "./DatabaseProvider";
 
@@ -6,6 +6,7 @@ import { View, StyleSheet, Pressable, Modal } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { SettingsController } from "@/controllers/settingsController";
 import { tryConnectDB } from "@/constants/functions";
+import { SoundManagerContext, SoundManagerContextType } from "./SoundManager";
 
 import g_styles from "@/constants/styles";
 import SettingBox from "@/components/Shared/SettingBox";
@@ -17,6 +18,7 @@ const Setting = () =>{
   const [musicOn, setMusicOn] = useState<number>(1);
   const [sfxOn, setSfxOn] = useState<number>(1);
   const db = useDatabase();
+  const { handleTurnOnSfx, handleTurnOffSfx, handleTurnOnMusic, handleTurnOffMusic } = useContext<SoundManagerContextType>(SoundManagerContext);
 
   //TODO: enable the change of the value of musicOn and sfxOn and keep it in the database.
   
@@ -30,6 +32,8 @@ const Setting = () =>{
         setTitle(title);
         setMusicOn(musicOn);
         setSfxOn(sfxOn);
+        (musicOn) ? handleTurnOnMusic() : handleTurnOffMusic();
+        (sfxOn) ? handleTurnOnSfx() : handleTurnOffSfx();
       }); 
     };
   }, []));

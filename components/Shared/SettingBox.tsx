@@ -1,6 +1,7 @@
 import { View, StyleSheet, Text, TextInput } from "react-native";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import g_styles from "@/constants/styles";
+import { SoundManagerContext, SoundManagerContextType } from "./SoundManager";
 import LongButton from "@/components/Shared/LongButton";
 import SettingButton from "@/components/Shared/SettingButton";
 
@@ -29,8 +30,7 @@ type SettingBoxProps = {
 
 const SettingBox = ({handleSaveQuit} : {handleSaveQuit: ()=> void})=> {
   // I need to extract the values from somewhere.
-  const [musicEnable, setMusicEnable] = useState(true);
-  const [sfxEnable, setSfxEnable] = useState(false);
+  const { musicOn, sfxOn, handleTurnOffSfx, handleTurnOnSfx, handleTurnOffMusic, handleTurnOnMusic } = useContext<SoundManagerContextType>(SoundManagerContext);
 
   return (
     <View style={styles.center}>
@@ -39,14 +39,14 @@ const SettingBox = ({handleSaveQuit} : {handleSaveQuit: ()=> void})=> {
         <SettingButton props={{
             titleEnable:"Music On",
             titleDisable:"Music Off",
-            settingEnable:musicEnable,
-            onSettingSwitch:()=> setMusicEnable(!musicEnable)
+            settingEnable:musicOn,
+            onSettingSwitch:()=> musicOn ? handleTurnOffMusic() : handleTurnOnMusic() 
         }}/>
         <SettingButton props={{
             titleEnable:"SFX On",
             titleDisable:"SFX Off",
-            settingEnable:sfxEnable,
-            onSettingSwitch:()=> setSfxEnable(!sfxEnable)
+            settingEnable:sfxOn,
+            onSettingSwitch:()=> sfxOn ? handleTurnOffSfx() : handleTurnOnSfx()
         }}/>
         <LongButton text="Save/Quit" handleOnPress={handleSaveQuit} />
       </View>

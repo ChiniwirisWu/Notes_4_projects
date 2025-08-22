@@ -3,6 +3,8 @@ import { View } from "react-native";
 import { useAudioPlayer, createAudioPlayer } from "expo-audio";
 
 export interface SoundManagerContextType {
+  musicOn:boolean,
+  sfxOn:boolean,
   handleTurnOffMusic: ()=> void, 
   handleTurnOnMusic: ()=> void, 
   handlePlaySoundEffect: (soundType:SoundType)=> void,
@@ -11,6 +13,8 @@ export interface SoundManagerContextType {
 };
 
 export const SoundManagerContext = createContext<SoundManagerContextType>({
+  musicOn:true,
+  sfxOn:true,
   handleTurnOffMusic: ()=> {}, 
   handleTurnOnMusic: ()=> {}, 
   handlePlaySoundEffect: (soundType:SoundType)=> {},
@@ -28,12 +32,6 @@ export default function SoundManager({children}:{children:any}){
   const [musicOn, setMusicOn] = useState<boolean>(false);
   const [sfxOn, setSfxOn] = useState<boolean>(true);
 
-  useEffect(useCallback(()=>{
-    (musicOn) ? backgroundPlayer.play() : backgroundPlayer.pause();
-    console.log(backgroundPlayer.isLoaded);
-    console.log(effectsPlayer.isLoaded);
-  }, [])); 
-
   const soundTypes = {
     background: require("@/assets/Sfx/relaxing_piano_music.mp3"),
     pressed: require("@/assets/Sfx/select_sound.mp3"),
@@ -41,14 +39,13 @@ export default function SoundManager({children}:{children:any}){
     failed: require("@/assets/Sfx/select_sound.mp3"),
   };
 
-  const effectsPlayer = useAudioPlayer(soundTypes.pressed);
-  effectsPlayer.loop = false;
-  effectsPlayer.volume = 0.3;
-
   const backgroundPlayer = useAudioPlayer(soundTypes.background);
   backgroundPlayer.loop = true;
   backgroundPlayer.volume = 0.25;
 
+  const effectsPlayer = useAudioPlayer(soundTypes.pressed);
+  effectsPlayer.loop = false;
+  effectsPlayer.volume = 0.3;
 
   const handleTurnOffMusic = ()=>{
     setMusicOn(false);
@@ -82,7 +79,6 @@ export default function SoundManager({children}:{children:any}){
     };
     effectsPlayer.seekTo(0);
     effectsPlayer.play();
-    console.log("handlePlaySoundEffect executed!");
   };
 
   const handleTurnOffSfx = ()=>{
@@ -96,6 +92,8 @@ export default function SoundManager({children}:{children:any}){
   return (
     <SoundManagerContext 
       value={{
+        musicOn,
+        sfxOn,
         handleTurnOnMusic, 
         handleTurnOffMusic, 
         handlePlaySoundEffect,
