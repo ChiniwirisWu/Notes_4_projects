@@ -29,7 +29,6 @@ type SettingBoxProps = {
 };
 
 const SettingBox = ({handleSaveQuit} : {handleSaveQuit: ()=> void})=> {
-  // I need to extract the values from somewhere.
   const { musicOn, sfxOn, handleTurnOffSfx, handleTurnOnSfx, handleTurnOffMusic, handleTurnOnMusic } = useContext<SoundManagerContextType>(SoundManagerContext);
 
   return (

@@ -1,10 +1,10 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext } from "react";
 import { useDatabase } from "./DatabaseProvider";
 import { useFocusEffect } from "expo-router";
 import { tryConnectDB } from "@/constants/functions";
 import { SettingsController } from "@/controllers/settingsController";
-
 import { View, StyleSheet, TextInput, Pressable, Text, Modal } from "react-native";
+import { SoundManagerContext, SoundManagerContextType, SoundType } from "./SoundManager";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Fonts from "@/constants/fonts";
 import TitleBox from "@/components/Shared/titleBox";
@@ -14,6 +14,7 @@ const Title = ({editable}: {editable:boolean}) =>{
   const [showModal, setShowModal] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [isDBReady, setIsDBReady] = useState<boolean>(false);
+  const {handlePlaySoundEffect} = useContext<SoundManagerContextType>(SoundManagerContext);
   const db = useDatabase();
 
   useFocusEffect(
@@ -35,6 +36,7 @@ const Title = ({editable}: {editable:boolean}) =>{
       SettingsController.updateTitle(db, title);
       setTitle(title);
       setShowModal(false);
+      handlePlaySoundEffect(SoundType.pressed);
     }
   };
 

@@ -25,6 +25,23 @@ import MessageBox from "@/components/Shared/MessageBox";
 import LoadingScreen from "@/components/Shared/LoadingScreen";
 import { SoundType, SoundManagerContext, SoundManagerContextType } from "@/components/Shared/SoundManager";
 
+const messageTexts = {
+  succeed: "Note created succesfully!🥳",
+  error: "There was a problem creating this note. Hint: try with another title ⚠️"
+};
+
+enum MessageType {
+  succeed,
+  error,
+};
+
+function getMessageText(messageType:MessageType) : string{
+  switch(messageType){
+    case MessageType.succeed: return messageTexts.succeed;
+    case MessageType.error: return messageTexts.error;
+    default: return "";
+  }
+};
 
 const Create = () => {
   const db = useDatabase();
@@ -36,7 +53,9 @@ const Create = () => {
   const [nonFunctionalRequirements, setNonFunctionalRequirements] = useState<Array<Item>>();
   const [score, setScore] = useState<number>(1);
   const [showMessage, setShowMessage] = useState<boolean>(false);
+  const [messageText, setMessageText] = useState<string>("");
   const scrollRef = useRef<ScrollView | null>(null);
+
 
   const {handlePlaySoundEffect} = useContext<SoundManagerContextType>(SoundManagerContext);
   
@@ -47,12 +66,12 @@ const Create = () => {
   );
 
   const handleEmtpyAllFields = ()=>{
+    handlePlaySoundEffect(SoundType.pressed);
     setTitle("");
     setDescription("");
     setFunctionalRequirements([]);
     setNonFunctionalRequirements([]);
     setScore(1);
-    handlePlaySoundEffect(SoundType.pressed);
   };
 
   const handleCloseMessage = ()=>{
@@ -62,7 +81,8 @@ const Create = () => {
     }
   }
 
-  const handleShowMessage = ()=>{
+  const handleShowMessage = (messageType:MessageType)=>{
+    setMessageText(getMessageText(messageType));
     setShowMessage(true);
     if(scrollRef.current != null){
       scrollRef.current.scrollToEnd();
@@ -98,9 +118,11 @@ const Create = () => {
 
       // Show messages only if the note is saved.
       handleEmtpyAllFields();
-      handleShowMessage();
+      handleShowMessage(MessageType.succeed);
+      handlePlaySoundEffect(SoundType.pressed);
     } catch (e){
       console.error(e);
+      handleShowMessage(MessageType.error);
     }
   };
 
@@ -134,7 +156,7 @@ const Create = () => {
         <LongButton text="Clear" handleOnPress={handleEmtpyAllFields} marginBottom={40} />
 
         {(showMessage)?(
-          <MessageBox handleOnPress={handleCloseMessage} />
+          <MessageBox handleOnPress={handleCloseMessage} messageText={messageText} />
         ):(
           <></>
         )}

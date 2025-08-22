@@ -1,7 +1,9 @@
 import { View, StyleSheet, Text } from "react-native";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import SquareButton from "../Shared/SquareButton";
 import g_styles from "@/constants/styles";
+import { SoundManagerContext, SoundManagerContextType, SoundType } from "@/components/Shared/SoundManager";
+
 
 const styles = StyleSheet.create({
   scoreContainer: {
@@ -20,6 +22,7 @@ const styles = StyleSheet.create({
 });
 
 const ScoreBox = ({score, baseWidth} : {score:number, baseWidth: number})=>{
+
 
   const colors = [
     {background: "#000", color: "#fff"},
@@ -45,13 +48,16 @@ const Votation = ({score, setScore}: VotationParams)=>{
 
   const buttonsBoxWidth = 40;
   const scoreBoxWidth = 50;
+  const {handlePlaySoundEffect} = useContext<SoundManagerContextType>(SoundManagerContext);
 
   const onAdd = ()=>{
     setScore(((score + 1) > 5) ? 5 : score + 1);
+    handlePlaySoundEffect(SoundType.pressed);
   }
 
   const onMinus = ()=>{
     setScore(((score - 1) < 1) ? 1 : score - 1);
+    handlePlaySoundEffect(SoundType.pressed);
   }
 
   return (
