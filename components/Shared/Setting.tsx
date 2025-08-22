@@ -18,6 +18,7 @@ const Setting = () =>{
   const [sfxOn, setSfxOn] = useState<number>(1);
   const db = useDatabase();
 
+  //TODO: enable the change of the value of musicOn and sfxOn and keep it in the database.
   
   useFocusEffect(useCallback(()=>{
 

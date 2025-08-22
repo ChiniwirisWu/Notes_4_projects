@@ -5,6 +5,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import * as SQLite from "expo-sqlite";
 import { SQLiteProvider } from "expo-sqlite";
+import SoundManager from "@/components/Shared/SoundManager";
 import DatabaseProvider from "@/components/Shared/DatabaseProvider";
 
 SplashScreen.preventAutoHideAsync();
@@ -22,9 +23,11 @@ const RootLayout = ()=>{
     return (
       <DatabaseProvider>
         <GestureHandlerRootView>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown:false }} />
-          </Stack>
+          <SoundManager>
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown:false }} />
+            </Stack>
+          </SoundManager>
         </GestureHandlerRootView>
       </DatabaseProvider>
     );

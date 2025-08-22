@@ -4,7 +4,7 @@ import g_styles from "@/constants/styles";
 type TextAreaInputParams = {
   fieldName:string, 
   marginBottom?:number,
-  value:string, 
+  value:string|undefined, 
   setValue:(text:string)=>void
 }
 

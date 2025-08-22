@@ -3,7 +3,7 @@ import g_styles from "@/constants/styles";
 
 type SingleLineTextInputParams = {
   fieldName:string, 
-  value:(string), 
+  value:(string|undefined), 
   setValue:(text:string)=>void
 }
 

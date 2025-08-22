@@ -10,7 +10,8 @@ import { tryConnectDB } from "@/constants/functions";
 import { 
   useState, 
   useRef, 
-  useCallback 
+  useCallback,
+  useContext
 } from "react";
 
 import Setting from "@/components/Shared/Setting";
@@ -22,6 +23,7 @@ import IncrementableList from "@/components/Create/IncrementableList";
 import Votation from "@/components/Create/Votation";
 import MessageBox from "@/components/Shared/MessageBox";
 import LoadingScreen from "@/components/Shared/LoadingScreen";
+import { SoundType, SoundManagerContext, SoundManagerContextType } from "@/components/Shared/SoundManager";
 
 
 const Create = () => {
@@ -35,6 +37,8 @@ const Create = () => {
   const [score, setScore] = useState<number>(1);
   const [showMessage, setShowMessage] = useState<boolean>(false);
   const scrollRef = useRef<ScrollView | null>(null);
+
+  const {handlePlaySoundEffect} = useContext<SoundManagerContextType>(SoundManagerContext);
   
   useFocusEffect(
     useCallback(()=> {
@@ -48,6 +52,7 @@ const Create = () => {
     setFunctionalRequirements([]);
     setNonFunctionalRequirements([]);
     setScore(1);
+    handlePlaySoundEffect(SoundType.pressed);
   };
 
   const handleCloseMessage = ()=>{
