@@ -2,7 +2,7 @@ import { Key } from "./listItem"
 import { Item } from "./listItem"
 
 export type ItemInfo = {
-  key: Key,
+  key?: Key,
   title: string,
   description: string,
   functionalRequirements: Item[], // JSON
@@ -11,7 +11,7 @@ export type ItemInfo = {
 };
 
 export type ItemInfoWithJSON = {
-  key: Key,
+  key?: Key,
   title: string,
   description: string,
   functionalRequirements: string, // JSON

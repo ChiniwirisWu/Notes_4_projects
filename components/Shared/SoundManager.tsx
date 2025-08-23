@@ -23,7 +23,7 @@ export const SoundManagerContext = createContext<SoundManagerContextType>({
 });
 
 export enum SoundType {
-  pressed,
+  touched,
   succeed,
   failed
 };
@@ -34,25 +34,31 @@ export default function SoundManager({children}:{children:any}){
 
   const soundTypes = {
     background: require("@/assets/Sfx/relaxing_piano_music.mp3"),
-    pressed: require("@/assets/Sfx/select_sound.mp3"),
-    succeed: require("@/assets/Sfx/select_sound.mp3"),
-    failed: require("@/assets/Sfx/select_sound.mp3"),
+    touched: require("@/assets/Sfx/button-click.mp3"),
+    succeed: require("@/assets/Sfx/succeed_sound.mp3"),
+    failed: require("@/assets/Sfx/failed_sound.mp3"),
   };
 
   const backgroundPlayer = useAudioPlayer(soundTypes.background);
   backgroundPlayer.loop = true;
   backgroundPlayer.volume = 0.25;
 
-  const effectsPlayer = useAudioPlayer(soundTypes.pressed);
+  const effectsPlayer = useAudioPlayer(soundTypes.touched);
   effectsPlayer.loop = false;
   effectsPlayer.volume = 0.3;
 
   const handleTurnOffMusic = ()=>{
+    if(sfxOn){
+      handlePlaySoundEffect(SoundType.touched);
+    };
     setMusicOn(false);
     backgroundPlayer.pause();
   };
 
   const handleTurnOnMusic = ()=>{
+    if(sfxOn){
+      handlePlaySoundEffect(SoundType.touched);
+    };
     setMusicOn(true);
     backgroundPlayer.play();
   };
@@ -64,8 +70,8 @@ export default function SoundManager({children}:{children:any}){
     };
 
     switch(soundType){
-      case SoundType.pressed: 
-        effectsPlayer.replace(soundTypes.pressed);
+      case SoundType.touched: 
+        effectsPlayer.replace(soundTypes.touched);
         break;
       case SoundType.succeed:
         effectsPlayer.replace(soundTypes.succeed);
@@ -74,7 +80,7 @@ export default function SoundManager({children}:{children:any}){
         effectsPlayer.replace(soundTypes.failed);
         break;
       default:
-        effectsPlayer.replace(soundTypes.pressed);
+        effectsPlayer.replace(soundTypes.touched);
         break;
     };
     effectsPlayer.seekTo(0);
@@ -82,10 +88,16 @@ export default function SoundManager({children}:{children:any}){
   };
 
   const handleTurnOffSfx = ()=>{
+    if(sfxOn){
+      handlePlaySoundEffect(SoundType.touched);
+    };
     setSfxOn(false);
   };
 
   const handleTurnOnSfx = ()=>{
+    if(sfxOn){
+      handlePlaySoundEffect(SoundType.touched);
+    };
     setSfxOn(true);
   };
 

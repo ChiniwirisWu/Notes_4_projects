@@ -52,12 +52,12 @@ const Votation = ({score, setScore}: VotationParams)=>{
 
   const onAdd = ()=>{
     setScore(((score + 1) > 5) ? 5 : score + 1);
-    handlePlaySoundEffect(SoundType.pressed);
+    handlePlaySoundEffect(SoundType.touched);
   }
 
   const onMinus = ()=>{
     setScore(((score - 1) < 1) ? 1 : score - 1);
-    handlePlaySoundEffect(SoundType.pressed);
+    handlePlaySoundEffect(SoundType.touched);
   }
 
   return (

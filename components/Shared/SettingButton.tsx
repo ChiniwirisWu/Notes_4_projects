@@ -6,7 +6,7 @@ type SettingBoxProps = {
   titleEnable:string,
   titleDisable:string,
   settingEnable:boolean,
-  onSettingSwitch:()=>void
+  handleChangeValue:()=>void
 };
 
 const SettingButton = ({props}:{props:SettingBoxProps})=> {
@@ -27,7 +27,7 @@ const SettingButton = ({props}:{props:SettingBoxProps})=> {
 
   return(
       <Pressable 
-        onPress={props.onSettingSwitch}
+        onPress={props.handleChangeValue}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
       >

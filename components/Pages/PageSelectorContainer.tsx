@@ -12,14 +12,13 @@ const styles = StyleSheet.create({
   },
 })
 
+type PageSelectorContainerTypes = {
+  pageSelectors:React.ReactElement<typeof PageSelector>[], 
+  pageSelected:number,
+};
 
-const PageSelectorContainer = ({
-    pageSelectors, 
-    pageSelected
-} : {
-    pageSelectors:React.ReactElement<typeof PageSelector>[], 
-    pageSelected:number,
-})=>{
+
+const PageSelectorContainer = ({pageSelectors, pageSelected} : PageSelectorContainerTypes)=>{
 
   return (
     <View style={styles.selectorContainer}>

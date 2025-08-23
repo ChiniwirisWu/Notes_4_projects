@@ -20,7 +20,7 @@ const Title = ({editable}: {editable:boolean}) =>{
   useFocusEffect(
     useCallback(()=> {
 
-      tryConnectDB({db, setIsDBReady});
+      tryConnectDB({db, setIsDBReady, isDBReady});
 
       if(isDBReady && db != null){
         SettingsController.getTitle(db).then(response=>{
@@ -36,7 +36,7 @@ const Title = ({editable}: {editable:boolean}) =>{
       SettingsController.updateTitle(db, title);
       setTitle(title);
       setShowModal(false);
-      handlePlaySoundEffect(SoundType.pressed);
+      handlePlaySoundEffect(SoundType.touched);
     }
   };
 

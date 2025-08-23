@@ -2,11 +2,13 @@ import { View, ScrollView, } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 import { useFocusEffect } from "expo-router";
 import { Item } from "@/constants/listItem";
+import { ItemInfo } from "@/constants/globalTypes";
 import { defaultNoteValue } from "@/constants/defaultNoteObjectValues";
 import g_style from "@/constants/styles";
 import { generateKey, generateRandomInteger } from "@/constants/functions";
 import { useDatabase } from "@/components/Shared/DatabaseProvider";
 import { tryConnectDB } from "@/constants/functions";
+import { CreateController } from "@/controllers/createController";
 import { 
   useState, 
   useRef, 
@@ -27,18 +29,18 @@ import { SoundType, SoundManagerContext, SoundManagerContextType } from "@/compo
 
 const messageTexts = {
   succeed: "Note created succesfully!🥳",
-  error: "There was a problem creating this note. Hint: try with another title ⚠️"
+  failed: "There was a problem creating this note. Hint: try with another title ⚠️"
 };
 
 enum MessageType {
   succeed,
-  error,
+  failed,
 };
 
 function getMessageText(messageType:MessageType) : string{
   switch(messageType){
     case MessageType.succeed: return messageTexts.succeed;
-    case MessageType.error: return messageTexts.error;
+    case MessageType.failed: return messageTexts.failed;
     default: return "";
   }
 };
@@ -61,12 +63,12 @@ const Create = () => {
   
   useFocusEffect(
     useCallback(()=> {
-      tryConnectDB({db, setIsDBReady});
+      handlePlaySoundEffect(SoundType.touched);
+      tryConnectDB({db, setIsDBReady, isDBReady});
     }, [isDBReady])
   );
 
   const handleEmtpyAllFields = ()=>{
-    handlePlaySoundEffect(SoundType.pressed);
     setTitle("");
     setDescription("");
     setFunctionalRequirements([]);
@@ -74,57 +76,47 @@ const Create = () => {
     setScore(1);
   };
 
+  const scrollToTop = ()=>{
+    if(scrollRef.current != null){
+      scrollRef.current.scrollTo({x: 0, y:0});
+    } 
+  };
+
   const handleCloseMessage = ()=>{
     setShowMessage(false);
+    handlePlaySoundEffect(SoundType.touched);
     if(scrollRef.current != null){
       scrollRef.current.scrollTo({x: 0, y:0});
     }
   }
 
+  const handleSaveNewNote = ()=>{
+    if(!db) return;
+
+    CreateController.saveNewNoteIntoDB(db, {title, description, functionalRequirements, nonFunctionalRequirements, score}).then(res=>{
+
+      if(res){
+        console.log("created");
+        handleEmtpyAllFields();
+        handlePlaySoundEffect(SoundType.succeed);
+        handleShowMessage(MessageType.succeed);
+      } else {
+        console.log("failed");
+        handlePlaySoundEffect(SoundType.failed);
+        handleShowMessage(MessageType.failed);
+      }})
+  };
+
   const handleShowMessage = (messageType:MessageType)=>{
     setMessageText(getMessageText(messageType));
     setShowMessage(true);
-    if(scrollRef.current != null){
-      scrollRef.current.scrollToEnd();
-    }
+    setTimeout(()=>{
+      if(scrollRef.current != null){
+        scrollRef.current.scrollToEnd({animated:true});
+      }
+    }, 200)
   }
 
-  const handleSaveNewNote = async ()=>{
-
-    try { 
-      if(!db){
-        console.error("La base de datos no ha sido inicializada todavia!");
-        return;
-      }
-
-      const functionalRequirementsJSON = JSON.stringify(functionalRequirements);
-      const nonFunctionalRequirementsJSON = JSON.stringify(nonFunctionalRequirements);
-      const hashLength = 10;
-      const alias = "note4projects";
-
-      const statement = await db.prepareAsync(`
-      INSERT INTO note (key, title, description, score, functionalRequirements, nonFunctionalRequirements) 
-      VALUES ($key, $title, $description, $score, $functionalRequirements, $nonFunctionalRequirements);
-      `);
-
-      const result = await statement.executeAsync({
-        $key: generateKey(generateRandomInteger(), hashLength, alias),
-        $title: (title == "" || title == undefined) ? defaultNoteValue.title : title, 
-        $description: (description == "" || description == undefined) ? defaultNoteValue.description : description, 
-        $score: score, 
-        $functionalRequirements: functionalRequirementsJSON,
-        $nonFunctionalRequirements : nonFunctionalRequirementsJSON
-      });
-
-      // Show messages only if the note is saved.
-      handleEmtpyAllFields();
-      handleShowMessage(MessageType.succeed);
-      handlePlaySoundEffect(SoundType.pressed);
-    } catch (e){
-      console.error(e);
-      handleShowMessage(MessageType.error);
-    }
-  };
 
   // If the database is not set yet, this cuts the way of making an error with SQL queries.
   if(!db){
@@ -153,7 +145,11 @@ const Create = () => {
         />
         <Votation score={score} setScore={setScore} />
         <LongButton text="Save" handleOnPress={handleSaveNewNote} marginBottom={10} />
-        <LongButton text="Clear" handleOnPress={handleEmtpyAllFields} marginBottom={40} />
+        <LongButton text="Clear" handleOnPress={()=> {
+          handlePlaySoundEffect(SoundType.touched);
+          handleEmtpyAllFields();
+          scrollToTop();
+        }} marginBottom={40} />
 
         {(showMessage)?(
           <MessageBox handleOnPress={handleCloseMessage} messageText={messageText} />

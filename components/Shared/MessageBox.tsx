@@ -1,4 +1,3 @@
-import { MessageStates } from "@/constants/listItem";
 import { View, Text } from "react-native";
 import LongButton from "./LongButton";
 import g_styles from "@/constants/styles";

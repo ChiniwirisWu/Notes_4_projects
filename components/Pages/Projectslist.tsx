@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useState, useContext, useCallback, useEffect, forwardRef, useImperativeHandle } from 'react';
+import { useFocusEffect } from 'expo-router';
+import { tryConnectDB } from '@/constants/functions';
 import {FlatList, StyleSheet, Text, View, Pressable} from 'react-native';
+import { SoundType, SoundManagerContext, SoundManagerContextType } from '../Shared/SoundManager';
+import { SUCCESS_MESSAGES } from '@/constants/messages';
 import { router } from "expo-router";
+import { useDatabase } from '../Shared/DatabaseProvider';
 import g_styles from "@/constants/styles";
 import { Item } from '@/constants/listItem';
 import Vote from "@/components/Pages/Vote";
@@ -45,17 +50,52 @@ const IdeaListItem = ({idea} : {idea:ItemInfoWithJSON})=>{
   )
 }
 
-const ProjectsList = ({ideasList}: {ideasList:ItemInfoWithJSON[]}) => {
+export interface ProjectsListFowardRefType {
+  fetchAllItems:()=> void
+};
+
+// onFocus is used as an event to re-render the ProjectsList
+const ProjectsList = forwardRef<ProjectsListFowardRefType>((props, ref)=>{
+
+  const [items, setItems] = useState<ItemInfoWithJSON[]>([]);
+  const [isDBReady, setIsDBReady] = useState<boolean>(false); // this method is to load the method once, not twice.
+  const { handlePlaySoundEffect } = useContext<SoundManagerContextType>(SoundManagerContext);
+  let firstLoaded = true; // this variable is used to manage that it only loads one time the setup.
+  const db = useDatabase();
+
+  const fetchAllItems = async ()=>{
+    if(db){
+      const result = await db.getAllAsync<ItemInfoWithJSON>("SELECT * FROM note");
+      console.log(SUCCESS_MESSAGES.ALL_ITEMS_FETCHED);
+      setItems(result);
+    }
+  };
+
+  useImperativeHandle(ref, ()=> ({
+    fetchAllItems
+  }));
+
+  useEffect(useCallback(()=>{
+    handlePlaySoundEffect(SoundType.touched);
+
+    tryConnectDB({db, setIsDBReady, isDBReady});
+
+    if(db && isDBReady && firstLoaded){
+      firstLoaded = false;
+      fetchAllItems();
+    };     
+    // if the database has not loaded yet, try to connect.
+  }, [isDBReady]) );
   
   return (
     <View style={styles.container}>
       <FlatList
-        data={ideasList}
+        data={items}
         renderItem={({item}) => <IdeaListItem idea={item} />}
       />
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

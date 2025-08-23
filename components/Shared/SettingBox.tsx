@@ -21,15 +21,15 @@ const styles = StyleSheet.create({
 
 });
 
-type SettingBoxProps = {
-  titleEnable:string,
-  titleDisable:string,
-  settingEnable:boolean,
-  onSettingSwitch:()=>void
+type SettingBoxType = {
+  handleSaveQuit: ()=> void,
+  handleChangeMusicOn: ()=> void,
+  handleChangeSfxOn: ()=> void
 };
 
-const SettingBox = ({handleSaveQuit} : {handleSaveQuit: ()=> void})=> {
-  const { musicOn, sfxOn, handleTurnOffSfx, handleTurnOnSfx, handleTurnOffMusic, handleTurnOnMusic } = useContext<SoundManagerContextType>(SoundManagerContext);
+const SettingBox = ({handleSaveQuit, handleChangeMusicOn, handleChangeSfxOn} : SettingBoxType)=> {
+  // 1) This variables are used later to set up the color of some LongButtons.
+  const { musicOn, sfxOn } = useContext<SoundManagerContextType>(SoundManagerContext);
 
   return (
     <View style={styles.center}>
@@ -39,13 +39,13 @@ const SettingBox = ({handleSaveQuit} : {handleSaveQuit: ()=> void})=> {
             titleEnable:"Music On",
             titleDisable:"Music Off",
             settingEnable:musicOn,
-            onSettingSwitch:()=> musicOn ? handleTurnOffMusic() : handleTurnOnMusic() 
+            handleChangeValue:handleChangeMusicOn
         }}/>
         <SettingButton props={{
             titleEnable:"SFX On",
             titleDisable:"SFX Off",
             settingEnable:sfxOn,
-            onSettingSwitch:()=> sfxOn ? handleTurnOffSfx() : handleTurnOnSfx()
+            handleChangeValue:handleChangeSfxOn
         }}/>
         <LongButton text="Save/Quit" handleOnPress={handleSaveQuit} />
       </View>

@@ -1,9 +1,11 @@
 import { View, StyleSheet } from "react-native";
-import { useState } from "react";
+import { useState, useCallback, useContext } from "react";
 import g_styles from "@/constants/styles";
 import { generateKey } from "@/constants/functions";
 import { ItemInfoWithJSON } from "@/constants/globalTypes";
 import { useLocalSearchParams } from "expo-router";
+import { useFocusEffect } from "expo-router";
+import { SoundManagerContext, SoundManagerContextType, SoundType } from "@/components/Shared/SoundManager";
 
 import PageSelector from "@/components/Pages/PageSelector";
 import DetailsPage from "@/components/Pages/DetailsPage";
@@ -22,6 +24,11 @@ const Detail = ()=>{
   const pages = ["Details", "Requirements"]; 
   const pagesHashLength = 10; 
   const pagesAlias = "pageSelector";
+  const {handlePlaySoundEffect} = useContext<SoundManagerContextType>(SoundManagerContext);
+
+  useFocusEffect(useCallback(()=>{
+    handlePlaySoundEffect(SoundType.touched);
+  }, []))
 
   // used to change between pages.
   const onSelect = (pageIndex:number)=> {

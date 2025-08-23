@@ -1,5 +1,7 @@
 import { Pressable, Text, StyleSheet } from "react-native";
 import g_styles from "@/constants/styles";
+import { SoundType, SoundManagerContextType, SoundManagerContext } from "../Shared/SoundManager";
+import { useContext } from "react";
 
 const styles = StyleSheet.create({
   selectorPressable: {
@@ -23,9 +25,25 @@ const styles = StyleSheet.create({
  * pageSelected:number is used to update the PageSelector component setting it's style.
  * pageIndex: page which the PageSelector component represents. 
  */
-const PageSelector = ({title, pageIndex, onSelect, pageSelected}:{title:string, pageIndex:number, onSelect:(index:number)=> void, pageSelected:number})=>{
+
+type PageSelectorType = {
+  title:string, 
+  pageIndex:number, 
+  onSelect:(index:number)=> void, 
+  pageSelected:number
+};
+
+const PageSelector = ({ title, pageIndex, onSelect, pageSelected } : PageSelectorType)=>{
+
+  const {handlePlaySoundEffect} = useContext<SoundManagerContextType>(SoundManagerContext);
+
   return (
-    <Pressable style={styles.selectorPressable} onPress={()=> onSelect(pageIndex)}>
+    <Pressable 
+      style={styles.selectorPressable} 
+      onPress={()=> {
+        onSelect(pageIndex)
+        handlePlaySoundEffect(SoundType.touched);
+    }}>
       <Text style={[
         g_styles.p, 
         styles.selectorP, 

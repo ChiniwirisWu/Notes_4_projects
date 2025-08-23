@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
 import Animated, { FlatList, View, Text, StyleSheet, } from "react-native";
 import g_styles from "@/constants/styles";
 import { generateKey } from "@/constants/functions";
@@ -10,6 +10,7 @@ import {
   getMessageColor,
 } 
 from "@/constants/listItem"; 
+import { SoundManagerContext, SoundManagerContextType, SoundType } from "../Shared/SoundManager";
 
 import IconButton from "@/components/Shared/IconButton";
 import IncrementableListItem from "./IncrementableListItem";
@@ -59,6 +60,7 @@ const IncrementableList = ({title, alias, items, setItems}: IncrementableListPar
   const [messageState, setMessageState] = useState<MessageStates>((items.length < 1) ? MessageStates.empty : MessageStates.shown);
   const [messageColor, setMessageColor] = useState<string>(getMessageColor(messageState));
   const [message, setMessage] = useState<string|null>(getMessage(messageState));
+  const {handlePlaySoundEffect} = useContext<SoundManagerContextType>(SoundManagerContext);
 
   const showSelectedMessage = (messageState:MessageStates)=>{
     setShowMessage((messageState == MessageStates.shown) ? false : true);  
@@ -76,6 +78,7 @@ const IncrementableList = ({title, alias, items, setItems}: IncrementableListPar
 
   // hader method 1  
   const handleAddEmptyListItem = (id:number, alias:string)=>{
+    handlePlaySoundEffect(SoundType.touched);  
     const hashLength = 10;
     const newItem = {key: generateKey(id, hashLength, alias), title: "", state: ItemStates.empty};
     setItems([...items, newItem]);
@@ -83,6 +86,8 @@ const IncrementableList = ({title, alias, items, setItems}: IncrementableListPar
   };
 
   const onShowHide = ()=> {
+
+    handlePlaySoundEffect(SoundType.touched);  
 
     if(messageState == MessageStates.hidden){
       // output: MessageStates.empty | MessageStates.shown.

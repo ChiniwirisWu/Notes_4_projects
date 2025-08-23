@@ -8,6 +8,7 @@ import ConfirmationBox from "../Shared/ConfirmationBox";
 import { runOnJS } from "react-native-reanimated";
 
 import { IncrementableListContext } from "./IncrementableList";
+import { SoundType, SoundManagerContext, SoundManagerContextType } from "../Shared/SoundManager";
 
 const styles = StyleSheet.create({
   ListItem: {
@@ -27,13 +28,14 @@ type IncrementableListItemParams = {
 };
 
 
-const IncrementableListItem = ({itemInfo, itemIndex} : IncrementableListItemParams) => {
+export default function IncrementableListItem ({itemInfo, itemIndex} : IncrementableListItemParams) {
 
   // initialize with itemInfo from DB.
   const [state, setState] = useState<ItemStates>(itemInfo.state);
   const [title, setTitle] = useState<string>((state == ItemStates.empty) ? "Insert text" : itemInfo.title);
   const [showModal, setShowModal] = useState<boolean>(false);
   const { handleOnDeleteListItem, handleItemInfoChange } = useContext(IncrementableListContext);
+  const {handlePlaySoundEffect} = useContext<SoundManagerContextType>(SoundManagerContext);
 
   const onTitleChange = (text:string)=>{
     // It manages it's information by itself and also changes the database info. 
@@ -58,6 +60,7 @@ const IncrementableListItem = ({itemInfo, itemIndex} : IncrementableListItemPara
 
       switch(state){
         case ItemStates.marked: 
+          handlePlaySoundEffect(SoundType.touched);
           if(title.length > 0) {
             setState(ItemStates.filled);
             handleItemInfoChange({key: itemInfo.key, title:title, state:ItemStates.filled}, itemIndex);
@@ -68,6 +71,7 @@ const IncrementableListItem = ({itemInfo, itemIndex} : IncrementableListItemPara
           break;
 
         case ItemStates.filled:
+          handlePlaySoundEffect(SoundType.touched);
           setState(ItemStates.marked);
           handleItemInfoChange({key: itemInfo.key, title:title, state:ItemStates.marked}, itemIndex);
           break;
@@ -120,4 +124,3 @@ const IncrementableListItem = ({itemInfo, itemIndex} : IncrementableListItemPara
   );
 };
 
-export default IncrementableListItem;
