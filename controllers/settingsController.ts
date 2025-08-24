@@ -2,10 +2,7 @@
 // I use the "WHERE id=1" because I will only have one row in the database.
 
 import { SQLiteDatabase } from "expo-sqlite";
-
-function showErrorMessage(errorMessage:any){
-  console.error(`Error at settings.ts: ${errorMessage}`);
-};
+import { SUCCESS_MESSAGES, ERROR_MESSAGES } from "@/constants/messages";
 
 type GetSettingsType = {
   title:string,
@@ -15,14 +12,16 @@ type GetSettingsType = {
 
 export class SettingsController{
 
-  static async updateTitle(db:SQLiteDatabase, newTitle:string) : Promise<boolean> {
+  static async updateTitleInDB(db:SQLiteDatabase, newTitle:string) : Promise<boolean> {
     try{
       const statement = await db.prepareAsync("UPDATE settings SET title=$title WHERE id=1");
       await statement.executeAsync({$title:newTitle});
-      console.log("Title changed successfully ✅");
+
+      console.log(SUCCESS_MESSAGES.SETTINGS_UPDATED);
       return true;
     } catch (e){
-      showErrorMessage(e);
+      console.error(ERROR_MESSAGES.QUERY_FAILED);
+      console.error(e);
       return false;
     }
   };
@@ -31,10 +30,12 @@ export class SettingsController{
     try{
       const statement = await db.prepareAsync("UPDATE settings SET musicOn=$musicOn WHERE id=1");
       await statement.executeAsync({$musicOn:musicOn});
-      console.log("MusicOn changed successfully ✅");
+
+      console.log(SUCCESS_MESSAGES.SETTINGS_UPDATED);
       return true;
     } catch (e){
-      showErrorMessage(e);
+      console.error(ERROR_MESSAGES.QUERY_FAILED);
+      console.error(e);
       return false;
     }
   };
@@ -43,10 +44,12 @@ export class SettingsController{
     try{
       const statement = await db.prepareAsync("UPDATE settings SET SfxOn=$SfxOn WHERE id=1");
       await statement.executeAsync({$SfxOn:SfxOn});
-      console.log("SfxOn changed successfully ✅");
+
+      console.log(SUCCESS_MESSAGES.SETTINGS_UPDATED);
       return true;
     } catch (e){
-      showErrorMessage(e);
+      console.error(ERROR_MESSAGES.QUERY_FAILED);
+      console.error(e);
       return false;
     }
   };
@@ -54,21 +57,25 @@ export class SettingsController{
   static async getSettings(db:SQLiteDatabase) : Promise<GetSettingsType>{
     try{
       const response = await db.getFirstAsync<GetSettingsType>("SELECT * FROM settings WHERE id=1");
-      console.log("Settings fetched successfully ✅");
+      console.log(SUCCESS_MESSAGES.FIELDS_FETCHED);
+
       return (response) ? response : {title:"DefaultName", musicOn: 1, sfxOn: 1};
     } catch (e){
-      showErrorMessage(e);
+      console.error(ERROR_MESSAGES.QUERY_FAILED);
+      console.error(e);
       return {title:"Error", musicOn: 1, sfxOn: 1};
     }
   };
 
-  static async getTitle(db:SQLiteDatabase) : Promise<{title:string}>{
+  static async getTitleFromDB(db:SQLiteDatabase) : Promise<{title:string}>{
     try{
       const response = await db.getFirstAsync<{title:string}>("SELECT title FROM settings WHERE id=1");
-      console.log("Title fetched successfully ✅");
+      console.log(SUCCESS_MESSAGES.FIELDS_FETCHED);
+      
       return (response) ? response : {title:"Error"};
     } catch (e){
-      showErrorMessage(e);
+      console.error(ERROR_MESSAGES.QUERY_FAILED);
+      console.error(e);
       return {title:"Error"};
     }
   };

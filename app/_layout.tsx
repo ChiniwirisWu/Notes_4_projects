@@ -1,10 +1,7 @@
 import { useFonts } from "expo-font";
-import { useEffect, useState } from "react";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import * as SQLite from "expo-sqlite";
-import { SQLiteProvider } from "expo-sqlite";
 import SoundManager from "@/components/Shared/SoundManager";
 import DatabaseProvider from "@/components/Shared/DatabaseProvider";
 

@@ -53,7 +53,7 @@ const DetailsPage = ({pageInfo}: {pageInfo:ItemInfoWithJSON})=>{
   
   useFocusEffect(
     useCallback(()=> {
-      tryConnectDB({db, setIsDBReady});
+      tryConnectDB({db, setIsDBReady, isDBReady});
     }, [isDBReady])
   );
 
@@ -67,7 +67,6 @@ const DetailsPage = ({pageInfo}: {pageInfo:ItemInfoWithJSON})=>{
   const handleSaveChanges = async ()=>{
     if(!db) return;
     try {
-      console.log("Updating the note...");
       const statement = await db.prepareAsync("UPDATE note SET title=$title, description=$description, score=$score WHERE key=$key");
       const response = await statement.executeAsync({$title:title, $description:description, $score:score, $key:pageInfo.key});
       console.log({$title:title, $description:description, $score:score, $key: pageInfo.key})

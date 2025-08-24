@@ -1,5 +1,5 @@
-import { View, StyleSheet, Text, TextInput } from "react-native";
-import { useState, useContext } from "react";
+import { View, StyleSheet, Text } from "react-native";
+import { useContext } from "react";
 import g_styles from "@/constants/styles";
 import { SoundManagerContext, SoundManagerContextType } from "./SoundManager";
 import LongButton from "@/components/Shared/LongButton";

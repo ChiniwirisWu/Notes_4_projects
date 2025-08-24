@@ -1,6 +1,5 @@
-import { useState, createContext, useEffect, useCallback } from "react";
-import { View } from "react-native";
-import { useAudioPlayer, createAudioPlayer } from "expo-audio";
+import { useState, createContext } from "react";
+import { useAudioPlayer } from "expo-audio";
 
 export interface SoundManagerContextType {
   musicOn:boolean,

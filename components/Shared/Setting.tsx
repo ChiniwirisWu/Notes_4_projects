@@ -1,21 +1,19 @@
 import { useState, useCallback, useContext } from "react";
 import { useFocusEffect } from "expo-router";
 import { useDatabase } from "./DatabaseProvider";
-
 import { View, StyleSheet, Pressable, Modal } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { SettingsController } from "@/controllers/settingsController";
 import { tryConnectDB } from "@/constants/functions";
 import { SoundManagerContext, SoundManagerContextType, SoundType } from "./SoundManager";
 import { ERROR_MESSAGES } from "@/constants/messages";
-
 import g_styles from "@/constants/styles";
+
 import SettingBox from "@/components/Shared/SettingBox";
 
 const Setting = () =>{
   const [showModal, setShowModal] = useState(false);
   const [isDBReady, setIsDBReady] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>("");
   const db = useDatabase();
   const { handleTurnOnSfx, handleTurnOffSfx, handleTurnOnMusic, handleTurnOffMusic, handlePlaySoundEffect, sfxOn, musicOn } = useContext<SoundManagerContextType>(SoundManagerContext);
 
@@ -29,8 +27,7 @@ const Setting = () =>{
     if(isDBReady && db != null){
       SettingsController.getSettings(db).then(result=>{
         // takes the values from DB and if musicOn or sfxOn it do a behaviour.
-        const {title, musicOn, sfxOn} = result;   
-        setTitle(title);
+        const { musicOn, sfxOn } = result;   
         (musicOn) ? handleTurnOnMusic() : handleTurnOffMusic();
         (sfxOn) ? handleTurnOnSfx() : handleTurnOffSfx();
       }); 

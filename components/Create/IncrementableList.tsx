@@ -56,18 +56,11 @@ export const IncrementableListContext = createContext<IncrementableListContextTy
 });
 
 const IncrementableList = ({title, alias, items, setItems}: IncrementableListParams)=>{
-  const [showMessage, setShowMessage] = useState<boolean>(items.length < 1); 
   const [messageState, setMessageState] = useState<MessageStates>((items.length < 1) ? MessageStates.empty : MessageStates.shown);
-  const [messageColor, setMessageColor] = useState<string>(getMessageColor(messageState));
-  const [message, setMessage] = useState<string|null>(getMessage(messageState));
   const {handlePlaySoundEffect} = useContext<SoundManagerContextType>(SoundManagerContext);
-
-  const showSelectedMessage = (messageState:MessageStates)=>{
-    setShowMessage((messageState == MessageStates.shown) ? false : true);  
-    setMessage(getMessage(messageState));
-    setMessageState(messageState);
-    setMessageColor(getMessageColor(messageState));
-  };
+  const [messageColor, setMessageColor] = useState<string>(getMessageColor(messageState));
+  const [showMessage, setShowMessage] = useState<boolean>(items.length < 1); 
+  const [message, setMessage] = useState<string|null>(getMessage(messageState));
 
   useEffect(()=>{
   // this ensures that it shows the empty message whenever the user clears the fields.
@@ -75,6 +68,13 @@ const IncrementableList = ({title, alias, items, setItems}: IncrementableListPar
       showSelectedMessage(MessageStates.empty);
     }
   }, [items]);
+
+  const showSelectedMessage = (messageState:MessageStates)=>{
+    setShowMessage((messageState == MessageStates.shown) ? false : true);  
+    setMessage(getMessage(messageState));
+    setMessageState(messageState);
+    setMessageColor(getMessageColor(messageState));
+  };
 
   // hader method 1  
   const handleAddEmptyListItem = (id:number, alias:string)=>{

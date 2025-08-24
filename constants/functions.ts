@@ -1,5 +1,7 @@
 import { Key } from "./listItem";
 import { type SQLiteDatabase } from "expo-sqlite";
+import { Levels } from "./globalTypes";
+import { ERROR_MESSAGES } from "./messages";
 
 export function generateKey(id:number, hashLength:number, alias:string) : Key{
   const hash:string = Math.random().toString(36).substring(2, 2 + hashLength); 
@@ -20,7 +22,7 @@ type TryConnectDBParams = {
 
 export function tryConnectDB({db, setIsDBReady, isDBReady}: TryConnectDBParams) : boolean{
   if(!db){
-    console.log("Database is still loading...");
+    console.warn(ERROR_MESSAGES.DATABASE_NOT_LOADED);
     if(isDBReady == false) return false; // if it is already false, do nothing.
     setIsDBReady(false);
     return false;
@@ -28,5 +30,16 @@ export function tryConnectDB({db, setIsDBReady, isDBReady}: TryConnectDBParams) 
     if(isDBReady == true) return true; // if it is already true, do nothing.
     setIsDBReady(true);
     return true;
+  }
+};
+
+export function getLevelFromNumber (x:number) : Levels{
+  switch(x){
+    case 1: return Levels.common;
+    case 2: return Levels.uncommon;
+    case 3: return Levels.rare;
+    case 4: return Levels.epic;
+    case 5: return Levels.legendary;
+    default: return Levels.common;
   }
 };

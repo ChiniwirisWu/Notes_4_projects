@@ -3,23 +3,13 @@ import {
   useState,
   useContext,
   createContext,
-  useMemo
 } from "react";
-import {
-  SQLiteDatabase,
-  SQLiteProvider,
-  openDatabaseAsync
-} from "expo-sqlite";
-import {
-  ActivityIndicator,
-  Text,
-  View
-} from "react-native";
-import g_styles from "@/constants/styles";
+import { SQLiteDatabase, openDatabaseAsync } from "expo-sqlite";
+import { SUCCESS_MESSAGES } from "@/constants/messages";
+
 import LoadingScreen from "./LoadingScreen";
 
 const DatabaseContext = createContext<SQLiteDatabase | null>(null);
-
 export const useDatabase = ()=> useContext(DatabaseContext); // I am going to use this one inside the components.
 
 
@@ -30,7 +20,7 @@ export default function DatabaseProvider({children}:{children:any}){
     if(!db){
       setUpDatabase();
     } else {
-      console.log("Database initialized");
+      console.log(SUCCESS_MESSAGES.DATABASE_INITIALIZED);
     }
   }, [db]);
 
