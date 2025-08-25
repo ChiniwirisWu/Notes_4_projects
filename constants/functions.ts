@@ -1,7 +1,6 @@
-import { Key } from "./listItem";
 import { type SQLiteDatabase } from "expo-sqlite";
-import { Levels } from "./globalTypes";
-import { ERROR_MESSAGES } from "./messages";
+import { Levels, Key } from "@/constants/types";
+import { getMessage, MessageType } from "./messages";
 
 export function generateKey(id:number, hashLength:number, alias:string) : Key{
   const hash:string = Math.random().toString(36).substring(2, 2 + hashLength); 
@@ -22,7 +21,7 @@ type TryConnectDBParams = {
 
 export function tryConnectDB({db, setIsDBReady, isDBReady}: TryConnectDBParams) : boolean{
   if(!db){
-    console.warn(ERROR_MESSAGES.DATABASE_NOT_LOADED);
+    console.warn(getMessage(MessageType.DATABASE_NOT_LOADED));
     if(isDBReady == false) return false; // if it is already false, do nothing.
     setIsDBReady(false);
     return false;
@@ -43,3 +42,4 @@ export function getLevelFromNumber (x:number) : Levels{
     default: return Levels.common;
   }
 };
+

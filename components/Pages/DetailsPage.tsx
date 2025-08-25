@@ -1,13 +1,13 @@
-import { View, StyleSheet, ScrollView } from "react-native";
+import { StyleSheet, ScrollView } from "react-native";
 import SingleLineTextInput from "../Create/SingleLineTextInput";
 import TextAreaInput from "../Create/TextareaInput";
 import Votation from "../Create/Votation";
 import LongButton from "../Shared/LongButton";
 import MessageBox from "../Shared/MessageBox";
-import { ItemInfoWithJSON } from "@/constants/globalTypes";
-import { useSQLiteContext } from "expo-sqlite";
+import { NoteInfoWithJSON } from "@/constants/types";
 import { useFocusEffect } from "expo-router";
 import { SoundManagerContext, SoundManagerContextType, SoundType } from "@/components/Shared/SoundManager";
+import { MessageType, getMessage } from "@/constants/messages";
 
 import { useState, useRef, useCallback, useContext } from "react";
 import { useDatabase } from "../Shared/DatabaseProvider";
@@ -20,25 +20,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const messageTexts = {
-  succeed: "Note modified succesfully!🥳",
-  error: "There was a problem creating this note. Hint: try with another title ⚠️"
-};
-
-enum MessageType {
-  succeed,
-  failed,
-};
-
-function getMessageText(messageType:MessageType) : string{
-  switch(messageType){
-    case MessageType.succeed: return messageTexts.succeed;
-    case MessageType.failed: return messageTexts.error;
-    default: return "";
-  }
-};
-
-const DetailsPage = ({pageInfo}: {pageInfo:ItemInfoWithJSON})=>{
+const DetailsPage = ({pageInfo}: {pageInfo:NoteInfoWithJSON})=>{
 
   const [title, setTitle] = useState<string>(pageInfo.title);
   const [description, setDescription] = useState<string>(pageInfo.description);
@@ -68,22 +50,18 @@ const DetailsPage = ({pageInfo}: {pageInfo:ItemInfoWithJSON})=>{
     if(!db) return;
     try {
       const statement = await db.prepareAsync("UPDATE note SET title=$title, description=$description, score=$score WHERE key=$key");
-      const response = await statement.executeAsync({$title:title, $description:description, $score:score, $key:pageInfo.key});
-      console.log({$title:title, $description:description, $score:score, $key: pageInfo.key})
-      console.log(pageInfo);
-      console.log("Note updated ✅");
-      handleShowMessage(MessageType.succeed);
+      await statement.executeAsync({$title:title, $description:description, $score:score, $key:pageInfo.key});
+      handleShowMessage(MessageType.QUERY_SUCCESS);
 
     } catch (e){
       console.error(e);
-      handleShowMessage(MessageType.failed);
+      handleShowMessage(MessageType.QUERY_FAILED);
     }
-    console.log(`Details Page: updating details...`);
     console.log({title, score, description});
   }
 
   const handleShowMessage = (messageType:MessageType)=>{
-    setMessageText(getMessageText(messageType));
+    setMessageText(getMessage(messageType));
     setShowMessage(true);
     if(scrollRef.current != null){
       scrollRef.current.scrollToEnd();
@@ -96,14 +74,14 @@ const DetailsPage = ({pageInfo}: {pageInfo:ItemInfoWithJSON})=>{
       <TextAreaInput fieldName="Description" marginBottom={40} value={description} setValue={setDescription} />
       <Votation score={score} setScore={setScore} />
       <LongButton text={"Save"} handleOnPress={()=>{
-        handlePlaySoundEffect(SoundType.succeed);
+        handlePlaySoundEffect(SoundType.success);
         handleSaveChanges();
       }} />
 
       {(showMessage)?(
         <MessageBox 
           handleOnPress={()=>{
-            handlePlaySoundEffect(SoundType.touched);
+            handlePlaySoundEffect(SoundType.bump);
             handleCloseMessage();
           }} 
           messageText={messageText} />

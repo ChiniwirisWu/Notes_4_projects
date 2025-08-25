@@ -6,7 +6,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { SettingsController } from "@/controllers/settingsController";
 import { tryConnectDB } from "@/constants/functions";
 import { SoundManagerContext, SoundManagerContextType, SoundType } from "./SoundManager";
-import { ERROR_MESSAGES } from "@/constants/messages";
+import { MessageType, getMessage } from "@/constants/messages";
 import g_styles from "@/constants/styles";
 
 import SettingBox from "@/components/Shared/SettingBox";
@@ -37,7 +37,7 @@ const Setting = () =>{
   // 2) This handler updates the database "musicOn" variable and handles the SoundManager as well
   const setMusicOnDB = async ()=>{
     if(!db){
-      console.warn(ERROR_MESSAGES.DATABASE_NOT_LOADED);
+      console.warn(getMessage(MessageType.DATABASE_NOT_LOADED));
       return;
     };
     await SettingsController.updateMusicOn(db, !musicOn);
@@ -47,7 +47,7 @@ const Setting = () =>{
   // 3) This handler updates the database "sfxOn" variable and handles the SoundManager as well
   const setSfxOnDB = async ()=>{
     if(!db){
-      console.warn(ERROR_MESSAGES.DATABASE_NOT_LOADED);
+      console.warn(getMessage(MessageType.DATABASE_NOT_LOADED));
       return;
     };
     await SettingsController.updateSfxOn(db, !sfxOn);

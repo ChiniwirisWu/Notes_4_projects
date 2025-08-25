@@ -1,7 +1,7 @@
 import { View, FlatList, StyleSheet } from "react-native"
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { Levels } from "@/constants/globalTypes";
-import { levelPatterns } from "@/constants/globalVariables";
+import { Levels } from "@/constants/types";
+import { levelPatterns } from "@/constants/maps";
 
 
 const styles = StyleSheet.create({

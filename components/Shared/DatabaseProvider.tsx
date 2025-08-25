@@ -5,7 +5,7 @@ import {
   createContext,
 } from "react";
 import { SQLiteDatabase, openDatabaseAsync } from "expo-sqlite";
-import { SUCCESS_MESSAGES } from "@/constants/messages";
+import { MessageType, getMessage } from "@/constants/messages";
 
 import LoadingScreen from "./LoadingScreen";
 
@@ -20,7 +20,7 @@ export default function DatabaseProvider({children}:{children:any}){
     if(!db){
       setUpDatabase();
     } else {
-      console.log(SUCCESS_MESSAGES.DATABASE_INITIALIZED);
+      console.log(getMessage(MessageType.DATABASE_INITIALIZED));
     }
   }, [db]);
 

@@ -2,11 +2,12 @@ import { View, StyleSheet, Text, ScrollView } from "react-native";
 import IncrementableList from "../Create/IncrementableList";
 import LongButton from "../Shared/LongButton";
 import CircularProgress from "react-native-circular-progress-indicator"
-import Fonts from "@/constants/fonts";
 import g_styles from "@/constants/styles";
-import { ItemInfo, ItemInfoWithJSON } from "@/constants/globalTypes";
-import { useEffect, useState } from "react";
-import { Item } from "@/constants/listItem";
+import { NoteInfoWithJSON } from "@/constants/types";
+import { useState, useRef } from "react";
+import { NoteTask } from "@/constants/types";
+import { MessageType, getMessage } from "@/constants/messages";
+import MessageBox from "../Shared/MessageBox";
 
 const styles = StyleSheet.create({
   container: {
@@ -20,10 +21,24 @@ const styles = StyleSheet.create({
   }
 });
 
-const RequirementsPage = ({pageInfo}:{pageInfo:ItemInfoWithJSON})=>{
+const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
 
-  const [functionalRequirements, setFunctionalRequirements] = useState<Array<Item>>(JSON.parse(pageInfo.functionalRequirements));
-  const [nonFunctionalRequirements, setNonFunctionalRequirements] = useState<Array<Item>>(JSON.parse(pageInfo.nonFunctionalRequirements));
+  const [functionalRequirements, setFunctionalRequirements] = useState<Array<NoteTask>>(JSON.parse(pageInfo.functionalRequirements));
+  const [nonFunctionalRequirements, setNonFunctionalRequirements] = useState<Array<NoteTask>>(JSON.parse(pageInfo.nonFunctionalRequirements));
+  const scrollRef = useRef<ScrollView>(null);
+  const [showMessage, setShowMessage] = useState<boolean>(false);
+  const [messageText, setMessageText] = useState<string | null>("");
+
+  const handleShowMessage = (messageType:MessageType)=>{
+    setMessageText(getMessage(messageType));
+    setShowMessage(true);
+    // This timeout ensures that it will scroll after the note finishes doing DB queries.
+    setTimeout(()=>{
+      if(scrollRef.current != null){
+        scrollRef.current.scrollToEnd({animated:true});
+      }
+    }, 200);
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -56,6 +71,12 @@ const RequirementsPage = ({pageInfo}:{pageInfo:ItemInfoWithJSON})=>{
       </View>
       <LongButton text="Save" handleOnPress={()=> {}} marginBottom={40} />
       <LongButton text="Delete" handleOnPress={()=> {}} marginBottom={40} />
+
+      {(showMessage)?(
+        <MessageBox handleOnPress={handleCloseMessage} messageText={messageText} />
+      ):(
+        <></>
+      )}
     </ScrollView>
   ); 
 }

@@ -1,4 +1,3 @@
-// used to map the colors of the votes ❤️❤️❤️❤️❤️
 export const levelPatterns:string[][] = [
   ["#c21002","#c21002","#c21002","#c21002", "#fff"],
   ["#c21002","#c21002", "#c21002", "#00c750", "#00c750"],

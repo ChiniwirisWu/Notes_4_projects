@@ -3,21 +3,19 @@
 
 import { SQLiteDatabase } from "expo-sqlite";
 import { generateKey, generateRandomInteger } from "@/constants/functions";
-import { Item } from "@/constants/listItem";
-import { ItemInfoWithJSON } from "@/constants/globalTypes";
-import { defaultNoteValue } from "@/constants/defaultNoteObjectValues";
-import { ItemInfo } from "@/constants/globalTypes";
-import { Key } from "@/constants/listItem";
+import { NoteTask } from "@/constants/types";
+import { defaultNoteValue } from "@/constants/default";
 
 function showErrorMessage(errorMessage:any){
   console.error(`Error at settings.ts: ${errorMessage}`);
 };
 
+// This is made so the database is responsable on protecting itself.
 type ItemInfoWithNull = {
   title: string | null | undefined,
   description: string | null | undefined,
-  functionalRequirements: Item[] | null | undefined, // JSON
-  nonFunctionalRequirements: Item[] | null | undefined, // JSON
+  functionalRequirements: NoteTask[] | null | undefined, // JSON
+  nonFunctionalRequirements: NoteTask[] | null | undefined, // JSON
   score: number | null | undefined 
 };
 

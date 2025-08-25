@@ -2,14 +2,11 @@ import { useState, useEffect, createContext, useContext } from "react";
 import Animated, { FlatList, View, Text, StyleSheet, } from "react-native";
 import g_styles from "@/constants/styles";
 import { generateKey } from "@/constants/functions";
-import { 
-  MessageStates,
-  ItemStates, 
-  Item,
-  getMessage,
-  getMessageColor,
-} 
-from "@/constants/listItem"; 
+
+import { NoteTask, NoteTaskState, NoteTaskListState } from "@/constants/types";
+import { getMessageColor } from "@/constants/colors";
+import { getMessage, MessageType } from "@/constants/messages";
+
 import { SoundManagerContext, SoundManagerContextType, SoundType } from "../Shared/SoundManager";
 
 import IconButton from "@/components/Shared/IconButton";
@@ -40,67 +37,76 @@ const styles = StyleSheet.create({
 type IncrementableListParams = {
   title:string, 
   alias:string
-  items:(Item[]),
-  setItems: (items:Item[])=> void
+  items:(NoteTask[]),
+  setItems: (items:NoteTask[])=> void
 };
 
 
 export interface IncrementableListContextType {
   handleOnDeleteListItem : (itemIndex:number)=> void,
-  handleItemInfoChange: (itemInfo:Item, itemIndex:number)=> void,
+  handleItemInfoChange: (itemInfo:NoteTask, itemIndex:number)=> void,
 };
 
 export const IncrementableListContext = createContext<IncrementableListContextType>({
   handleOnDeleteListItem : (itemIndex:number)=> {},
-  handleItemInfoChange: (itemInfo:Item, itemIndex:number)=> {}
+  handleItemInfoChange: (itemInfo:NoteTask, itemIndex:number)=> {}
 });
 
 const IncrementableList = ({title, alias, items, setItems}: IncrementableListParams)=>{
-  const [messageState, setMessageState] = useState<MessageStates>((items.length < 1) ? MessageStates.empty : MessageStates.shown);
   const {handlePlaySoundEffect} = useContext<SoundManagerContextType>(SoundManagerContext);
-  const [messageColor, setMessageColor] = useState<string>(getMessageColor(messageState));
+  const [noteTaskListState, setNoteTaskListState] = useState<NoteTaskListState>((items.length < 1) ? NoteTaskListState.EMPTY : NoteTaskListState.SHOWN);
+  const [messageColor, setMessageColor] = useState<string>(getMessageColor(noteTaskListState));
   const [showMessage, setShowMessage] = useState<boolean>(items.length < 1); 
-  const [message, setMessage] = useState<string|null>(getMessage(messageState));
+  const [message, setMessage] = useState<string|null>(getMessage(MessageType.NONE));
 
   useEffect(()=>{
   // this ensures that it shows the empty message whenever the user clears the fields.
     if(items.length < 1){
-      showSelectedMessage(MessageStates.empty);
+      showSelectedMessage(noteTaskListState);
     }
   }, [items]);
 
-  const showSelectedMessage = (messageState:MessageStates)=>{
-    setShowMessage((messageState == MessageStates.shown) ? false : true);  
-    setMessage(getMessage(messageState));
-    setMessageState(messageState);
-    setMessageColor(getMessageColor(messageState));
+  const showSelectedMessage = (listState:NoteTaskListState)=>{
+    // No messages should be shown if the ListState is SHOWN.
+    if(listState == NoteTaskListState.SHOWN){
+      setShowMessage(false);
+      setNoteTaskListState(listState);
+      return;
+    };
+
+    setMessage(getMessage((listState == NoteTaskListState.HIDDEN) ? MessageType.HIDEN : MessageType.EMPTY));
+    setMessageColor(getMessageColor(listState));
+    setNoteTaskListState(listState);
+    setShowMessage(true);
+    return;
   };
 
   // hader method 1  
   const handleAddEmptyListItem = (id:number, alias:string)=>{
-    handlePlaySoundEffect(SoundType.touched);  
+    handlePlaySoundEffect(SoundType.bump);  
     const hashLength = 10;
-    const newItem = {key: generateKey(id, hashLength, alias), title: "", state: ItemStates.empty};
+    const newItem = {key: generateKey(id, hashLength, alias), title: "", state: NoteTaskState.EMPTY};
     setItems([...items, newItem]);
-    showSelectedMessage(MessageStates.shown); // the list should be shown whenever the user adds a new item.
+    showSelectedMessage(NoteTaskListState.SHOWN); // the list should be shown whenever the user adds a new item.
   };
 
   const onShowHide = ()=> {
 
-    handlePlaySoundEffect(SoundType.touched);  
+    handlePlaySoundEffect(SoundType.bump);  
+    console.log("BUB!");
 
-    if(messageState == MessageStates.hidden){
+    if(noteTaskListState == NoteTaskListState.HIDDEN){
       // output: MessageStates.empty | MessageStates.shown.
       if(items.length < 1){
         // empty scenario.
-        showSelectedMessage(MessageStates.empty);
+        showSelectedMessage(NoteTaskListState.EMPTY);
       } else {
         // show the elements.
-        showSelectedMessage(MessageStates.shown);
+        showSelectedMessage(NoteTaskListState.SHOWN);
       }
     } else {
       // output: MessageStates.hidden.
-      showSelectedMessage(MessageStates.hidden);
+      showSelectedMessage(NoteTaskListState.HIDDEN);
     }
   }
 
@@ -109,10 +115,14 @@ const IncrementableList = ({title, alias, items, setItems}: IncrementableListPar
       let itemsCopy = items.slice();
       itemsCopy.splice(itemIndex, 1);
       setItems(itemsCopy); 
+      
+      if(itemsCopy.length < 1){
+        showSelectedMessage(NoteTaskListState.EMPTY);
+      }
     };
   };
 
-  const handleItemInfoChange = (itemInfo:Item, itemIndex:number)=>{
+  const handleItemInfoChange = (itemInfo:NoteTask, itemIndex:number)=>{
     if(itemIndex <= (items.length - 1)){
       const itemsCopy = items.slice();
       itemsCopy[itemIndex] = itemInfo;
@@ -154,4 +164,4 @@ const IncrementableList = ({title, alias, items, setItems}: IncrementableListPar
   );
 }
 
-export default IncrementableList;
+export default IncrementableList

@@ -1,7 +1,7 @@
 import { View, ScrollView, } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 import { useFocusEffect } from "expo-router";
-import { Item } from "@/constants/listItem";
+import { NoteTask } from "@/constants/types";
 import g_style from "@/constants/styles";
 import { useDatabase } from "@/components/Shared/DatabaseProvider";
 import { tryConnectDB } from "@/constants/functions";
@@ -12,7 +12,8 @@ import {
   useCallback,
   useContext
 } from "react";
-import { SUCCESS_MESSAGES, ERROR_MESSAGES } from "@/constants/messages";
+import { SoundType, SoundManagerContext, SoundManagerContextType } from "@/components/Shared/SoundManager";
+import { MessageType, getMessage } from "@/constants/messages";
 
 import Setting from "@/components/Shared/Setting";
 import Title from "@/components/Shared/Title";
@@ -23,28 +24,16 @@ import IncrementableList from "@/components/Create/IncrementableList";
 import Votation from "@/components/Create/Votation";
 import MessageBox from "@/components/Shared/MessageBox";
 import LoadingScreen from "@/components/Shared/LoadingScreen";
-import { SoundType, SoundManagerContext, SoundManagerContextType } from "@/components/Shared/SoundManager";
 
-enum MessageType {
-  succeed,
-  failed,
-};
 
-function getMessageText(messageType:MessageType) : string{
-  switch(messageType){
-    case MessageType.succeed: return SUCCESS_MESSAGES.NOTE_CREATED;
-    case MessageType.failed: return ERROR_MESSAGES.NOTE_NOT_CREATED;
-    default: return "";
-  }
-};
 
 const Create = () => {
   const {handlePlaySoundEffect} = useContext<SoundManagerContextType>(SoundManagerContext);
-  const [nonFunctionalRequirements, setNonFunctionalRequirements] = useState<Array<Item>>();
-  const [functionalRequirements, setFunctionalRequirements] = useState<Array<Item>>();
+  const [nonFunctionalRequirements, setNonFunctionalRequirements] = useState<Array<NoteTask>>();
+  const [functionalRequirements, setFunctionalRequirements] = useState<Array<NoteTask>>();
   const [isDBReady, setIsDBReady] = useState<boolean>(false);
-  const [showMessage, setShowMessage] = useState<boolean>(false);
   const [description, setDescription] = useState<string>();
+  const [showMessage, setShowMessage] = useState<boolean>(false);
   const [messageText, setMessageText] = useState<string>("");
   const scrollRef = useRef<ScrollView | null>(null);
   const [title, setTitle] = useState<string>();
@@ -84,23 +73,21 @@ const Create = () => {
 
   const handleSaveNewNote = ()=>{
     if(!db) return;
-
     CreateController.saveNewNoteIntoDB(db, {title, description, functionalRequirements, nonFunctionalRequirements, score}).then(res=>{
-
       if(res){
         // if the note is saved then do success behaviour
         handleEmtpyAllFields();
         handlePlaySoundEffect(SoundType.success);
-        handleShowMessage(MessageType.succeed);
+        handleShowMessage(MessageType.CREATED);
       } else {
         // if the note is NOT saved then do success behaviour
         handlePlaySoundEffect(SoundType.fail);
-        handleShowMessage(MessageType.failed);
+        handleShowMessage(MessageType.NOT_CREATED);
       }})
   };
 
   const handleShowMessage = (messageType:MessageType)=>{
-    setMessageText(getMessageText(messageType));
+    setMessageText(getMessage(messageType));
     setShowMessage(true);
     // This timeout ensures that it will scroll after the note finishes doing DB queries.
     setTimeout(()=>{

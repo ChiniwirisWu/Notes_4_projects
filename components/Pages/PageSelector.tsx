@@ -42,7 +42,7 @@ const PageSelector = ({ title, pageIndex, onSelect, pageSelected } : PageSelecto
       style={styles.selectorPressable} 
       onPress={()=> {
         onSelect(pageIndex)
-        handlePlaySoundEffect(SoundType.bump);
+        handlePlaySoundEffect(SoundType.click);
     }}>
       <Text style={[
         g_styles.p, 

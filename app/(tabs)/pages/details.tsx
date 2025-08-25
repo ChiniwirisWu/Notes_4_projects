@@ -2,7 +2,7 @@ import { View, StyleSheet } from "react-native";
 import { useState, useCallback, useContext } from "react";
 import g_styles from "@/constants/styles";
 import { generateKey } from "@/constants/functions";
-import { ItemInfoWithJSON } from "@/constants/globalTypes";
+import { NoteInfoWithJSON } from "@/constants/types";
 import { useLocalSearchParams } from "expo-router";
 import { useFocusEffect } from "expo-router";
 import { SoundManagerContext, SoundManagerContextType, SoundType } from "@/components/Shared/SoundManager";
@@ -27,7 +27,7 @@ const Detail = ()=>{
   const {handlePlaySoundEffect} = useContext<SoundManagerContextType>(SoundManagerContext);
 
   useFocusEffect(useCallback(()=>{
-    handlePlaySoundEffect(SoundType.touched);
+    handlePlaySoundEffect(SoundType.bump);
   }, []))
 
   // used to change between pages.
@@ -36,7 +36,7 @@ const Detail = ()=>{
   };
 
   const { details } = useLocalSearchParams<{details : string}>();
-  const [pageInfo] = useState<ItemInfoWithJSON>((typeof details === "string") ? JSON.parse(details) : undefined);
+  const [pageInfo] = useState<NoteInfoWithJSON>((typeof details === "string") ? JSON.parse(details) : undefined);
 
   // pageSelectors for the PageSelectorContainer
   const pageSelectors:React.ReactElement<typeof PageSelector>[] = pages.map((el, ind)=> (
