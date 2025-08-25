@@ -34,7 +34,7 @@ const Title = ({editable}: {editable:boolean}) =>{
   // 3) this changes the title in the db and localy in it's state.
   const handleTitleChange = ()=>{
     if(db != null){
-      handlePlaySoundEffect(SoundType.touched);
+      handlePlaySoundEffect(SoundType.success);
       SettingsController.updateTitleInDB(db, title);
 
       setTitle(title);

@@ -65,7 +65,7 @@ const Setting = () =>{
       >
         <SettingBox 
           handleSaveQuit={()=> {
-            handlePlaySoundEffect(SoundType.touched);
+            handlePlaySoundEffect(SoundType.bump);
             setShowModal(false)
           }} 
           handleChangeMusicOn={setMusicOnDB}

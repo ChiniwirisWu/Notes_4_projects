@@ -65,7 +65,7 @@ const ProjectsList = forwardRef<ProjectsListFowardRefType>((props, ref)=>{
   }));
 
   useEffect(useCallback(()=>{
-    handlePlaySoundEffect(SoundType.touched);
+    handlePlaySoundEffect(SoundType.bump);
 
     //tryConnectDB({db, setIsDBReady, isDBReady});
     let isConnected = false;

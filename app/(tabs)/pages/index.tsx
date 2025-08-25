@@ -21,7 +21,7 @@ const Home = ()=>{
   const { handlePlaySoundEffect } = useContext<SoundManagerContextType>(SoundManagerContext);
 
   useFocusEffect(useCallback(()=>{
-    handlePlaySoundEffect(SoundType.touched);
+    handlePlaySoundEffect(SoundType.bump);
     if(projectListRef.current && projectListRef.current.fetchAllItems){
       projectListRef.current.fetchAllItems();
     };

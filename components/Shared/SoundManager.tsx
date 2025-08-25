@@ -22,9 +22,13 @@ export const SoundManagerContext = createContext<SoundManagerContextType>({
 });
 
 export enum SoundType {
-  touched,
-  succeed,
-  failed
+  bump, // 1
+  click, // 2
+  success, // 3
+  fail, // 4
+  open, // 5
+  close, // 6
+  last_item
 };
 
 export default function SoundManager({children}:{children:any}){
@@ -33,22 +37,25 @@ export default function SoundManager({children}:{children:any}){
 
   const soundTypes = {
     background: require("@/assets/Sfx/relaxing_piano_music.mp3"),
-    touched: require("@/assets/Sfx/button-click.mp3"),
-    succeed: require("@/assets/Sfx/succeed_sound.mp3"),
-    failed: require("@/assets/Sfx/failed_sound.mp3"),
+    bump: require("@/assets/Sfx/KEY_PRESS.wav"),
+    click: require("@/assets/Sfx/CLICK.mp3"),
+    success: require("@/assets/Sfx/SUCCESS.mp3"),
+    fail: require("@/assets/Sfx/ERROR.wav"),
+    open : require("@/assets/Sfx/OPEN_DIALOGUE.wav"),
+    close : require("@/assets/Sfx/CLOSE_DIALOGUE.wav"),
   };
 
   const backgroundPlayer = useAudioPlayer(soundTypes.background);
   backgroundPlayer.loop = true;
   backgroundPlayer.volume = 0.25;
 
-  const effectsPlayer = useAudioPlayer(soundTypes.touched);
+  const effectsPlayer = useAudioPlayer(soundTypes.bump);
   effectsPlayer.loop = false;
   effectsPlayer.volume = 0.3;
 
   const handleTurnOffMusic = ()=>{
     if(sfxOn){
-      handlePlaySoundEffect(SoundType.touched);
+      handlePlaySoundEffect(SoundType.bump);
     };
     setMusicOn(false);
     backgroundPlayer.pause();
@@ -56,7 +63,7 @@ export default function SoundManager({children}:{children:any}){
 
   const handleTurnOnMusic = ()=>{
     if(sfxOn){
-      handlePlaySoundEffect(SoundType.touched);
+      handlePlaySoundEffect(SoundType.bump);
     };
     setMusicOn(true);
     backgroundPlayer.play();
@@ -69,17 +76,32 @@ export default function SoundManager({children}:{children:any}){
     };
 
     switch(soundType){
-      case SoundType.touched: 
-        effectsPlayer.replace(soundTypes.touched);
+      // opening a list, adding elements.
+      case SoundType.bump: 
+        effectsPlayer.replace(soundTypes.bump);
         break;
-      case SoundType.succeed:
-        effectsPlayer.replace(soundTypes.succeed);
+      // CRUD for notes.
+      case SoundType.success:
+        effectsPlayer.replace(soundTypes.success);
         break;
-      case SoundType.failed:
-        effectsPlayer.replace(soundTypes.failed);
+      // Backend errors.
+      case SoundType.fail:
+        effectsPlayer.replace(soundTypes.fail);
+        break;
+      // Message boxes
+      case SoundType.open:
+        effectsPlayer.replace(soundTypes.open);
+        break;
+      // Message boxes
+      case SoundType.close:
+        effectsPlayer.replace(soundTypes.close);
+        break;
+      // Marking a requirement as completed.
+      case SoundType.click:
+        effectsPlayer.replace(soundTypes.click);
         break;
       default:
-        effectsPlayer.replace(soundTypes.touched);
+        effectsPlayer.replace(soundTypes.bump);
         break;
     };
     effectsPlayer.seekTo(0);
@@ -87,15 +109,12 @@ export default function SoundManager({children}:{children:any}){
   };
 
   const handleTurnOffSfx = ()=>{
-    if(sfxOn){
-      handlePlaySoundEffect(SoundType.touched);
-    };
     setSfxOn(false);
   };
 
   const handleTurnOnSfx = ()=>{
     if(sfxOn){
-      handlePlaySoundEffect(SoundType.touched);
+      handlePlaySoundEffect(SoundType.bump);
     };
     setSfxOn(true);
   };

@@ -54,7 +54,7 @@ const Create = () => {
   // 1) connect to db if it is disconnected and sound whenever user focuses the screen.
   useFocusEffect(
     useCallback(()=> {
-      handlePlaySoundEffect(SoundType.touched);
+      handlePlaySoundEffect(SoundType.bump);
       tryConnectDB({db, setIsDBReady, isDBReady});
     }, [isDBReady])
   );
@@ -78,7 +78,7 @@ const Create = () => {
   // 4) Closes a messageBox and scrolls to top.
   const handleCloseMessage = ()=>{
     setShowMessage(false);
-    handlePlaySoundEffect(SoundType.touched);
+    handlePlaySoundEffect(SoundType.bump);
     scrollToTop();
   }
 
@@ -90,11 +90,11 @@ const Create = () => {
       if(res){
         // if the note is saved then do success behaviour
         handleEmtpyAllFields();
-        handlePlaySoundEffect(SoundType.succeed);
+        handlePlaySoundEffect(SoundType.success);
         handleShowMessage(MessageType.succeed);
       } else {
         // if the note is NOT saved then do success behaviour
-        handlePlaySoundEffect(SoundType.failed);
+        handlePlaySoundEffect(SoundType.fail);
         handleShowMessage(MessageType.failed);
       }})
   };
@@ -138,7 +138,7 @@ const Create = () => {
         <Votation score={score} setScore={setScore} />
         <LongButton text="Save" handleOnPress={handleSaveNewNote} marginBottom={10} />
         <LongButton text="Clear" handleOnPress={()=> {
-          handlePlaySoundEffect(SoundType.touched);
+          handlePlaySoundEffect(SoundType.close);
           handleEmtpyAllFields();
           scrollToTop();
         }} marginBottom={40} />
