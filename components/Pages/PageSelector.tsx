@@ -29,19 +29,19 @@ const styles = StyleSheet.create({
 type PageSelectorType = {
   title:string, 
   pageIndex:number, 
-  onSelect:(index:number)=> void, 
+  handleSelectPage:(index:number)=> void, 
   pageSelected:number
 };
 
-const PageSelector = ({ title, pageIndex, onSelect, pageSelected } : PageSelectorType)=>{
+const PageSelector = ({ title, pageIndex, handleSelectPage, pageSelected } : PageSelectorType)=>{
 
-  const {handlePlaySoundEffect} = useContext<SoundManagerContextType>(SoundManagerContext);
+  const { handlePlaySoundEffect } = useContext<SoundManagerContextType>(SoundManagerContext);
 
   return (
     <Pressable 
       style={styles.selectorPressable} 
       onPress={()=> {
-        onSelect(pageIndex)
+        handleSelectPage(pageIndex)
         handlePlaySoundEffect(SoundType.click);
     }}>
       <Text style={[

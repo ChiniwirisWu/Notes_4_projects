@@ -1,42 +1,42 @@
-import { useState, useCallback, useContext } from "react";
-import { useDatabase } from "./DatabaseProvider";
-import { useFocusEffect } from "expo-router";
-import { tryConnectDB } from "@/constants/functions";
+import { useState, useContext, useEffect } from "react";
 import { SettingsController } from "@/controllers/settingsController";
 import { View, StyleSheet, Pressable, Text, Modal } from "react-native";
 import { SoundManagerContext, SoundManagerContextType, SoundType } from "./SoundManager";
 import Fonts from "@/constants/fonts";
 import TitleBox from "@/components/Shared/titleBox";
+import { useDatabase } from "./DatabaseProvider";
 
 
 //1) editable param is set because I only want to modify it's name at home screen but use this component also in create screen.
 const Title = ({editable}: {editable:boolean}) =>{
-  const {handlePlaySoundEffect} = useContext<SoundManagerContextType>(SoundManagerContext);
+
+  const { handlePlaySoundEffect } = useContext<SoundManagerContextType>(SoundManagerContext);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [isDBReady, setIsDBReady] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const db = useDatabase();
 
   //2) get the title from DB each time in case it changes.
-  useFocusEffect(
-    useCallback(()=> {
+  useEffect(()=>{
+    
+    if(db){
+      fetchingTitle();
+    };
 
-      tryConnectDB({db, setIsDBReady, isDBReady});
+  }, [db]);
 
-      if(isDBReady && db != null){
-        SettingsController.getTitleFromDB(db).then(response=>{
-          setTitle(response.title);
-        });
-      };
-    }, [isDBReady])
-  );
+  const fetchingTitle = async ()=>{
+    if(db){
+      SettingsController.getTitleFromDB(db).then(response=>{
+        setTitle(response.title);
+      });
+    };
+  };
 
   // 3) this changes the title in the db and localy in it's state.
   const handleTitleChange = ()=>{
-    if(db != null){
+    if(db){
       handlePlaySoundEffect(SoundType.success);
       SettingsController.updateTitleInDB(db, title);
-
       setTitle(title);
       setShowModal(false);
     }

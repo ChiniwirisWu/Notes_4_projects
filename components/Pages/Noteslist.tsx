@@ -1,14 +1,12 @@
-import React, { useState, useContext, useCallback, useEffect, forwardRef, useImperativeHandle } from 'react';
-import { tryConnectDB } from '@/constants/functions';
+import React, { useState, useContext, useCallback, useEffect, forwardRef, useImperativeHandle, useDebugValue } from 'react';
 import {FlatList, StyleSheet, Text, View, Pressable} from 'react-native';
-import { SoundType, SoundManagerContext, SoundManagerContextType } from '../Shared/SoundManager';
 import { router, useFocusEffect } from "expo-router";
 import { useDatabase } from '../Shared/DatabaseProvider';
 import g_styles from "@/constants/styles";
 import Vote from "@/components/Pages/Vote";
 import { NoteInfoWithJSON } from '@/constants/types';
 import { getLevelFromNumber } from '@/constants/functions';
-import { getMessage, MessageType } from '@/constants/messages';
+import { NotesListController } from '@/controllers/notesList';
 
 const styles = StyleSheet.create({
   container: {
@@ -41,45 +39,43 @@ const IdeaListItem = ({idea} : {idea:NoteInfoWithJSON})=>{
   )
 }
 
-export interface ProjectsListFowardRefType {
+export interface NotesListFowardRefMethods {
   fetchAllItems:()=> void
 };
 
-const ProjectsList = forwardRef<ProjectsListFowardRefType>((props, ref)=>{
+const NotesList = forwardRef<NotesListFowardRefMethods>((props, ref)=>{
 
-  const { handlePlaySoundEffect } = useContext<SoundManagerContextType>(SoundManagerContext);
   const [items, setItems] = useState<NoteInfoWithJSON[]>([]);
-  const [isDBReady, setIsDBReady] = useState<boolean>(false); // this method is to load the method once, not twice.
   const db = useDatabase();
 
+  // 1) first execution when the component mounts.
+  useEffect(()=>{
+
+    if(db){
+      fetchAllItems();
+    };
+
+  }, [db]);
+
+  // 2) fetching and reloading method.
   const fetchAllItems = async ()=>{
     if(db){
-      const result = await db.getAllAsync<NoteInfoWithJSON>("SELECT * FROM note");
-      console.log(getMessage(MessageType.QUERY_SUCCESS));
-      setItems(result);
-    }
+
+      let currentNotes:(false | NoteInfoWithJSON[]) = false;
+      
+      while (!currentNotes){
+        currentNotes = await NotesListController.fetchAllItems(db); 
+      };
+
+      setItems(currentNotes);
+    };
   };
 
+  // 3) throw to the parent the trigger to fetch all Notes and reload the component. 
   useImperativeHandle(ref, ()=> ({
     fetchAllItems
   }));
 
-  useEffect(useCallback(()=>{
-    handlePlaySoundEffect(SoundType.bump);
-
-    //tryConnectDB({db, setIsDBReady, isDBReady});
-    let isConnected = false;
-
-    while(!isConnected){
-      isConnected = (db) ? true : false;
-    };
-
-    if(isDBReady){
-      fetchAllItems();
-    };     
-    // if the database has not loaded yet, try to connect.
-  }, []) );
-  
   return (
     <View style={styles.container}>
       <FlatList
@@ -93,4 +89,4 @@ const ProjectsList = forwardRef<ProjectsListFowardRefType>((props, ref)=>{
 
 
 
-export default ProjectsList;
+export default NotesList;

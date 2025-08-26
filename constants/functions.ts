@@ -1,4 +1,5 @@
 import { type SQLiteDatabase } from "expo-sqlite";
+import { useDatabase } from "@/components/Shared/DatabaseProvider";
 import { Levels, Key } from "@/constants/types";
 import { getMessage, MessageType } from "./messages";
 
@@ -13,23 +14,19 @@ export function generateRandomInteger(){
   return Math.floor(Math.random() * (MAX_VALUE - MIN_VALUE)) + MIN_VALUE;
 }
 
-type TryConnectDBParams = {
-  db:(SQLiteDatabase | null), 
-  setIsDBReady:(isReady:boolean)=>void
-  isDBReady:boolean
-};
+// Assumes that the DB will connect eventualy.
+export function tryConnectDB() : SQLiteDatabase | false{
+  const db = useDatabase();
 
-export function tryConnectDB({db, setIsDBReady, isDBReady}: TryConnectDBParams) : boolean{
-  if(!db){
-    console.warn(getMessage(MessageType.DATABASE_NOT_LOADED));
-    if(isDBReady == false) return false; // if it is already false, do nothing.
-    setIsDBReady(false);
-    return false;
-  } else {
-    if(isDBReady == true) return true; // if it is already true, do nothing.
-    setIsDBReady(true);
-    return true;
-  }
+  let isConnected = false;
+
+  while(!isConnected){
+    if(db){
+      return db;
+    }
+  };
+
+  return false; // it returns false because I don't know how to avoid this statement yet.
 };
 
 export function getLevelFromNumber (x:number) : Levels{

@@ -8,8 +8,8 @@ import g_style from "@/constants/styles";
 import Setting from "@/components/Shared/Setting";
 import Title from "@/components/Shared/Title";
 import Searchbar from "@/components/Pages/Searchbar";
-import ProjectsList from "@/components/Pages/Projectslist";
-import { ProjectsListFowardRefType } from "@/components/Pages/Projectslist";
+import NotesList from "@/components/Pages/Noteslist";
+import { NotesListFowardRefMethods } from "@/components/Pages/Noteslist";
 
 /*
  * TODO: Add the number of items filtered ⚠️ at Line 19
@@ -17,14 +17,19 @@ import { ProjectsListFowardRefType } from "@/components/Pages/Projectslist";
 
 const Home = ()=>{
 
-  const projectListRef = useRef<ProjectsListFowardRefType>(null);
+  const notesListRef = useRef<NotesListFowardRefMethods>(null);
   const { handlePlaySoundEffect } = useContext<SoundManagerContextType>(SoundManagerContext);
 
   useFocusEffect(useCallback(()=>{
+
     handlePlaySoundEffect(SoundType.bump);
-    if(projectListRef.current && projectListRef.current.fetchAllItems){
-      projectListRef.current.fetchAllItems();
+
+    if(notesListRef.current && notesListRef.current.fetchAllItems){
+
+      notesListRef.current.fetchAllItems();
+
     };
+
   }, []));
 
   return (
@@ -32,7 +37,7 @@ const Home = ()=>{
     <Setting />
     <Title editable={true} />
     <Searchbar />  
-    <ProjectsList ref={projectListRef}/>
+    <NotesList ref={notesListRef}/>
     <StatusBar style="auto" />
   </View>
   );

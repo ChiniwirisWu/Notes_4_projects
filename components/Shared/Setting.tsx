@@ -4,7 +4,6 @@ import { useDatabase } from "./DatabaseProvider";
 import { View, StyleSheet, Pressable, Modal } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { SettingsController } from "@/controllers/settingsController";
-import { tryConnectDB } from "@/constants/functions";
 import { SoundManagerContext, SoundManagerContextType, SoundType } from "./SoundManager";
 import { MessageType, getMessage } from "@/constants/messages";
 import g_styles from "@/constants/styles";
@@ -13,26 +12,29 @@ import SettingBox from "@/components/Shared/SettingBox";
 
 const Setting = () =>{
   const [showModal, setShowModal] = useState(false);
-  const [isDBReady, setIsDBReady] = useState<boolean>(false);
+  const { 
+    handleTurnOnSfx, 
+    handleTurnOffSfx, 
+    handleTurnOnMusic, 
+    handleTurnOffMusic, 
+    handlePlaySoundEffect, 
+    sfxOn, 
+    musicOn } = useContext<SoundManagerContextType>(SoundManagerContext);
   const db = useDatabase();
-  const { handleTurnOnSfx, handleTurnOffSfx, handleTurnOnMusic, handleTurnOffMusic, handlePlaySoundEffect, sfxOn, musicOn } = useContext<SoundManagerContextType>(SoundManagerContext);
 
   // 1) This set's up the initial settings.
   useFocusEffect(useCallback(()=>{
 
-    if(!tryConnectDB({db, setIsDBReady, isDBReady})){
-      return; // quick return to re-render.
-    };
-
-    if(isDBReady && db != null){
+    if(db){
       SettingsController.getSettings(db).then(result=>{
         // takes the values from DB and if musicOn or sfxOn it do a behaviour.
         const { musicOn, sfxOn } = result;   
         (musicOn) ? handleTurnOnMusic() : handleTurnOffMusic();
         (sfxOn) ? handleTurnOnSfx() : handleTurnOffSfx();
       }); 
-    };
-  }, [isDBReady]));
+    }
+
+  }, [db]));
 
   // 2) This handler updates the database "musicOn" variable and handles the SoundManager as well
   const setMusicOnDB = async ()=>{

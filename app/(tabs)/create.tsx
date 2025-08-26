@@ -4,12 +4,10 @@ import { useFocusEffect } from "expo-router";
 import { NoteTask } from "@/constants/types";
 import g_style from "@/constants/styles";
 import { useDatabase } from "@/components/Shared/DatabaseProvider";
-import { tryConnectDB } from "@/constants/functions";
 import { CreateController } from "@/controllers/createController";
 import { 
   useState, 
   useRef, 
-  useCallback,
   useContext
 } from "react";
 import { SoundType, SoundManagerContext, SoundManagerContextType } from "@/components/Shared/SoundManager";
@@ -31,7 +29,6 @@ const Create = () => {
   const {handlePlaySoundEffect} = useContext<SoundManagerContextType>(SoundManagerContext);
   const [nonFunctionalRequirements, setNonFunctionalRequirements] = useState<Array<NoteTask>>();
   const [functionalRequirements, setFunctionalRequirements] = useState<Array<NoteTask>>();
-  const [isDBReady, setIsDBReady] = useState<boolean>(false);
   const [description, setDescription] = useState<string>();
   const [showMessage, setShowMessage] = useState<boolean>(false);
   const [messageText, setMessageText] = useState<string>("");
@@ -41,19 +38,16 @@ const Create = () => {
   const db = useDatabase();
   
   // 1) connect to db if it is disconnected and sound whenever user focuses the screen.
-  useFocusEffect(
-    useCallback(()=> {
-      handlePlaySoundEffect(SoundType.bump);
-      tryConnectDB({db, setIsDBReady, isDBReady});
-    }, [isDBReady])
-  );
+  useFocusEffect(()=>{
+    handlePlaySoundEffect(SoundType.bump);
+  });
 
   // 2) clean up all the fields and just that!
   const handleEmtpyAllFields = ()=>{
-    setTitle("");
-    setDescription("");
     setFunctionalRequirements([]);
     setNonFunctionalRequirements([]);
+    setDescription("");
+    setTitle("");
     setScore(1);
   };
 
@@ -66,13 +60,13 @@ const Create = () => {
 
   // 4) Closes a messageBox and scrolls to top.
   const handleCloseMessage = ()=>{
-    setShowMessage(false);
     handlePlaySoundEffect(SoundType.bump);
+    setShowMessage(false);
     scrollToTop();
   }
 
   const handleSaveNewNote = ()=>{
-    if(!db) return;
+    if(db){
     CreateController.saveNewNoteIntoDB(db, {title, description, functionalRequirements, nonFunctionalRequirements, score}).then(res=>{
       if(res){
         // if the note is saved then do success behaviour
@@ -83,18 +77,21 @@ const Create = () => {
         // if the note is NOT saved then do success behaviour
         handlePlaySoundEffect(SoundType.fail);
         handleShowMessage(MessageType.NOT_CREATED);
-      }})
+      }});
+    }
+
   };
 
   const handleShowMessage = (messageType:MessageType)=>{
-    setMessageText(getMessage(messageType));
-    setShowMessage(true);
     // This timeout ensures that it will scroll after the note finishes doing DB queries.
     setTimeout(()=>{
       if(scrollRef.current != null){
         scrollRef.current.scrollToEnd({animated:true});
       }
     }, 200);
+
+    setMessageText(getMessage(messageType));
+    setShowMessage(true);
   }
 
   // If the database is not set yet, this cuts the way of making an error with SQL queries.
@@ -141,7 +138,5 @@ const Create = () => {
     </View>
   );
 };
-
-
 
 export default Create;

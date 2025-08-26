@@ -5,13 +5,12 @@ import Votation from "../Create/Votation";
 import LongButton from "../Shared/LongButton";
 import MessageBox from "../Shared/MessageBox";
 import { NoteInfoWithJSON } from "@/constants/types";
-import { useFocusEffect } from "expo-router";
 import { SoundManagerContext, SoundManagerContextType, SoundType } from "@/components/Shared/SoundManager";
 import { MessageType, getMessage } from "@/constants/messages";
+import LoadingScreen from "../Shared/LoadingScreen";
 
 import { useState, useRef, useCallback, useContext } from "react";
 import { useDatabase } from "../Shared/DatabaseProvider";
-import { tryConnectDB } from "@/constants/functions";
 
 const styles = StyleSheet.create({
   container: {
@@ -31,13 +30,6 @@ const DetailsPage = ({pageInfo}: {pageInfo:NoteInfoWithJSON})=>{
   const {handlePlaySoundEffect} = useContext<SoundManagerContextType>(SoundManagerContext);
 
   const db = useDatabase();
-  const [isDBReady, setIsDBReady] = useState<boolean>(false);
-  
-  useFocusEffect(
-    useCallback(()=> {
-      tryConnectDB({db, setIsDBReady, isDBReady});
-    }, [isDBReady])
-  );
 
   const handleCloseMessage = ()=>{
     setShowMessage(false);
@@ -47,17 +39,17 @@ const DetailsPage = ({pageInfo}: {pageInfo:NoteInfoWithJSON})=>{
   };
 
   const handleSaveChanges = async ()=>{
-    if(!db) return;
-    try {
-      const statement = await db.prepareAsync("UPDATE note SET title=$title, description=$description, score=$score WHERE key=$key");
-      await statement.executeAsync({$title:title, $description:description, $score:score, $key:pageInfo.key});
-      handleShowMessage(MessageType.QUERY_SUCCESS);
+    if(db){
+      try {
+        const statement = await db.prepareAsync("UPDATE note SET title=$title, description=$description, score=$score WHERE key=$key");
+        await statement.executeAsync({$title:title, $description:description, $score:score, $key:pageInfo.key});
+        handleShowMessage(MessageType.QUERY_SUCCESS);
 
-    } catch (e){
-      console.error(e);
-      handleShowMessage(MessageType.QUERY_FAILED);
+      } catch (e){
+        console.error(e);
+        handleShowMessage(MessageType.QUERY_FAILED);
+      }
     }
-    console.log({title, score, description});
   }
 
   const handleShowMessage = (messageType:MessageType)=>{
@@ -66,6 +58,10 @@ const DetailsPage = ({pageInfo}: {pageInfo:NoteInfoWithJSON})=>{
     if(scrollRef.current != null){
       scrollRef.current.scrollToEnd();
     }
+  }
+
+  if(!db){
+    return <LoadingScreen />
   }
 
   return (
