@@ -1,6 +1,5 @@
 // the user passes the db to the methods to ensure that the db is not null
 // I use the "WHERE id=1" because I will only have one row in the database.
-
 import { SQLiteDatabase } from "expo-sqlite";
 import { generateKey, generateRandomInteger } from "@/constants/functions";
 import { NoteTask } from "@/constants/types";

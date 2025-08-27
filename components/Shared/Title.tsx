@@ -15,13 +15,10 @@ const Title = ({editable}: {editable:boolean}) =>{
   const [title, setTitle] = useState<string>("");
   const db = useDatabase();
 
-  //2) get the title from DB each time in case it changes.
   useEffect(()=>{
-    
     if(db){
       fetchingTitle();
     };
-
   }, [db]);
 
   const fetchingTitle = async ()=>{
@@ -36,7 +33,9 @@ const Title = ({editable}: {editable:boolean}) =>{
   const handleTitleChange = ()=>{
     if(db){
       handlePlaySoundEffect(SoundType.success);
+      // Update at the database
       SettingsController.updateTitleInDB(db, title);
+      // Update locally so it renders the new element.
       setTitle(title);
       setShowModal(false);
     }

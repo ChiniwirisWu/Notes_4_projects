@@ -25,7 +25,7 @@ const Detail = ()=>{
 
   useFocusEffect(useCallback(()=>{
     handlePlaySoundEffect(SoundType.bump);
-  }, []))
+  }, []));
 
   // used to change between pages.
   const handleSelectPage = (pageIndex:number)=> {

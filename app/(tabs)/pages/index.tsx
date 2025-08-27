@@ -7,7 +7,6 @@ import g_style from "@/constants/styles";
 
 import Setting from "@/components/Shared/Setting";
 import Title from "@/components/Shared/Title";
-import Searchbar from "@/components/Pages/Searchbar";
 import NotesList from "@/components/Pages/Noteslist";
 import { NotesListFowardRefMethods } from "@/components/Pages/Noteslist";
 
@@ -26,7 +25,7 @@ const Home = ()=>{
 
     if(notesListRef.current && notesListRef.current.fetchAllItems){
 
-      notesListRef.current.fetchAllItems();
+      notesListRef.current.fetchAllItems(); 
 
     };
 
@@ -36,7 +35,6 @@ const Home = ()=>{
   <View style={g_style.container}>
     <Setting />
     <Title editable={true} />
-    <Searchbar />  
     <NotesList ref={notesListRef}/>
     <StatusBar style="auto" />
   </View>
