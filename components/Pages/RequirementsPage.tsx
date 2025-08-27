@@ -27,7 +27,7 @@ const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
   const [nonFunctionalRequirements, setNonFunctionalRequirements] = useState<Array<NoteTask>>(JSON.parse(pageInfo.nonFunctionalRequirements));
   const scrollRef = useRef<ScrollView>(null);
   const [showMessage, setShowMessage] = useState<boolean>(false);
-  const [messageText, setMessageText] = useState<string | null>("");
+  const [messageText, setMessageText] = useState<string>("");
 
   const handleShowMessage = (messageType:MessageType)=>{
     setMessageText(getMessage(messageType));
@@ -41,7 +41,8 @@ const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
   }
 
   return (
-    <ScrollView style={styles.container}>
+  <View style={g_styles.container}>
+    <ScrollView style={styles.container} ref={scrollRef}>
       <IncrementableList 
         title="Functional Requirements" 
         alias="functionalR" 
@@ -78,6 +79,7 @@ const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
         <></>
       )}
     </ScrollView>
+  </View>
   ); 
 }
 

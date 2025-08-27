@@ -2,6 +2,7 @@ import { type SQLiteDatabase } from "expo-sqlite";
 import { useDatabase } from "@/components/Shared/DatabaseProvider";
 import { Levels, Key } from "@/constants/types";
 import { getMessage, MessageType } from "./messages";
+import { ScrollView } from "react-native-gesture-handler";
 
 export function generateKey(id:number, hashLength:number, alias:string) : Key{
   const hash:string = Math.random().toString(36).substring(2, 2 + hashLength); 
@@ -39,4 +40,3 @@ export function getLevelFromNumber (x:number) : Levels{
     default: return Levels.common;
   }
 };
-

@@ -7,10 +7,11 @@ import MessageBox from "../Shared/MessageBox";
 import { NoteInfoWithJSON } from "@/constants/types";
 import { SoundManagerContext, SoundManagerContextType, SoundType } from "@/components/Shared/SoundManager";
 import { MessageType, getMessage } from "@/constants/messages";
-import LoadingScreen from "../Shared/LoadingScreen";
-
 import { useState, useRef, useCallback, useContext } from "react";
 import { useDatabase } from "../Shared/DatabaseProvider";
+import { DetailsPageController } from "@/controllers/detailsPageController";
+
+import LoadingScreen from "../Shared/LoadingScreen";
 
 const styles = StyleSheet.create({
   container: {
@@ -40,15 +41,9 @@ const DetailsPage = ({pageInfo}: {pageInfo:NoteInfoWithJSON})=>{
 
   const handleSaveChanges = async ()=>{
     if(db){
-      try {
-        const statement = await db.prepareAsync("UPDATE note SET title=$title, description=$description, score=$score WHERE key=$key");
-        await statement.executeAsync({$title:title, $description:description, $score:score, $key:pageInfo.key});
-        handleShowMessage(MessageType.QUERY_SUCCESS);
-
-      } catch (e){
-        console.error(e);
-        handleShowMessage(MessageType.QUERY_FAILED);
-      }
+      const fields = { title, description, score , key:pageInfo.key};
+      const isSaved = await DetailsPageController.updateFieldsInDB({db, fields});
+      handleShowMessage(isSaved ? MessageType.UPDATED : MessageType.NOT_UPDATED);
     }
   }
 

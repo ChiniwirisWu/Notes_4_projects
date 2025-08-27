@@ -1,8 +1,8 @@
-import { View, ScrollView, } from "react-native";
+import { View, ScrollView } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 import { useFocusEffect } from "expo-router";
 import { NoteTask } from "@/constants/types";
-import g_style from "@/constants/styles";
+import g_styles from "@/constants/styles";
 import { useDatabase } from "@/components/Shared/DatabaseProvider";
 import { CreateController } from "@/controllers/createController";
 import { 
@@ -10,7 +10,11 @@ import {
   useRef, 
   useContext
 } from "react";
-import { SoundType, SoundManagerContext, SoundManagerContextType } from "@/components/Shared/SoundManager";
+import { 
+  SoundType, 
+  SoundManagerContext, 
+  SoundManagerContextType 
+} from "@/components/Shared/SoundManager";
 import { MessageType, getMessage } from "@/constants/messages";
 
 import Setting from "@/components/Shared/Setting";
@@ -26,13 +30,13 @@ import LoadingScreen from "@/components/Shared/LoadingScreen";
 
 
 const Create = () => {
-  const {handlePlaySoundEffect} = useContext<SoundManagerContextType>(SoundManagerContext);
+  const { handlePlaySoundEffect } = useContext<SoundManagerContextType>(SoundManagerContext);
   const [nonFunctionalRequirements, setNonFunctionalRequirements] = useState<Array<NoteTask>>();
   const [functionalRequirements, setFunctionalRequirements] = useState<Array<NoteTask>>();
   const [description, setDescription] = useState<string>();
   const [showMessage, setShowMessage] = useState<boolean>(false);
   const [messageText, setMessageText] = useState<string>("");
-  const scrollRef = useRef<ScrollView | null>(null);
+  const scrollRef = useRef<ScrollView>(null);
   const [title, setTitle] = useState<string>();
   const [score, setScore] = useState<number>(1);
   const db = useDatabase();
@@ -51,19 +55,22 @@ const Create = () => {
     setScore(1);
   };
 
-  // 3) separate method to keep the behaviour manageable
-  const scrollToTop = ()=>{
+  const handleClearFields = ()=>{
+    handlePlaySoundEffect(SoundType.close);
+    handleEmtpyAllFields();
     if(scrollRef.current != null){
-      scrollRef.current.scrollTo({x: 0, y:0});
-    } 
+      scrollRef.current.scrollTo({x:0, y:0})
+    }
   };
 
-  // 4) Closes a messageBox and scrolls to top.
   const handleCloseMessage = ()=>{
-    handlePlaySoundEffect(SoundType.bump);
+    handlePlaySoundEffect(SoundType.close);
     setShowMessage(false);
-    scrollToTop();
-  }
+    if(scrollRef.current != null){
+      scrollRef.current.scrollTo({x:0, y:0})
+    }
+  };
+
 
   const handleSaveNewNote = ()=>{
     if(db){
@@ -101,7 +108,7 @@ const Create = () => {
 
   // It loads only if the database is setted.
   return (
-    <View style={g_style.container}>
+    <View style={g_styles.container}>
       <ScrollView ref={scrollRef}>
         <Setting />
         <Title editable={false} />
@@ -121,11 +128,7 @@ const Create = () => {
         />
         <Votation score={score} setScore={setScore} />
         <LongButton text="Save" handleOnPress={handleSaveNewNote} marginBottom={10} />
-        <LongButton text="Clear" handleOnPress={()=> {
-          handlePlaySoundEffect(SoundType.close);
-          handleEmtpyAllFields();
-          scrollToTop();
-        }} marginBottom={40} />
+        <LongButton text="Clear" handleOnPress={()=> {handleClearFields}} marginBottom={40} />
 
         {(showMessage)?(
           <MessageBox handleOnPress={handleCloseMessage} messageText={messageText} />
