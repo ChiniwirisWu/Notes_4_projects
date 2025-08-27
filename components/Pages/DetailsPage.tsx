@@ -33,6 +33,7 @@ const DetailsPage = ({pageInfo}: {pageInfo:NoteInfoWithJSON})=>{
   const db = useDatabase();
 
   const handleCloseMessage = ()=>{
+    handlePlaySoundEffect(SoundType.bump);
     setShowMessage(false);
     if(scrollRef.current != null){
       scrollRef.current.scrollTo({x: 0, y: 0});
@@ -44,6 +45,7 @@ const DetailsPage = ({pageInfo}: {pageInfo:NoteInfoWithJSON})=>{
       const fields = { title, description, score , key:pageInfo.key};
       const isSaved = await DetailsPageController.updateFieldsInDB({db, fields});
       handleShowMessage(isSaved ? MessageType.UPDATED : MessageType.NOT_UPDATED);
+      handlePlaySoundEffect(isSaved ? SoundType.success : SoundType.fail);
     }
   }
 
@@ -64,20 +66,12 @@ const DetailsPage = ({pageInfo}: {pageInfo:NoteInfoWithJSON})=>{
       <SingleLineTextInput fieldName="Title" value={title} setValue={setTitle} />
       <TextAreaInput fieldName="Description" marginBottom={40} value={description} setValue={setDescription} />
       <Votation score={score} setScore={setScore} />
-      <LongButton text={"Save"} handleOnPress={()=>{
-        handlePlaySoundEffect(SoundType.success);
-        handleSaveChanges();
-      }} />
+      <LongButton text={"Save"} handleOnPress={handleSaveChanges} />
 
       {(showMessage)?(
-        <MessageBox 
-          handleOnPress={()=>{
-            handlePlaySoundEffect(SoundType.bump);
-            handleCloseMessage();
-          }} 
-          messageText={messageText} />
+        <MessageBox handleOnPress={handleCloseMessage} messageText={messageText} />
       ):(
-        <></>
+        null
       )}
     </ScrollView>
   ); 

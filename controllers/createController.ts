@@ -34,13 +34,10 @@ export class CreateController{
       const nonFunctionalRequirementsJSON = JSON.stringify(nonFunctionalRequirements);
       const hashLength = 10;
       const alias = "note4projects";
-
-      const statement = await db.prepareAsync(`
-      INSERT INTO note (key, title, description, score, functionalRequirements, nonFunctionalRequirements) 
-      VALUES ($key, $title, $description, $score, $functionalRequirements, $nonFunctionalRequirements);
-      `);
-
-      await statement.executeAsync({
+      const result = await db.runAsync(`
+        INSERT INTO note (key, title, description, score, functionalRequirements, nonFunctionalRequirements) 
+        VALUES ($key, $title, $description, $score, $functionalRequirements, $nonFunctionalRequirements);
+      `, {
         $key: generateKey(generateRandomInteger(), hashLength, alias),
         $title: (title == "" || title == undefined) ? defaultNoteValue.title : title, 
         $description: (description == "" || description == undefined) ? defaultNoteValue.description : description, 
@@ -48,6 +45,7 @@ export class CreateController{
         $functionalRequirements: functionalRequirementsJSON ? functionalRequirements : JSON.stringify([]),
         $nonFunctionalRequirements : nonFunctionalRequirementsJSON ? nonFunctionalRequirements : JSON.stringify([])
       });
+
 
       // Show messages only if the note is saved.
       return true;

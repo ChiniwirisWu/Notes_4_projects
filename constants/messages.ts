@@ -1,7 +1,3 @@
-import { SoundType } from "@/components/Shared/SoundManager";
-import { ScrollView } from "react-native-gesture-handler";
-import { scrollToTop } from "@/constants/functions";
-
 export enum MessageType {
   CREATED,
   NOT_CREATED,

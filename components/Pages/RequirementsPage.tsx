@@ -1,10 +1,14 @@
 import { View, StyleSheet, Text, ScrollView } from "react-native";
+import { useDatabase } from "../Shared/DatabaseProvider";
+import LoadingScreen from "../Shared/LoadingScreen";
+import { SoundType, SoundManagerContext, SoundManagerContextType } from "../Shared/SoundManager";
 import IncrementableList from "../Create/IncrementableList";
 import LongButton from "../Shared/LongButton";
 import CircularProgress from "react-native-circular-progress-indicator"
 import g_styles from "@/constants/styles";
 import { NoteInfoWithJSON } from "@/constants/types";
-import { useState, useRef } from "react";
+import { useState, useRef, useContext, useEffect } from "react";
+import { RequirementsPageController } from "@/controllers/requirementsPageController";
 import { NoteTask } from "@/constants/types";
 import { MessageType, getMessage } from "@/constants/messages";
 import MessageBox from "../Shared/MessageBox";
@@ -25,9 +29,12 @@ const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
 
   const [functionalRequirements, setFunctionalRequirements] = useState<Array<NoteTask>>(JSON.parse(pageInfo.functionalRequirements));
   const [nonFunctionalRequirements, setNonFunctionalRequirements] = useState<Array<NoteTask>>(JSON.parse(pageInfo.nonFunctionalRequirements));
+  const db = useDatabase();
+
   const scrollRef = useRef<ScrollView>(null);
-  const [showMessage, setShowMessage] = useState<boolean>(false);
+  const [showMessage, setShowMessage] = useState<boolean>(true);
   const [messageText, setMessageText] = useState<string>("");
+  const { handlePlaySoundEffect } = useContext<SoundManagerContextType>(SoundManagerContext);
 
   const handleShowMessage = (messageType:MessageType)=>{
     setMessageText(getMessage(messageType));
@@ -39,6 +46,28 @@ const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
       }
     }, 200);
   }
+
+  const handleCloseMessage = ()=>{
+    handlePlaySoundEffect(SoundType.close);
+    setShowMessage(false);
+    if(scrollRef.current != null){
+      scrollRef.current.scrollTo({x:0, y:0})
+    }
+  };
+
+  const handleSaveRequirements = async ()=>{
+    console.log("hi neptuno");
+    if(db){
+      const params = {key:pageInfo.key, functionalRequirements, nonFunctionalRequirements};
+      const isSaved = await RequirementsPageController.saveRequirements({db, params});
+      handlePlaySoundEffect(isSaved ? SoundType.success : SoundType.fail);
+      handleShowMessage(isSaved ? MessageType.UPDATED : MessageType.NOT_UPDATED);
+    }
+  };
+
+  if(!db){
+    return <LoadingScreen />;
+  };
 
   return (
   <View style={g_styles.container}>
@@ -70,7 +99,7 @@ const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
           duration={1000}
         />
       </View>
-      <LongButton text="Save" handleOnPress={()=> {}} marginBottom={40} />
+      <LongButton text="Save" handleOnPress={handleSaveRequirements} marginBottom={40} />
       <LongButton text="Delete" handleOnPress={()=> {}} marginBottom={40} />
 
       {(showMessage)?(
