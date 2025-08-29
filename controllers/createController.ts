@@ -29,10 +29,7 @@ export class CreateController{
         $score: score ? score : 1, 
         $functionalRequirements: JSON.stringify(functionalRequirements),
         $nonFunctionalRequirements : JSON.stringify(nonFunctionalRequirements) 
-      }
-);
-
-
+      });
       // Show messages only if the note is saved.
       return true;
     } catch (e){

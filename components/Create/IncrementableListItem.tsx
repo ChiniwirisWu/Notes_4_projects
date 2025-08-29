@@ -19,8 +19,10 @@ const styles = StyleSheet.create({
     height: 52,
   },
   textInput: {
-    width: "100%"
+    flexWrap: "wrap",
+    paddingRight: 19
   },
+
 });
 
 type IncrementableListItemParams = {
@@ -104,6 +106,7 @@ export default function IncrementableListItem ({itemInfo, itemIndex} : Increment
       </GestureDetector>
 
       <TextInput 
+        multiline={true}
         onChangeText={(e)=> onTitleChange(e)} 
         style={[g_styles.p, styles.textInput, (state == NoteTaskState.MARKED ? g_styles.markedP : null )]} 
         value={(state == NoteTaskState.EMPTY) ? undefined : title} 
