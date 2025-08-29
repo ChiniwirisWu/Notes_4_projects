@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, ScrollView } from "react-native";
+import { View, StyleSheet, Text, ScrollView, Modal } from "react-native";
 import { useDatabase } from "../Shared/DatabaseProvider";
 import LoadingScreen from "../Shared/LoadingScreen";
 import { router } from "expo-router";
@@ -12,7 +12,10 @@ import { useState, useRef, useContext, useEffect } from "react";
 import { RequirementsPageController } from "@/controllers/requirementsPageController";
 import { NoteTask } from "@/constants/types";
 import { MessageType, getMessage } from "@/constants/messages";
+import { ConfirmationBoxMethods } from "../Shared/ConfirmationBox";
+
 import MessageBox from "../Shared/MessageBox";
+import ConfirmationBox from "../Shared/ConfirmationBox";
 
 const styles = StyleSheet.create({
   container: {
@@ -30,6 +33,7 @@ const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
 
   const [functionalRequirements, setFunctionalRequirements] = useState<Array<NoteTask>>(JSON.parse(pageInfo.functionalRequirements));
   const [nonFunctionalRequirements, setNonFunctionalRequirements] = useState<Array<NoteTask>>(JSON.parse(pageInfo.nonFunctionalRequirements));
+  const confirmationBoxRef = useRef<ConfirmationBoxMethods>(null);
   const db = useDatabase();
 
   const scrollRef = useRef<ScrollView>(null);
@@ -47,6 +51,12 @@ const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
       }
     }, 200);
   }
+
+  const handleOpenDeleteBox = ()=> {
+    if(confirmationBoxRef.current){
+      confirmationBoxRef.current.handleOpenModal();
+    } 
+  };
 
   const handleCloseMessage = ()=>{
     handlePlaySoundEffect(SoundType.close);
@@ -119,14 +129,23 @@ const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
         />
       </View>
       <LongButton text="Save" handleOnPress={handleSaveRequirements} marginBottom={40} />
-      <LongButton text="Delete" handleOnPress={handleDeleteNote} marginBottom={40} />
+      <LongButton text="Delete" handleOnPress={handleOpenDeleteBox} marginBottom={40} />
 
       {(showMessage)?(
         <MessageBox handleOnPress={handleCloseMessage} messageText={messageText} />
       ):(
         <></>
       )}
+
     </ScrollView>
+
+    <View>
+      <ConfirmationBox 
+        ref={confirmationBoxRef}
+        message={"Delete this item"} 
+        handleConfirm={handleDeleteNote}/>
+    </View>
+
   </View>
   ); 
 }

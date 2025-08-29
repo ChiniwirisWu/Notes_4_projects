@@ -18,6 +18,9 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     flex: 1,
   },
+  flatListContainer: {
+    gap: 5
+  },
   header: {
     flex: 1,
     flexDirection: "row",
@@ -147,6 +150,7 @@ const IncrementableList = ({title, alias, items, setItems}: IncrementableListPar
       ):(
         <IncrementableListContext.Provider value={{handleOnDeleteListItem, handleItemInfoChange}}>
           <FlatList 
+            contentContainerStyle={styles.flatListContainer}
             data={items}
             renderItem={({item, index})=> (
               <IncrementableListItem 

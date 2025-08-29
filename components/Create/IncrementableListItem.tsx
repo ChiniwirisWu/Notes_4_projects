@@ -1,11 +1,11 @@
 import { NoteTask, NoteTaskState } from "@/constants/types";
 import { getStateColor } from "@/constants/colors";
 import { View, TextInput, StyleSheet, Modal } from "react-native";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import { FontAwesome6 } from "@expo/vector-icons";
 import g_styles from "@/constants/styles";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import ConfirmationBox from "../Shared/ConfirmationBox";
+import ConfirmationBox, { ConfirmationBoxMethods } from "../Shared/ConfirmationBox";
 import { runOnJS } from "react-native-reanimated";
 
 import { IncrementableListContext } from "./IncrementableList";
@@ -15,12 +15,10 @@ const styles = StyleSheet.create({
   ListItem: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 20,
-    height: 52,
   },
   textInput: {
-    flexWrap: "wrap",
-    paddingRight: 19
+    flex: 1,
+    paddingLeft: 15
   },
 
 });
@@ -36,9 +34,9 @@ export default function IncrementableListItem ({itemInfo, itemIndex} : Increment
   // initialize with itemInfo from DB.
   const [state, setState] = useState<NoteTaskState>(itemInfo.state);
   const [title, setTitle] = useState<string>((state == NoteTaskState.EMPTY) ? "Insert text" : itemInfo.title);
-  const [showModal, setShowModal] = useState<boolean>(false);
   const { handleOnDeleteListItem, handleItemInfoChange } = useContext(IncrementableListContext);
   const {handlePlaySoundEffect} = useContext<SoundManagerContextType>(SoundManagerContext);
+  const confirmationBoxRef = useRef<ConfirmationBoxMethods>(null);
 
   const onTitleChange = (text:string)=>{
     // It manages it's information by itself and also changes the database info. 
@@ -52,7 +50,9 @@ export default function IncrementableListItem ({itemInfo, itemIndex} : Increment
 
   const handleOpenDeleteBox = ()=>{
     try {
-      setShowModal(true);
+      if(confirmationBoxRef.current){
+        confirmationBoxRef.current.handleOpenModal();
+      }
     } catch(e){
       console.error("Error: " + e);
     }
@@ -113,16 +113,12 @@ export default function IncrementableListItem ({itemInfo, itemIndex} : Increment
         placeholderTextColor="#fff" 
         placeholder={title} />
 
-      <Modal
-        visible={showModal}
-        backdropColor={"#000"}>
 
         <ConfirmationBox 
+          ref={confirmationBoxRef}
           message={"Delete this item"} 
-          handleCloseModal={()=> setShowModal(false)} 
           handleConfirm={()=> handleOnDeleteListItem(itemIndex)}/>
 
-      </Modal>
     </View>
 
   );
