@@ -1,14 +1,14 @@
 import { View, StyleSheet, Text, ScrollView, Modal } from "react-native";
 import { useDatabase } from "../Shared/DatabaseProvider";
 import LoadingScreen from "../Shared/LoadingScreen";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { SoundType, SoundManagerContext, SoundManagerContextType } from "../Shared/SoundManager";
 import IncrementableList from "../Create/IncrementableList";
 import LongButton from "../Shared/LongButton";
 import CircularProgress from "react-native-circular-progress-indicator"
 import g_styles from "@/constants/styles";
-import { NoteInfoWithJSON } from "@/constants/types";
-import { useState, useRef, useContext, useEffect } from "react";
+import { NoteInfoWithJSON, NoteTaskState } from "@/constants/types";
+import { useState, useRef, useContext, useEffect, useCallback } from "react";
 import { RequirementsPageController } from "@/controllers/requirementsPageController";
 import { NoteTask } from "@/constants/types";
 import { MessageType, getMessage } from "@/constants/messages";
@@ -35,11 +35,15 @@ const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
   const [nonFunctionalRequirements, setNonFunctionalRequirements] = useState<Array<NoteTask>>(JSON.parse(pageInfo.nonFunctionalRequirements));
   const confirmationBoxRef = useRef<ConfirmationBoxMethods>(null);
   const db = useDatabase();
-
   const scrollRef = useRef<ScrollView>(null);
   const [showMessage, setShowMessage] = useState<boolean>(false);
   const [messageText, setMessageText] = useState<string>("");
+  const [requirementsAchieved, setRequirementsAchieved] = useState<number>(0);
   const { handlePlaySoundEffect } = useContext<SoundManagerContextType>(SoundManagerContext);
+
+  useFocusEffect(useCallback(()=>{
+    calculateRequirementsAchieved(); 
+  }, []))
 
   const handleShowMessage = (messageType:MessageType)=>{
     setMessageText(getMessage(messageType));
@@ -51,6 +55,23 @@ const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
       }
     }, 200);
   }
+
+  const sumCompletedTask = (requirements:NoteTask[]) : number =>{
+    let sum:number = 0;
+    requirements.forEach((el, ind)=>{
+      if(el.state == NoteTaskState.MARKED){
+        sum++;
+      }
+    });
+    return sum;
+  };
+
+  const calculateRequirementsAchieved = ()=>{
+    const total:number = functionalRequirements.length + nonFunctionalRequirements.length;
+    const achieved:number = sumCompletedTask(functionalRequirements) + sumCompletedTask(nonFunctionalRequirements);
+    const percentage = (achieved / total) * 100;
+    setRequirementsAchieved(percentage);
+  };
 
   const handleOpenDeleteBox = ()=> {
     if(confirmationBoxRef.current){
@@ -67,12 +88,12 @@ const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
   };
 
   const handleSaveRequirements = async ()=>{
-    console.log("hi neptuno");
     if(db){
       const params = {key:pageInfo.key, functionalRequirements, nonFunctionalRequirements};
       const isSaved = await RequirementsPageController.saveRequirements({db, params});
       handlePlaySoundEffect(isSaved ? SoundType.success : SoundType.fail);
       handleShowMessage(isSaved ? MessageType.UPDATED : MessageType.NOT_UPDATED);
+      calculateRequirementsAchieved();
     }
   };
 
@@ -116,15 +137,14 @@ const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
       <View style={styles.progressBarContainer}>
         <Text style={[g_styles.p, {marginBottom: 40, width: "100%"}]}>Requirement's achieved</Text>
         <CircularProgress
-          value={80}
-          title={"RC"}
+          value={requirementsAchieved}
           titleColor="#fff"
           valueSuffix="%"
           radius={60}
-          progressValueColor={'#fff'}
+          progressValueColor={'#0be646'}
           inActiveStrokeColor={"#222"}
-          activeStrokeColor="#9534eb"
-          activeStrokeSecondaryColor="#fced0f"
+          activeStrokeColor="#0be646"
+          activeStrokeSecondaryColor="#95339b"
           duration={1000}
         />
       </View>
