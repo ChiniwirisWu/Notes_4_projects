@@ -37,10 +37,8 @@ export default function DatabaseProvider({children}:{children:any}){
       );
 
       INSERT INTO settings (id, title, musicOn, sfxOn)
-      SELECT 1, 'My Awesome App', 1, 1
+      SELECT 1, 'Notes4Projects!', 1, 1
       WHERE (SELECT COUNT(*) FROM settings) = 0;
-
-      DROP TABLE IF EXISTS note;
 
       CREATE TABLE IF NOT EXISTS note(
         key VARCHAR(200) PRIMARY KEY,

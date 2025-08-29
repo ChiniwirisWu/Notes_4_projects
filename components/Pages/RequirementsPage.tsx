@@ -33,7 +33,7 @@ const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
   const db = useDatabase();
 
   const scrollRef = useRef<ScrollView>(null);
-  const [showMessage, setShowMessage] = useState<boolean>(true);
+  const [showMessage, setShowMessage] = useState<boolean>(false);
   const [messageText, setMessageText] = useState<string>("");
   const { handlePlaySoundEffect } = useContext<SoundManagerContextType>(SoundManagerContext);
 

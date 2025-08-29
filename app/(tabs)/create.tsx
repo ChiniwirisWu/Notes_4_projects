@@ -117,18 +117,18 @@ const Create = () => {
         <IncrementableList 
           title="Functional Requirements" 
           alias="functionalR" 
-          items={(functionalRequirements == undefined) ? [] : functionalRequirements} 
+          items={functionalRequirements} 
           setItems={setFunctionalRequirements}
         />
         <IncrementableList 
           title="Non Functional Requirements" 
           alias="functionalR"
-          items={(nonFunctionalRequirements == undefined) ? [] : nonFunctionalRequirements} 
+          items={nonFunctionalRequirements} 
           setItems={setNonFunctionalRequirements}
         />
         <Votation score={score} setScore={setScore} />
         <LongButton text="Save" handleOnPress={handleSaveNewNote} marginBottom={10} />
-        <LongButton text="Clear" handleOnPress={()=> {handleClearFields}} marginBottom={40} />
+        <LongButton text="Clear" handleOnPress={handleClearFields} marginBottom={40} />
 
         {(showMessage)?(
           <MessageBox handleOnPress={handleCloseMessage} messageText={messageText} />

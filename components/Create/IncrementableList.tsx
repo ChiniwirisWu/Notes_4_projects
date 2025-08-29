@@ -63,7 +63,8 @@ const IncrementableList = ({title, alias, items, setItems}: IncrementableListPar
   useEffect(()=>{
   // this ensures that it shows the empty message whenever the user clears the fields.
     if(items.length < 1){
-      showSelectedMessage(noteTaskListState);
+      showSelectedMessage(NoteTaskListState.EMPTY);
+      setNoteTaskListState(NoteTaskListState.EMPTY)
     }
   }, [items]);
 
