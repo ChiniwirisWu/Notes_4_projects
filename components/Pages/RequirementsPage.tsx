@@ -1,6 +1,7 @@
 import { View, StyleSheet, Text, ScrollView } from "react-native";
 import { useDatabase } from "../Shared/DatabaseProvider";
 import LoadingScreen from "../Shared/LoadingScreen";
+import { router } from "expo-router";
 import { SoundType, SoundManagerContext, SoundManagerContextType } from "../Shared/SoundManager";
 import IncrementableList from "../Create/IncrementableList";
 import LongButton from "../Shared/LongButton";
@@ -65,6 +66,24 @@ const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
     }
   };
 
+  const handleDeleteNote = async ()=>{
+    if(db){
+      const isDeleted = await RequirementsPageController.destroyNote({db, key:pageInfo.key}); 
+      const FIVE_SECONDS = 5 * 1000;
+      if(isDeleted){
+
+        handleShowMessage(MessageType.DELETED);
+
+        setTimeout(()=>{
+          router.back(); 
+        }, FIVE_SECONDS);
+
+      } else {
+        handleShowMessage(MessageType.NOT_DELETED)
+      };
+    }
+  };
+
   if(!db){
     return <LoadingScreen />;
   };
@@ -100,7 +119,7 @@ const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
         />
       </View>
       <LongButton text="Save" handleOnPress={handleSaveRequirements} marginBottom={40} />
-      <LongButton text="Delete" handleOnPress={()=> {}} marginBottom={40} />
+      <LongButton text="Delete" handleOnPress={handleDeleteNote} marginBottom={40} />
 
       {(showMessage)?(
         <MessageBox handleOnPress={handleCloseMessage} messageText={messageText} />
