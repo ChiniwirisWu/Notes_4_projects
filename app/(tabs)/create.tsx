@@ -8,7 +8,8 @@ import { CreateController } from "@/controllers/createController";
 import { 
   useState, 
   useRef, 
-  useContext
+  useContext,
+  useCallback
 } from "react";
 import { 
   SoundType, 
@@ -42,9 +43,9 @@ const Create = () => {
   const db = useDatabase();
   
   // 1) connect to db if it is disconnected and sound whenever user focuses the screen.
-  useFocusEffect(()=>{
+  useFocusEffect(useCallback(()=> {
     handlePlaySoundEffect(SoundType.bump);
-  });
+  }, []));
 
   // 2) clean up all the fields and just that!
   const handleEmtpyAllFields = ()=>{
