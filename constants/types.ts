@@ -19,7 +19,7 @@ export type NoteTask = {
 };
 
 export type NoteInfo = {
-  key: Key,
+  key?: Key,
   title: string,
   description: string,
   functionalRequirements: NoteTask[], // JSON

@@ -31,13 +31,13 @@ import LoadingScreen from "@/components/Shared/LoadingScreen";
 
 const Create = () => {
   const { handlePlaySoundEffect } = useContext<SoundManagerContextType>(SoundManagerContext);
-  const [nonFunctionalRequirements, setNonFunctionalRequirements] = useState<Array<NoteTask>>();
-  const [functionalRequirements, setFunctionalRequirements] = useState<Array<NoteTask>>();
-  const [description, setDescription] = useState<string>();
+  const [nonFunctionalRequirements, setNonFunctionalRequirements] = useState<Array<NoteTask>>([]);
+  const [functionalRequirements, setFunctionalRequirements] = useState<Array<NoteTask>>([]);
+  const [description, setDescription] = useState<string>("");
   const [showMessage, setShowMessage] = useState<boolean>(false);
   const [messageText, setMessageText] = useState<string>("");
   const scrollRef = useRef<ScrollView>(null);
-  const [title, setTitle] = useState<string>();
+  const [title, setTitle] = useState<string>("");
   const [score, setScore] = useState<number>(1);
   const db = useDatabase();
   

@@ -16,7 +16,7 @@ import MessageBox from "../Shared/MessageBox";
 const styles = StyleSheet.create({
   container: {
     marginTop: 40,
-    width: "100%"
+    flex: 1,
   },
   progressBarContainer: {
     justifyContent: "center",

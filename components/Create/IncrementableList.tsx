@@ -15,9 +15,11 @@ import IncrementableListItem from "./IncrementableListItem";
 
 const styles = StyleSheet.create({
   container:{
-    marginBottom: 50
+    marginBottom: 50,
+    flex: 1,
   },
   header: {
+    flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center"
@@ -40,7 +42,6 @@ type IncrementableListParams = {
   items:(NoteTask[]),
   setItems: (items:NoteTask[])=> void
 };
-
 
 export interface IncrementableListContextType {
   handleOnDeleteListItem : (itemIndex:number)=> void,
@@ -84,8 +85,7 @@ const IncrementableList = ({title, alias, items, setItems}: IncrementableListPar
   // hader method 1  
   const handleAddEmptyListItem = (id:number, alias:string)=>{
     handlePlaySoundEffect(SoundType.bump);  
-    const hashLength = 10;
-    const newItem = {key: generateKey(id, hashLength, alias), title: "", state: NoteTaskState.EMPTY};
+    const newItem = {key: generateKey(id, alias), title: "", state: NoteTaskState.EMPTY};
     setItems([...items, newItem]);
     showSelectedMessage(NoteTaskListState.SHOWN); // the list should be shown whenever the user adds a new item.
   };
@@ -132,7 +132,7 @@ const IncrementableList = ({title, alias, items, setItems}: IncrementableListPar
 
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]}>
       <View style={styles.header}>
         <Text style={g_styles.p}>{title}</Text>
         <View style={styles.buttonsContainer}>

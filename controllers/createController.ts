@@ -2,49 +2,35 @@
 // I use the "WHERE id=1" because I will only have one row in the database.
 import { SQLiteDatabase } from "expo-sqlite";
 import { generateKey, generateRandomInteger } from "@/constants/functions";
-import { NoteTask } from "@/constants/types";
-import { defaultNoteValue } from "@/constants/default";
-
-function showErrorMessage(errorMessage:any){
-  console.error(`Error at settings.ts: ${errorMessage}`);
-};
-
-// This is made so the database is responsable on protecting itself.
-type ItemInfoWithNull = {
-  title: string | null | undefined,
-  description: string | null | undefined,
-  functionalRequirements: NoteTask[] | null | undefined, // JSON
-  nonFunctionalRequirements: NoteTask[] | null | undefined, // JSON
-  score: number | null | undefined 
-};
+import { defaultValues } from "@/constants/default";
+import { NoteInfo } from "@/constants/types";
 
 export class CreateController{
 
-  static async saveNewNoteIntoDB (db:SQLiteDatabase, newNoteInfo:ItemInfoWithNull) : Promise<boolean> {
+  static async saveNewNoteIntoDB (db:SQLiteDatabase, newNoteInfo:NoteInfo) : Promise<boolean> {
 
-    const {title, description,functionalRequirements, nonFunctionalRequirements, score} = newNoteInfo;
+    const { title, description,functionalRequirements, nonFunctionalRequirements, score } = newNoteInfo;
 
     try { 
       if(!db){
         console.error("La base de datos no ha sido inicializada todavia!");
         return false;
       }
-
-      const functionalRequirementsJSON = JSON.stringify(functionalRequirements);
-      const nonFunctionalRequirementsJSON = JSON.stringify(nonFunctionalRequirements);
-      const hashLength = 10;
       const alias = "note4projects";
-      const result = await db.runAsync(`
+      const sql = `
         INSERT INTO note (key, title, description, score, functionalRequirements, nonFunctionalRequirements) 
         VALUES ($key, $title, $description, $score, $functionalRequirements, $nonFunctionalRequirements);
-      `, {
-        $key: generateKey(generateRandomInteger(), hashLength, alias),
-        $title: (title == "" || title == undefined) ? defaultNoteValue.title : title, 
-        $description: (description == "" || description == undefined) ? defaultNoteValue.description : description, 
+      `;
+
+      const result = await db.runAsync(sql, {
+        $key: generateKey(generateRandomInteger(), alias).toString(),
+        $title: (title.trim() != "") ? title : defaultValues.title, 
+        $description: (description.trim() != "") ? description : defaultValues.description, 
         $score: score ? score : 1, 
-        $functionalRequirements: functionalRequirementsJSON ? functionalRequirements : JSON.stringify([]),
-        $nonFunctionalRequirements : nonFunctionalRequirementsJSON ? nonFunctionalRequirements : JSON.stringify([])
-      });
+        $functionalRequirements: JSON.stringify(functionalRequirements),
+        $nonFunctionalRequirements : JSON.stringify(nonFunctionalRequirements) 
+      }
+);
 
 
       // Show messages only if the note is saved.

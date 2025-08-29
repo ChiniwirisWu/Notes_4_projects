@@ -40,6 +40,7 @@ export default function DatabaseProvider({children}:{children:any}){
       SELECT 1, 'My Awesome App', 1, 1
       WHERE (SELECT COUNT(*) FROM settings) = 0;
 
+
       CREATE TABLE IF NOT EXISTS note(
         key VARCHAR(200) PRIMARY KEY,
         title VARCHAR(200) NOT NULL UNIQUE,

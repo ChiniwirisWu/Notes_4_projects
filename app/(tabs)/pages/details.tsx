@@ -21,10 +21,11 @@ const Detail = ()=>{
   const [pageSelected, setSelectedPage] = useState<number>(0); 
   const {handlePlaySoundEffect} = useContext<SoundManagerContextType>(SoundManagerContext);
   const { details } = useLocalSearchParams<{details : string}>();
-  const [pageInfo] = useState<NoteInfoWithJSON>((typeof details === "string") ? JSON.parse(details) : undefined);
+  const [pageInfo] = useState<NoteInfoWithJSON>(JSON.parse(details));
 
   useFocusEffect(useCallback(()=>{
     handlePlaySoundEffect(SoundType.bump);
+    console.log(pageInfo)
   }, []));
 
   // used to change between pages.
@@ -33,7 +34,7 @@ const Detail = ()=>{
   };
   
   return (
-    <View style={[g_styles.container, styles.container]}>
+    <View style={[g_styles.container]}>
       <PageSelectorContainer pages={pages} pageSelected={pageSelected} handleSelectPage={handleSelectPage} />
       {(pageSelected == 0) ? (
         <DetailsPage pageInfo={pageInfo} />

@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
     width: 330,
     borderWidth: 3,
     borderColor: "#fff",
+    margin: "auto",
   },
 })
 
@@ -20,14 +21,13 @@ type PageSelectorContainerTypes = {
 
 
 const PageSelectorContainer = ({ pages, pageSelected, handleSelectPage } : PageSelectorContainerTypes)=>{
-  const pagesHashLength = 10; 
   const pagesAlias = "pageSelector";
 
   // pageSelectors for the PageSelectorContainer
   const pageSelectors:React.ReactElement<typeof PageSelector>[] = pages.map((el, ind)=> (
     <PageSelector
       title={el}
-      key={generateKey(ind, pagesHashLength, pagesAlias)}
+      key={generateKey(ind, pagesAlias)}
       pageIndex={ind}
       handleSelectPage={handleSelectPage}
       pageSelected={pageSelected}

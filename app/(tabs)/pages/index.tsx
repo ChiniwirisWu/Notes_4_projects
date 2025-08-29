@@ -10,10 +10,6 @@ import Title from "@/components/Shared/Title";
 import NotesList from "@/components/Pages/Noteslist";
 import { NotesListFowardRefMethods } from "@/components/Pages/Noteslist";
 
-/*
- * TODO: Add the number of items filtered ⚠️ at Line 19
- */
-
 const Home = ()=>{
 
   const notesListRef = useRef<NotesListFowardRefMethods>(null);
