@@ -7,7 +7,7 @@ import { NoteTask, NoteTaskState, NoteTaskListState } from "@/constants/types";
 import { getMessageColor } from "@/constants/colors";
 import { getMessage, MessageType } from "@/constants/messages";
 
-import { SoundManagerContext, SoundManagerContextType, SoundType } from "../Shared/SoundManager";
+import { SoundManagerContext, SoundManagerContextType, SoundEffect } from "../Shared/SoundManager";
 
 import IconButton from "@/components/Shared/IconButton";
 import IncrementableListItem from "./IncrementableListItem";
@@ -88,7 +88,7 @@ const IncrementableList = ({title, alias, items, setItems}: IncrementableListPar
 
   // hader method 1  
   const handleAddEmptyListItem = (id:number, alias:string)=>{
-    handlePlaySoundEffect(SoundType.bump);  
+    handlePlaySoundEffect(SoundEffect.bump);  
     const newItem = {key: generateKey(id, alias), title: "", state: NoteTaskState.EMPTY};
     setItems([...items, newItem]);
     showSelectedMessage(NoteTaskListState.SHOWN); // the list should be shown whenever the user adds a new item.
@@ -96,7 +96,7 @@ const IncrementableList = ({title, alias, items, setItems}: IncrementableListPar
 
   const onShowHide = ()=> {
 
-    handlePlaySoundEffect(SoundType.bump);  
+    handlePlaySoundEffect(SoundEffect.bump);  
     console.log("BUB!");
 
     if(noteTaskListState == NoteTaskListState.HIDDEN){

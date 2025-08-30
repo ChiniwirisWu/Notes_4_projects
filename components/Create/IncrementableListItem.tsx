@@ -9,7 +9,7 @@ import ConfirmationBox, { ConfirmationBoxMethods } from "../Shared/ConfirmationB
 import { runOnJS } from "react-native-reanimated";
 
 import { IncrementableListContext } from "./IncrementableList";
-import { SoundType, SoundManagerContext, SoundManagerContextType } from "../Shared/SoundManager";
+import { SoundEffect, SoundManagerContext, SoundManagerContextType } from "../Shared/SoundManager";
 
 const styles = StyleSheet.create({
   ListItem: {
@@ -63,7 +63,7 @@ export default function IncrementableListItem ({itemInfo, itemIndex} : Increment
 
       switch(state){
         case NoteTaskState.MARKED: 
-          handlePlaySoundEffect(SoundType.bump);
+          handlePlaySoundEffect(SoundEffect.bump);
           if(title.length > 0) {
             setState(NoteTaskState.FILLED);
             handleItemInfoChange({key: itemInfo.key, title:title, state:NoteTaskState.FILLED}, itemIndex);
@@ -74,7 +74,7 @@ export default function IncrementableListItem ({itemInfo, itemIndex} : Increment
           break;
 
         case NoteTaskState.FILLED:
-          handlePlaySoundEffect(SoundType.bump);
+          handlePlaySoundEffect(SoundEffect.bump);
           setState(NoteTaskState.MARKED);
           handleItemInfoChange({key: itemInfo.key, title:title, state:NoteTaskState.MARKED}, itemIndex);
           break;

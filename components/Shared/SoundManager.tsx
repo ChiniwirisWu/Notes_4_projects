@@ -1,12 +1,14 @@
-import { useState, createContext } from "react";
-import { useAudioPlayer } from "expo-audio";
+import { useState, createContext, useEffect } from "react";
+import { useAudioPlayer, AudioSource } from "expo-audio";
+import { songs, soundEffects } from "@/constants/songsAndSounds";
+import { generateRandomInteger } from "@/constants/functions";
 
 export interface SoundManagerContextType {
   musicOn:boolean,
   sfxOn:boolean,
   handleTurnOffMusic: ()=> void, 
   handleTurnOnMusic: ()=> void, 
-  handlePlaySoundEffect: (soundType:SoundType)=> void,
+  handlePlaySoundEffect: (soundEffect:SoundEffect)=> void,
   handleTurnOnSfx: ()=> void,
   handleTurnOffSfx: ()=> void,
 };
@@ -16,12 +18,13 @@ export const SoundManagerContext = createContext<SoundManagerContextType>({
   sfxOn:true,
   handleTurnOffMusic: ()=> {}, 
   handleTurnOnMusic: ()=> {}, 
-  handlePlaySoundEffect: (soundType:SoundType)=> {},
+  handlePlaySoundEffect: (soundEffect:SoundEffect)=> {},
   handleTurnOnSfx: ()=> {},
   handleTurnOffSfx: ()=> {},
 });
 
-export enum SoundType {
+
+export enum SoundEffect {
   bump, // 1
   click, // 2
   success, // 3
@@ -31,31 +34,40 @@ export enum SoundType {
   last_item
 };
 
+function pickRandomSong() : AudioSource{
+  // currently there are 12 songs.
+  const FIRST_SONG_INDEX = 0;
+  const LAST_SONG_INDEX = 11;
+  const songChoosen = generateRandomInteger(FIRST_SONG_INDEX, LAST_SONG_INDEX); 
+  return songs[songChoosen];
+};
+
 export default function SoundManager({children}:{children:any}){
   const [musicOn, setMusicOn] = useState<boolean>(false);
   const [sfxOn, setSfxOn] = useState<boolean>(true);
 
-  const soundTypes = {
-    background: require("@/assets/Sfx/relaxing_piano_music.mp3"),
-    bump: require("@/assets/Sfx/KEY_PRESS.wav"),
-    click: require("@/assets/Sfx/CLICK.mp3"),
-    success: require("@/assets/Sfx/SUCCESS.mp3"),
-    fail: require("@/assets/Sfx/ERROR.wav"),
-    open : require("@/assets/Sfx/OPEN_DIALOGUE.wav"),
-    close : require("@/assets/Sfx/CLOSE_DIALOGUE.wav"),
-  };
+  setInterval(async ()=>{
+    console.log(backgroundPlayer.currentStatus);
+    if(backgroundPlayer.currentStatus.didJustFinish){
+      console.log(backgroundPlayer.currentStatus)
+      backgroundPlayer.replace(pickRandomSong());
+      backgroundPlayer.seekTo(0);
+      backgroundPlayer.play();
+    };
+  }, 3000);
+  
+  const backgroundPlayer = useAudioPlayer(pickRandomSong());
+  backgroundPlayer.loop = false;
+  backgroundPlayer.volume = 0.3;
+  backgroundPlayer.play();
 
-  const backgroundPlayer = useAudioPlayer(soundTypes.background);
-  backgroundPlayer.loop = true;
-  backgroundPlayer.volume = 0.25;
-
-  const effectsPlayer = useAudioPlayer(soundTypes.bump);
+  const effectsPlayer = useAudioPlayer(soundEffects.bump);
   effectsPlayer.loop = false;
   effectsPlayer.volume = 0.3;
 
   const handleTurnOffMusic = ()=>{
     if(sfxOn){
-      handlePlaySoundEffect(SoundType.bump);
+      handlePlaySoundEffect(SoundEffect.bump);
     };
     setMusicOn(false);
     backgroundPlayer.pause();
@@ -63,45 +75,45 @@ export default function SoundManager({children}:{children:any}){
 
   const handleTurnOnMusic = ()=>{
     if(sfxOn){
-      handlePlaySoundEffect(SoundType.bump);
+      handlePlaySoundEffect(SoundEffect.bump);
     };
     setMusicOn(true);
     backgroundPlayer.play();
   };
 
-  const handlePlaySoundEffect = (soundType:SoundType)=>{
+  const handlePlaySoundEffect = (soundEffect:SoundEffect)=>{
     if(!sfxOn){
       // it will only play if sfxOn == true;
       return;
     };
 
-    switch(soundType){
+    switch(soundEffect){
       // opening a list, adding elements.
-      case SoundType.bump: 
-        effectsPlayer.replace(soundTypes.bump);
+      case SoundEffect.bump: 
+        effectsPlayer.replace(soundEffects.bump);
         break;
       // CRUD for notes.
-      case SoundType.success:
-        effectsPlayer.replace(soundTypes.success);
+      case SoundEffect.success:
+        effectsPlayer.replace(soundEffects.success);
         break;
       // Backend errors.
-      case SoundType.fail:
-        effectsPlayer.replace(soundTypes.fail);
+      case SoundEffect.fail:
+        effectsPlayer.replace(soundEffects.fail);
         break;
       // Message boxes
-      case SoundType.open:
-        effectsPlayer.replace(soundTypes.open);
+      case SoundEffect.open:
+        effectsPlayer.replace(soundEffects.open);
         break;
       // Message boxes
-      case SoundType.close:
-        effectsPlayer.replace(soundTypes.close);
+      case SoundEffect.close:
+        effectsPlayer.replace(soundEffects.close);
         break;
       // Marking a requirement as completed.
-      case SoundType.click:
-        effectsPlayer.replace(soundTypes.click);
+      case SoundEffect.click:
+        effectsPlayer.replace(soundEffects.click);
         break;
       default:
-        effectsPlayer.replace(soundTypes.bump);
+        effectsPlayer.replace(soundEffects.bump);
         break;
     };
     effectsPlayer.seekTo(0);
@@ -114,7 +126,7 @@ export default function SoundManager({children}:{children:any}){
 
   const handleTurnOnSfx = ()=>{
     if(sfxOn){
-      handlePlaySoundEffect(SoundType.bump);
+      handlePlaySoundEffect(SoundEffect.bump);
     };
     setSfxOn(true);
   };

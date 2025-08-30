@@ -1,7 +1,7 @@
 // This component should always have a parent Context to get the handlers. 
 import { View, Text, StyleSheet, Modal } from "react-native";
 import { useImperativeHandle, forwardRef, useState, useContext } from "react";
-import { SoundManagerContext, SoundManagerContextType, SoundType } from "./SoundManager";
+import { SoundManagerContext, SoundManagerContextType, SoundEffect } from "./SoundManager";
 import g_styles from "@/constants/styles";
 import LongButton from "./LongButton";
 
@@ -37,12 +37,12 @@ const ConfirmationBox = forwardRef<ConfirmationBoxMethods, ConfirmationBoxProps>
   const { handleConfirm, message } = props;
 
   const handleCloseModal = ()=>{
-    handlePlaySoundEffect(SoundType.bump);
+    handlePlaySoundEffect(SoundEffect.bump);
     setShowModal(false);
   };
 
   const handleOpenModal = ()=>{
-    handlePlaySoundEffect(SoundType.bump);
+    handlePlaySoundEffect(SoundEffect.bump);
     setShowModal(true);
   };
 

@@ -12,7 +12,7 @@ import {
   useCallback
 } from "react";
 import { 
-  SoundType, 
+  SoundEffect, 
   SoundManagerContext, 
   SoundManagerContextType 
 } from "@/components/Shared/SoundManager";
@@ -44,7 +44,7 @@ const Create = () => {
   
   // 1) connect to db if it is disconnected and sound whenever user focuses the screen.
   useFocusEffect(useCallback(()=> {
-    handlePlaySoundEffect(SoundType.bump);
+    handlePlaySoundEffect(SoundEffect.bump);
   }, []));
 
   // 2) clean up all the fields and just that!
@@ -57,7 +57,7 @@ const Create = () => {
   };
 
   const handleClearFields = ()=>{
-    handlePlaySoundEffect(SoundType.close);
+    handlePlaySoundEffect(SoundEffect.close);
     handleEmtpyAllFields();
     if(scrollRef.current != null){
       scrollRef.current.scrollTo({x:0, y:0})
@@ -65,7 +65,7 @@ const Create = () => {
   };
 
   const handleCloseMessage = ()=>{
-    handlePlaySoundEffect(SoundType.close);
+    handlePlaySoundEffect(SoundEffect.close);
     setShowMessage(false);
     if(scrollRef.current != null){
       scrollRef.current.scrollTo({x:0, y:0})
@@ -79,11 +79,11 @@ const Create = () => {
       if(res){
         // if the note is saved then do success behaviour
         handleEmtpyAllFields();
-        handlePlaySoundEffect(SoundType.success);
+        handlePlaySoundEffect(SoundEffect.success);
         handleShowMessage(MessageType.CREATED);
       } else {
         // if the note is NOT saved then do success behaviour
-        handlePlaySoundEffect(SoundType.fail);
+        handlePlaySoundEffect(SoundEffect.fail);
         handleShowMessage(MessageType.NOT_CREATED);
       }});
     }

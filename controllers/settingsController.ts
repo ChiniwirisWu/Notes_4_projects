@@ -3,7 +3,6 @@
 
 import { SQLiteDatabase } from "expo-sqlite";
 import { MessageType, getMessage } from "@/constants/messages";
-import { tryConnectDB } from "@/constants/functions";
 
 type GetSettingsType = {
   title:string,

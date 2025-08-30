@@ -4,7 +4,7 @@ import { useDatabase } from "./DatabaseProvider";
 import { View, StyleSheet, Pressable, Modal } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { SettingsController } from "@/controllers/settingsController";
-import { SoundManagerContext, SoundManagerContextType, SoundType } from "./SoundManager";
+import { SoundManagerContext, SoundManagerContextType, SoundEffect } from "./SoundManager";
 import { MessageType, getMessage } from "@/constants/messages";
 import g_styles from "@/constants/styles";
 
@@ -67,7 +67,7 @@ const Setting = () =>{
       >
         <SettingBox 
           handleSaveQuit={()=> {
-            handlePlaySoundEffect(SoundType.bump);
+            handlePlaySoundEffect(SoundEffect.bump);
             setShowModal(false)
           }} 
           handleChangeMusicOn={setMusicOnDB}

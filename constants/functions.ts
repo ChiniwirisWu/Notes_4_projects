@@ -8,9 +8,9 @@ export function generateKey(id:number, alias:string) : Key{
   return `${alias}-${hash}-${id}`;
 }
 
-export function generateRandomInteger(){
-  const MIN_VALUE = 1;
-  const MAX_VALUE = 100000;
+export function generateRandomInteger(min_value?:number, max_value?:number){
+  const MIN_VALUE = (min_value) ? min_value : 1;
+  const MAX_VALUE = (max_value) ? max_value : 100000;
   return Math.floor(Math.random() * (MAX_VALUE - MIN_VALUE)) + MIN_VALUE;
 }
 

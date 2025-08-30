@@ -2,7 +2,7 @@ import { View, StyleSheet, Text, ScrollView, Modal } from "react-native";
 import { useDatabase } from "../Shared/DatabaseProvider";
 import LoadingScreen from "../Shared/LoadingScreen";
 import { router, useFocusEffect } from "expo-router";
-import { SoundType, SoundManagerContext, SoundManagerContextType } from "../Shared/SoundManager";
+import { SoundEffect, SoundManagerContext, SoundManagerContextType } from "../Shared/SoundManager";
 import IncrementableList from "../Create/IncrementableList";
 import LongButton from "../Shared/LongButton";
 import CircularProgress from "react-native-circular-progress-indicator"
@@ -80,7 +80,7 @@ const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
   };
 
   const handleCloseMessage = ()=>{
-    handlePlaySoundEffect(SoundType.close);
+    handlePlaySoundEffect(SoundEffect.close);
     setShowMessage(false);
     if(scrollRef.current != null){
       scrollRef.current.scrollTo({x:0, y:0})
@@ -91,7 +91,7 @@ const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
     if(db){
       const params = {key:pageInfo.key, functionalRequirements, nonFunctionalRequirements};
       const isSaved = await RequirementsPageController.saveRequirements({db, params});
-      handlePlaySoundEffect(isSaved ? SoundType.success : SoundType.fail);
+      handlePlaySoundEffect(isSaved ? SoundEffect.success : SoundEffect.fail);
       handleShowMessage(isSaved ? MessageType.UPDATED : MessageType.NOT_UPDATED);
       calculateRequirementsAchieved();
     }

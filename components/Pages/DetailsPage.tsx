@@ -5,7 +5,7 @@ import Votation from "../Create/Votation";
 import LongButton from "../Shared/LongButton";
 import MessageBox from "../Shared/MessageBox";
 import { NoteInfoWithJSON } from "@/constants/types";
-import { SoundManagerContext, SoundManagerContextType, SoundType } from "@/components/Shared/SoundManager";
+import { SoundManagerContext, SoundManagerContextType, SoundEffect } from "@/components/Shared/SoundManager";
 import { MessageType, getMessage } from "@/constants/messages";
 import { useState, useRef, useCallback, useContext } from "react";
 import { useDatabase } from "../Shared/DatabaseProvider";
@@ -33,7 +33,7 @@ const DetailsPage = ({pageInfo}: {pageInfo:NoteInfoWithJSON})=>{
   const db = useDatabase();
 
   const handleCloseMessage = ()=>{
-    handlePlaySoundEffect(SoundType.bump);
+    handlePlaySoundEffect(SoundEffect.bump);
     setShowMessage(false);
     if(scrollRef.current != null){
       scrollRef.current.scrollTo({x: 0, y: 0});
@@ -45,7 +45,7 @@ const DetailsPage = ({pageInfo}: {pageInfo:NoteInfoWithJSON})=>{
       const fields = { title, description, score , key:pageInfo.key};
       const isSaved = await DetailsPageController.updateFieldsInDB({db, fields});
       handleShowMessage(isSaved ? MessageType.UPDATED : MessageType.NOT_UPDATED);
-      handlePlaySoundEffect(isSaved ? SoundType.success : SoundType.fail);
+      handlePlaySoundEffect(isSaved ? SoundEffect.success : SoundEffect.fail);
     }
   }
 

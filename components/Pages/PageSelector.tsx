@@ -1,6 +1,6 @@
 import { Pressable, Text, StyleSheet } from "react-native";
 import g_styles from "@/constants/styles";
-import { SoundType, SoundManagerContextType, SoundManagerContext } from "../Shared/SoundManager";
+import { SoundEffect, SoundManagerContextType, SoundManagerContext } from "../Shared/SoundManager";
 import { useContext } from "react";
 
 const styles = StyleSheet.create({
@@ -42,7 +42,7 @@ const PageSelector = ({ title, pageIndex, handleSelectPage, pageSelected } : Pag
       style={styles.selectorPressable} 
       onPress={()=> {
         handleSelectPage(pageIndex)
-        handlePlaySoundEffect(SoundType.click);
+        handlePlaySoundEffect(SoundEffect.click);
     }}>
       <Text style={[
         g_styles.p, 

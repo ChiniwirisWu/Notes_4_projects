@@ -2,7 +2,7 @@ import { View } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useContext, useRef } from "react";
 import { useFocusEffect } from "expo-router";
-import { SoundType, SoundManagerContext, SoundManagerContextType } from "@/components/Shared/SoundManager";
+import { SoundEffect, SoundManagerContext, SoundManagerContextType } from "@/components/Shared/SoundManager";
 import g_style from "@/constants/styles";
 
 import Setting from "@/components/Shared/Setting";
@@ -17,7 +17,7 @@ const Home = ()=>{
 
   useFocusEffect(useCallback(()=>{
 
-    handlePlaySoundEffect(SoundType.bump);
+    handlePlaySoundEffect(SoundEffect.bump);
 
     if(notesListRef.current && notesListRef.current.fetchAllItems){
 

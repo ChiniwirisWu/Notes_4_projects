@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { SettingsController } from "@/controllers/settingsController";
 import { View, StyleSheet, Pressable, Text, Modal } from "react-native";
-import { SoundManagerContext, SoundManagerContextType, SoundType } from "./SoundManager";
+import { SoundManagerContext, SoundManagerContextType, SoundEffect } from "./SoundManager";
 import Fonts from "@/constants/fonts";
 import TitleBox from "@/components/Shared/titleBox";
 import { useDatabase } from "./DatabaseProvider";
@@ -32,7 +32,7 @@ const Title = ({editable}: {editable:boolean}) =>{
   // 3) this changes the title in the db and localy in it's state.
   const handleTitleChange = ()=>{
     if(db){
-      handlePlaySoundEffect(SoundType.success);
+      handlePlaySoundEffect(SoundEffect.success);
       // Update at the database
       SettingsController.updateTitleInDB(db, title);
       // Update locally so it renders the new element.

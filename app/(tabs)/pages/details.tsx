@@ -4,7 +4,7 @@ import g_styles from "@/constants/styles";
 import { NoteInfoWithJSON } from "@/constants/types";
 import { useLocalSearchParams } from "expo-router";
 import { useFocusEffect } from "expo-router";
-import { SoundManagerContext, SoundManagerContextType, SoundType } from "@/components/Shared/SoundManager";
+import { SoundManagerContext, SoundManagerContextType, SoundEffect } from "@/components/Shared/SoundManager";
 
 import DetailsPage from "@/components/Pages/DetailsPage";
 import RequirementsPage from "@/components/Pages/RequirementsPage";
@@ -24,7 +24,7 @@ const Detail = ()=>{
   const [pageInfo] = useState<NoteInfoWithJSON>(JSON.parse(details));
 
   useFocusEffect(useCallback(()=>{
-    handlePlaySoundEffect(SoundType.bump);
+    handlePlaySoundEffect(SoundEffect.bump);
     console.log(pageInfo)
   }, []));
 

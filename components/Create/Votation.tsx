@@ -2,7 +2,7 @@ import { View, StyleSheet, Text } from "react-native";
 import { useState, useContext } from "react";
 import SquareButton from "../Shared/SquareButton";
 import g_styles from "@/constants/styles";
-import { SoundManagerContext, SoundManagerContextType, SoundType } from "@/components/Shared/SoundManager";
+import { SoundManagerContext, SoundManagerContextType, SoundEffect } from "@/components/Shared/SoundManager";
 
 
 const styles = StyleSheet.create({
@@ -52,12 +52,12 @@ const Votation = ({score, setScore}: VotationParams)=>{
 
   const onAdd = ()=>{
     setScore(((score + 1) > 5) ? 5 : score + 1);
-    handlePlaySoundEffect(SoundType.bump);
+    handlePlaySoundEffect(SoundEffect.bump);
   }
 
   const onMinus = ()=>{
     setScore(((score - 1) < 1) ? 1 : score - 1);
-    handlePlaySoundEffect(SoundType.bump);
+    handlePlaySoundEffect(SoundEffect.bump);
   }
 
   return (
