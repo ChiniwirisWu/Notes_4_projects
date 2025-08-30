@@ -1,5 +1,5 @@
 import { useState, createContext, useEffect } from "react";
-import { useAudioPlayer, AudioSource } from "expo-audio";
+import { useAudioPlayer, AudioSource, createAudioPlayer, AudioPlayer } from "expo-audio";
 import { songs, soundEffects } from "@/constants/songsAndSounds";
 import { generateRandomInteger } from "@/constants/functions";
 
@@ -43,28 +43,31 @@ function pickRandomSong() : AudioSource{
 };
 
 export default function SoundManager({children}:{children:any}){
+  const [backgroundPlayer, setBackgroundPlayer] = useState<AudioPlayer>(createAudioPlayer(pickRandomSong()));
+  const [effectsPlayer, setEffectsPlayer] = useState<AudioPlayer>(createAudioPlayer());
   const [musicOn, setMusicOn] = useState<boolean>(false);
   const [sfxOn, setSfxOn] = useState<boolean>(true);
 
-  setInterval(async ()=>{
-    console.log(backgroundPlayer.currentStatus);
-    if(backgroundPlayer.currentStatus.didJustFinish){
-      console.log(backgroundPlayer.currentStatus)
-      backgroundPlayer.replace(pickRandomSong());
-      backgroundPlayer.seekTo(0);
-      backgroundPlayer.play();
-    };
-  }, 3000);
+  useEffect(()=>{
+
+    backgroundPlayer.loop = false;
+    backgroundPlayer.volume = 0.3;
+    backgroundPlayer.play();
+
+    effectsPlayer.loop = false;
+    effectsPlayer.volume = 0.3;
+
+    setInterval(async ()=>{
+      console.log(backgroundPlayer.currentStatus);
+      if(backgroundPlayer.currentStatus.didJustFinish){
+        console.log(backgroundPlayer.currentStatus)
+        backgroundPlayer.replace(pickRandomSong());
+        backgroundPlayer.seekTo(0);
+        backgroundPlayer.play();
+      };
+    }, 1000);
+  }, []);
   
-  const backgroundPlayer = useAudioPlayer(pickRandomSong());
-  backgroundPlayer.loop = false;
-  backgroundPlayer.volume = 0.3;
-  backgroundPlayer.play();
-
-  const effectsPlayer = useAudioPlayer(soundEffects.bump);
-  effectsPlayer.loop = false;
-  effectsPlayer.volume = 0.3;
-
   const handleTurnOffMusic = ()=>{
     if(sfxOn){
       handlePlaySoundEffect(SoundEffect.bump);
