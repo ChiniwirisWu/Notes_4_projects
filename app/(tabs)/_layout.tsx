@@ -32,6 +32,19 @@ const TabsLayout = () =>{
         tabBarIcon: ({ color }) => <FontAwesome name="home" color={color} size={24} />
       }}
       />
+
+      <Tabs.Screen
+      name="about"
+      options={{
+        title: "About",
+        headerShown: false,
+        tabBarActiveBackgroundColor: "#111",
+        tabBarInactiveBackgroundColor: "#000",
+        tabBarActiveTintColor: activeColor,
+        tabBarInactiveTintColor: inactiveColor,
+        tabBarIcon: ({ color }) => <FontAwesome name="home" color={color} size={24} />
+      }}
+      />
     </Tabs>
   ) 
 };
