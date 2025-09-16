@@ -1,11 +1,10 @@
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import SoundManager from "@/components/Shared/SoundManager";
 import DatabaseProvider from "@/components/Shared/DatabaseProvider";
+import LoadingScreen from "@/components/Shared/LoadingScreen";
 
-SplashScreen.preventAutoHideAsync();
 
 const RootLayout = ()=>{
 
@@ -14,8 +13,6 @@ const RootLayout = ()=>{
   });
 
   if(fontsLoaded){
-
-    SplashScreen.hideAsync();
 
     return (
       <DatabaseProvider>
@@ -28,6 +25,8 @@ const RootLayout = ()=>{
         </GestureHandlerRootView>
       </DatabaseProvider>
     );
+  } else {
+    return <LoadingScreen />
   }
 
    
