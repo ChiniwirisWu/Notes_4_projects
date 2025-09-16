@@ -34,11 +34,26 @@ export enum SoundEffect {
   last_item
 };
 
+const songsPlayed:number[] = [];
+let previousSong:number = 0;
+
 function pickRandomSong() : AudioSource{
   // currently there are 12 songs.
   const FIRST_SONG_INDEX = 0;
   const LAST_SONG_INDEX = 11;
-  const songChoosen = generateRandomInteger(FIRST_SONG_INDEX, LAST_SONG_INDEX); 
+  let songChoosen = previousSong;
+
+  if(songsPlayed.length < 1){
+     songChoosen = generateRandomInteger(FIRST_SONG_INDEX, LAST_SONG_INDEX); 
+     previousSong = songChoosen;
+
+  } else {
+    while(songsPlayed.includes(songChoosen)){
+     songChoosen = generateRandomInteger(FIRST_SONG_INDEX, LAST_SONG_INDEX); 
+     previousSong = songChoosen;
+    }
+  }
+
   return songs[songChoosen];
 };
 

@@ -110,7 +110,7 @@ const Create = () => {
   // It loads only if the database is setted.
   return (
     <View style={g_styles.container}>
-      <ScrollView ref={scrollRef}>
+      <ScrollView showsVerticalScrollIndicator={false} ref={scrollRef}>
         <Setting />
         <Title editable={false} />
         <SingleLineTextInput fieldName="Title" value={title} setValue={setTitle} />

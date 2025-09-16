@@ -16,7 +16,7 @@ export default function About (){
 
   return (
   <View style={[g_styles.container, {paddingTop: 40}]}>
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <Text style={[g_styles.p, {fontSize: 40, marginBottom: 10}]}>About</Text>      
       <Text style={[g_styles.p, {marginBottom: 30}]}>This application is oriented to developers to save and structure their ideas for projects that avoids writing lots of details and instead focus on defining the most practical aspects of their projects which are the functional and non functional requirements.</Text>      
  

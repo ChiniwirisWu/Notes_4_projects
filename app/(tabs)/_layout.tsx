@@ -1,12 +1,12 @@
 import { Tabs } from "expo-router";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 
 const TabsLayout = () =>{
   const activeColor = "#eee";
   const inactiveColor = "#888";
 
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: "blue "}}>
+    <Tabs initialRouteName="pages" screenOptions={{ tabBarActiveTintColor: "blue "}}>
       <Tabs.Screen
       name="pages"
       options={{
@@ -29,7 +29,7 @@ const TabsLayout = () =>{
         tabBarInactiveBackgroundColor: "#000",
         tabBarActiveTintColor: activeColor,
         tabBarInactiveTintColor: inactiveColor,
-        tabBarIcon: ({ color }) => <FontAwesome name="home" color={color} size={24} />
+        tabBarIcon: ({ color }) => <MaterialIcons name="add-box" color={color} size={24} />
       }}
       />
 
@@ -42,7 +42,7 @@ const TabsLayout = () =>{
         tabBarInactiveBackgroundColor: "#000",
         tabBarActiveTintColor: activeColor,
         tabBarInactiveTintColor: inactiveColor,
-        tabBarIcon: ({ color }) => <FontAwesome name="home" color={color} size={24} />
+        tabBarIcon: ({ color }) => <FontAwesome name="info-circle" color={color} size={24} />
       }}
       />
     </Tabs>

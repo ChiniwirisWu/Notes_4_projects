@@ -69,6 +69,9 @@ const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
   const calculateRequirementsAchieved = ()=>{
     const total:number = functionalRequirements.length + nonFunctionalRequirements.length;
     const achieved:number = sumCompletedTask(functionalRequirements) + sumCompletedTask(nonFunctionalRequirements);
+
+    if(total == 0) return 0;
+
     const percentage = (achieved / total) * 100;
     setRequirementsAchieved(percentage);
   };
@@ -121,7 +124,7 @@ const RequirementsPage = ({pageInfo}:{pageInfo:NoteInfoWithJSON})=>{
 
   return (
   <View style={g_styles.container}>
-    <ScrollView style={styles.container} ref={scrollRef}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container} ref={scrollRef}>
       <IncrementableList 
         title="Functional Requirements" 
         alias="functionalR" 

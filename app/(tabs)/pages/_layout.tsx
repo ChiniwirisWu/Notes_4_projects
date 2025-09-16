@@ -1,16 +1,16 @@
 import { Stack } from "expo-router";
 
-//export const unstable_settings = {
-  //initialRouteName: "index"
-//};
+export const unstable_settings = {
+  initialRouteName: "home"
+};
 
 const PagesLayout = ()=> {
   return (
     <Stack
-      initialRouteName="index"
+      initialRouteName="home"
       screenOptions={{headerTintColor: "#000" }}
     >
-      <Stack.Screen name="index" options={{headerShown:false}}/>
+      <Stack.Screen name="home" options={{headerShown:false}}/>
       <Stack.Screen name="details" options={{
         headerTitle: "", 
         headerStyle: {
