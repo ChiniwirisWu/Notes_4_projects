@@ -45,7 +45,7 @@ const Note = ({idea} : {idea:NoteInfoWithJSON})=>{
   const { title, score } = idea;
 
   return (
-    <Pressable onPress={()=> router.navigate({pathname: "/(tabs)/pages/details", params: {details: JSON.stringify(idea)}})}>
+    <Pressable onPress={()=> router.navigate({pathname: "/(tabs)/(pages)/details", params: {details: JSON.stringify(idea)}})}>
       <View style={styles.item}>
         <Text style={[g_styles.p, {flex: 1, paddingRight: 5}]}>{title}</Text>
         <Vote level={getLevelFromNumber(score)} />

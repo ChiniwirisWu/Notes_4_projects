@@ -3,7 +3,6 @@ import { useFocusEffect } from "expo-router";
 import { useContext } from "react";
 import { SoundManagerContext, SoundManagerContextType, SoundEffect } from "@/components/Shared/SoundManager";
 import g_styles from "@/constants/styles";
-import { useEffect } from "react";
 
 
 export default function About (){

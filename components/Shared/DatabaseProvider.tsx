@@ -63,7 +63,7 @@ export default function DatabaseProvider({children}:{children:any}){
       </DatabaseContext.Provider>
     );
   } else {
-    <LoadingScreen />
+    <LoadingScreen />;
   }
   
 

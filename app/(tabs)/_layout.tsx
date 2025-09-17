@@ -6,9 +6,10 @@ const TabsLayout = () =>{
   const inactiveColor = "#888";
 
   return (
-    <Tabs initialRouteName="pages" screenOptions={{ tabBarActiveTintColor: "blue "}}>
+    <Tabs initialRouteName="(pages)" screenOptions={{ tabBarActiveTintColor: "blue "}}>
+
       <Tabs.Screen
-      name="pages"
+      name="(pages)"
       options={{
         title: "Home",
         headerShown: false,
@@ -16,7 +17,8 @@ const TabsLayout = () =>{
         tabBarInactiveBackgroundColor: "#000",
         tabBarActiveTintColor: activeColor,
         tabBarInactiveTintColor: inactiveColor,
-        tabBarIcon: ({ color }) => <FontAwesome name="home" color={color} size={24} />
+        href:"/(tabs)/(pages)",
+        tabBarIcon: ({ color }) => <FontAwesome name="home" color={color} size={24} />,
       }}
       />
 
